@@ -3,7 +3,8 @@
 /* ~. GLOBALS .~ */
 // canvas: html canvas reference
 var canvas = document.getElementById("drawScreen");
-    canvas.width = window.innerWidth - (window.innerWidth * 0.2);
+    canvas.width = window.innerWidth * 0.88;
+    //canvas.width = window.innerWidth - (window.innerWidth * 0.1);
     canvas.height = 500;
 
 if(canvas.getContext)
@@ -18,9 +19,11 @@ var graph;
 // currentTool: used when user picks up a tool for drawing in the canvas 
 var currentTool;
 
+// array storing nodes drawned in canvas
 var network = new Array();
 
 /* 
+*  pickTool
 *  TRIGERRED WHEN USER SELECTS A TOOL IN THE TOOLBAR
 */
 var pickTool = function () {
@@ -34,10 +37,14 @@ var pickTool = function () {
     graph.width = 36;
     graph.height = 36;
     graph.src = toolImg.src;
-    // DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
+    // set mouse cursor
     setCursorClass(toolImg.src);
 }; 
 
+/* 
+*  setCursorClass
+*  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
+*/
 var setCursorClass = function(tool) {
     canvas.style.cursor = "url('" + tool + "'), auto";
     /*
@@ -52,6 +59,10 @@ var setCursorClass = function(tool) {
     */
 };
 
+/* 
+*  getMousePos
+*  Map mouse position in order to place drawing correctly
+*/
 var getMousePos = function (canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -60,7 +71,10 @@ var getMousePos = function (canvas, evt) {
     };
 };
 
-
+/* 
+*  drawImage
+*  Draw image on canvas
+*/
 var drawImage = function (source, posX, posY, width, height) {
     $(canvas).addLayer({
       name: "element" + network.length + 1,
@@ -81,16 +95,16 @@ var drawImage = function (source, posX, posY, width, height) {
     network.push($(canvas).getLayer("element" + network.length+1));
 };
 
-$('#drawTools input[name="tool"]').each( function ( index, value ) {
-    $(value).on("change", pickTool);
-});
-
+// PREPARE CANVAS FOR DRAWING [IMPORTANT]
 $('canvas#drawScreen').on({
     "mousemove": function (evt) {
         mouse = getMousePos(canvas, evt);
     },
     
-    "click": function(evt) { 
-        drawImage(graph.src, mouse.x, mouse.y, graph.width, graph.height);
+    "click": function(evt) {
+        if(currentTool == "cursor") {
+            return;
+        }
+        drawImage(graph.src, mouse.x + (graph.width / 2), mouse.y + (graph.height / 2), graph.width, graph.height);
     }
 });  
