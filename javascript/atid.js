@@ -22,6 +22,22 @@ var currentTool;
 // array storing nodes drawned in canvas
 var network = new Array();
 
+// arcMap: array of arcs already drawed
+var arcMap = new Array();
+
+/*
+ *   arc:
+ *   used when user is drawing a new arc between two tools.
+ *   dinamically updated when user select origin and destiny for the arc
+ */
+var arc = {
+    'enable': false,
+    'layers': {
+        'origin': '',
+        'destiny': ''
+    }
+};
+
 /* 
 *  pickTool
 *  TRIGERRED WHEN USER SELECTS A TOOL IN THE TOOLBAR
@@ -39,6 +55,9 @@ var pickTool = function () {
     graph.src = toolImg.src;
     // set mouse cursor
     setCursorClass(toolImg.src);
+
+    if(currentTool == "arc")
+        configArc();
 }; 
 
 /* 
@@ -47,16 +66,6 @@ var pickTool = function () {
 */
 var setCursorClass = function(tool) {
     canvas.style.cursor = "url('" + tool + "'), auto";
-    /*
-    var classes = canvas.classList;
-    var toolClass = "tool-" + tool;
-    for(var i = 0; i < classes.length; i++) {
-        if(classes[i].startsWith("tool-")) {
-            canvas.classList.remove( canvas.classList.item(i) );
-            canvas.classList.add( toolClass );
-        }
-    } 
-    */
 };
 
 /* 
@@ -82,17 +91,77 @@ var drawImage = function (source, posX, posY, width, height) {
       source: source,
       x: posX, y: posY,
       width: width, height: height,
-      draggable: true,
+      draggable: false,
       data : {
         element: currentTool,
         arc: {
             input: '',
-            output: '',
+            output: ''
         }
-      }
+      },
+        mousedown: function(layer) {
+
+            if(currentTool == "arc" && arc.enable) {
+                if(arc.origin == '') {
+                    arc.origin = layer;
+                    arcMap.push({
+                        name: layer.name,
+                        element: layer.data.element,
+                        x: layer.x,
+                        y: layer.y,
+                    });
+                }
+                else {
+                    if(arc.destiny == '') {
+                        if(layer.data.element == arc.origin.data.element) {
+                            alert("Can't create arc between same tools!");
+                            arc.origin = '';
+                            arc.destiny = '';
+                            return;
+                        }
+
+                        else {
+                            arc.destiny = layer;
+                            arcMap.push({
+                                name: layer.name,
+                                element: layer.data.element,
+                                x: layer.x,
+                                y: layer.y,
+                            });
+                            drawArc(arc);
+                        }
+                    }
+                }
+            }
+        }
     })
     .drawLayers();
     network.push($(canvas).getLayer("element" + network.length+1));
+};
+
+var configArc = function () {
+    arc.enable = true;
+};
+
+var drawArc = function () {
+    $('canvas#drawScreen').drawLine({
+        layer: true,
+        name: 'arc' + (Math.floor(arcMap.length / 2) + 1),
+        strokeStyle: '#000',
+        strokeWidth: 2,
+        rounded: true,
+        draggable: false,
+        startArrow: false,
+        endArrow: true,
+        arrowRadius: 15,
+        arrowAngle: 45,
+        x1: arc.layers.origin.x, y1: arc.layers.origin.y,
+        x2: arc.layers.destiny.x, y2: arc.layers.destiny.y
+    });
+};
+
+var toggleDrawing = function () {
+    $("canvas#drawScreen").getLayers().draggable = !($("canvas#drawScreen").getLayers().draggable);
 };
 
 // PREPARE CANVAS FOR DRAWING [IMPORTANT]
@@ -103,8 +172,15 @@ $('canvas#drawScreen').on({
     
     "click": function(evt) {
         if(currentTool == "cursor") {
+            toggleDrawing();
             return;
         }
-        drawImage(graph.src, mouse.x + (graph.width / 2), mouse.y + (graph.height / 2), graph.width, graph.height);
+        else {
+            toggleDrawing();
+            if(currentTool == "arc") {
+                return;
+            }
+            drawImage(graph.src, mouse.x + (graph.width / 2), mouse.y + (graph.height / 2), graph.width, graph.height);
+        }
     }
 });  
