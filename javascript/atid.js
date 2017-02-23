@@ -66,7 +66,10 @@ var pickTool = function () {
 *  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
 */
 var setCursorClass = function(tool) {
-    canvas.style.cursor = "url('" + tool + "'), auto";
+    if(currentTool != "arc")
+        canvas.style.cursor = "url('" + tool + "'), auto";
+    else
+        canvas.style.cursor = "default";
 };
 
 /* 
@@ -112,15 +115,43 @@ var drawImage = function (source, posX, posY, width, height) {
                     x: layer.x,
                     y: layer.y,
                 });
-                
+
             }
             else {
+                // TROCAR ESSA RUMA DE ELSE IF POR SWITCH (VAMU FAZER DIREITO U.U)
                 if(arc.layers.origin.data.element === layer.data.element) {
                     alert("you can't create an arc between same tools");
                     arc.layers.origin = '';
                     arc.layers.destiny = '';
                     return;
-                } else {
+                }
+                else if (arc.layers.origin.data.element == "repository" && layer.data.element != "activity") {
+                    alert("repositories can only be linked with activities");
+                    arc.layers.origin = '';
+                    arc.layers.destiny = '';
+                    return;
+                }
+                else if (arc.layers.origin.data.element == "event" && layer.data.element != "transition") {
+                    alert("events can only be linked to transitions");
+                    arc.layers.origin = '';
+                    arc.layers.destiny = '';
+                }
+                else if (arc.layers.origin.data.element == "transition" && (layer.data.element != "activity" && layer.data.element != "composition")) {
+                    alert("transitions can only be linked to activities or composite activities");
+                    arc.layers.origin = '';
+                    arc.layers.destiny = '';
+                }
+                else if(arc.layers.origin.data.element == "activity" && (layer.data.element != "transition" && layer.data.element != "repository")) {
+                    alert("activities can only be linked to transitions or repositories");
+                    arc.layers.origin = '';
+                    arc.layers.destiny = '';
+                }
+                else if(arc.layers.origin.data.element == "composition" && layer.data.element != "transition") {
+                    alert("composite activities can only be linked to transition");
+                    arc.layers.origin = '';
+                    arc.layers.destiny = '';
+                }
+                else {
                     arc.layers.destiny = layer;
                     arcMap.push({
                         name: layer.name,
@@ -129,12 +160,10 @@ var drawImage = function (source, posX, posY, width, height) {
                         y: layer.y
                     });
                     drawArc(arc);    
-                }
-                
+                }        
             }
-                
-          };        
-    }
+           }
+      }
     })
     .drawLayers();
     network.push($("canvas#drawScreen").getLayer("element" + network.length));
