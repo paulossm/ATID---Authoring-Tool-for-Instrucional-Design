@@ -53,6 +53,7 @@ var pickTool = function () {
     graph.width = 36;
     graph.height = 36;
     graph.src = toolImg.src;
+    
     // set mouse cursor
     setCursorClass(toolImg.src);
 
@@ -85,102 +86,130 @@ var getMousePos = function (canvas, evt) {
 *  Draw image on canvas
 */
 var drawImage = function (source, posX, posY, width, height) {
-    $(canvas).addLayer({
-      name: "element" + network.length + 1,
+    $("canvas#drawScreen").addLayer({
+      name: "element" + network.length,
       type: 'image',
       source: source,
       x: posX, y: posY,
       width: width, height: height,
-      draggable: false,
+      draggable: true,
       data : {
         element: currentTool,
         arc: {
-            input: '',
-            output: ''
+            input: [],
+            output: [],
         }
       },
-        mousedown: function(layer) {
+      click: function(layer) {
 
-            if(currentTool == "arc" && arc.enable) {
-                if(arc.origin == '') {
-                    arc.origin = layer;
+          if(currentTool == "arc" && arc.enable) {
+            
+            if(!arc.layers.origin) {
+                arc.layers.origin = layer;
+                arcMap.push({
+                    name: layer.name,
+                    element: layer.data.element,
+                    x: layer.x,
+                    y: layer.y,
+                });
+                
+            }
+            else {
+                if(arc.layers.origin.data.element === layer.data.element) {
+                    alert("you can't create an arc between same tools");
+                    arc.layers.origin = '';
+                    arc.layers.destiny = '';
+                    return;
+                } else {
+                    arc.layers.destiny = layer;
                     arcMap.push({
                         name: layer.name,
                         element: layer.data.element,
                         x: layer.x,
-                        y: layer.y,
+                        y: layer.y
                     });
+                    drawArc(arc);    
                 }
-                else {
-                    if(arc.destiny == '') {
-                        if(layer.data.element == arc.origin.data.element) {
-                            alert("Can't create arc between same tools!");
-                            arc.origin = '';
-                            arc.destiny = '';
-                            return;
-                        }
-
-                        else {
-                            arc.destiny = layer;
-                            arcMap.push({
-                                name: layer.name,
-                                element: layer.data.element,
-                                x: layer.x,
-                                y: layer.y,
-                            });
-                            drawArc(arc);
-                        }
-                    }
-                }
+                
             }
-        }
+                
+          };        
+    }
     })
     .drawLayers();
-    network.push($(canvas).getLayer("element" + network.length+1));
+    network.push($("canvas#drawScreen").getLayer("element" + network.length));
 };
 
-var configArc = function () {
+var configArc = function (layer) {
     arc.enable = true;
 };
 
-var drawArc = function () {
-    $('canvas#drawScreen').drawLine({
-        layer: true,
-        name: 'arc' + (Math.floor(arcMap.length / 2) + 1),
+var drawArc = function (arc) {
+    $("canvas#drawScreen").drawLine({
+        layer: true, 
+        name: 'arc' + (Math.floor(arcMap.length / 2) + 1), 
         strokeStyle: '#000',
-        strokeWidth: 2,
+        strokeWidth: 4,
         rounded: true,
         draggable: false,
         startArrow: false,
         endArrow: true,
         arrowRadius: 15,
-        arrowAngle: 45,
+        arrowAngle: 90,
         x1: arc.layers.origin.x, y1: arc.layers.origin.y,
-        x2: arc.layers.destiny.x, y2: arc.layers.destiny.y
+        x2: arc.layers.destiny.x, y2: arc.layers.destiny.y,
+    });
+    
+    attribArcToLayers(arc, "arc" + (Math.floor(arcMap.length/2) + 1));
+    updateArcOnDragLayers(arc);
+    arc.layers.origin = '';
+    arc.layers.destiny = '';
+};
+
+var attribArcToLayers = function (arc, arcName) {
+    $("canvas#drawScreen").getLayer(arc.layers.origin.name).data.arc["output"].push($("canvas#drawScreen").getLayer(arcName));
+    $("canvas#drawScreen").getLayer(arc.layers.destiny.name).data.arc["input"].push($("canvas#drawScreen").getLayer(arcName)); 
+};
+
+var updateArcOnDragLayers = function (arc) {
+    $.each(arc.layers, function (key, value) {
+        value.drag = function (layer) {
+            
+            for(var i = 0; i < layer.data.arc.input.length; i++) {
+                if(layer.data.arc.input[i] != '') {
+                    var input = $("canvas#drawScreen").getLayer(layer.data.arc.input[i].name);
+                    input.x2 = layer.x;
+                    input.y2 = layer.y;
+                }
+            }
+            
+            for(var j = 0; j < layer.data.arc.output.length; j++) {
+                if(layer.data.arc.output[j] != '') {
+                    var output = $("canvas#drawScreen").getLayer(layer.data.arc.output[j].name);
+                    output.x1 = layer.x;
+                    output.y1 = layer.y;
+                }
+            }
+        };
     });
 };
 
-var toggleDrawing = function () {
-    $("canvas#drawScreen").getLayers().draggable = !($("canvas#drawScreen").getLayers().draggable);
-};
+$("input[name=tool]").each(function (index, value) {
+    $(value).on("change", pickTool);
+});
 
-// PREPARE CANVAS FOR DRAWING [IMPORTANT]
-$('canvas#drawScreen').on({
+$('#drawScreen').on({
     "mousemove": function (evt) {
         mouse = getMousePos(canvas, evt);
     },
-    
-    "click": function(evt) {
-        if(currentTool == "cursor") {
-            toggleDrawing();
-            return;
-        }
-        else {
-            toggleDrawing();
-            if(currentTool == "arc") {
-                return;
-            }
-            drawImage(graph.src, mouse.x + (graph.width / 2), mouse.y + (graph.height / 2), graph.width, graph.height);
-        }
+    "click": function(evt) { interactCanvas(evt); }
+});         
+
+var interactCanvas = function (event) {
+    if(currentTool == "cursor" || currentTool == "arc") {
+        // default behavior
     }
-});  
+    else {
+        drawImage(graph.src, mouse.x + graph.width/2, mouse.y + graph.height/2, graph.width, graph.height);        
+    }
+}
