@@ -50,8 +50,8 @@ var pickTool = function () {
 
     // CREATE NEW IMAGE ELEMENT FROM TOOL SELECTED
     graph = new Image();
-    graph.width = 36;
-    graph.height = 36;
+    graph.width = 32;
+    graph.height = 32;
     graph.src = toolImg.src;
     
     // set mouse cursor
@@ -66,10 +66,7 @@ var pickTool = function () {
 *  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
 */
 var setCursorClass = function(tool) {
-    if(currentTool != "arc")
-        canvas.style.cursor = "url('" + tool + "'), auto";
-    else
-        canvas.style.cursor = "default";
+    canvas.style.cursor = "url('" + tool + "'), auto";
 };
 
 /* 

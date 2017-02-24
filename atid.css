@@ -154,7 +154,7 @@ ul.headerBar #course .courseName {
 }
 
 canvas#drawScreen::after {
-    content:'url(images/tools/cursor.png)';
+    content:'url(images/tools/cursor.svg)';
     width: auto;
     height: auto;
 
@@ -164,7 +164,7 @@ canvas#drawScreen::after {
 }
 
 canvas.tool-activity {
-    cursor: url("images/tools/activity.svg"), auto;
+    cursor: url("images/tools/dft.svg"), auto;
 }
 
 canvas.tool-arc {
