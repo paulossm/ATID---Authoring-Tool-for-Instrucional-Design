@@ -1,10 +1,9 @@
-'use strict';
 
 /* ~. GLOBALS .~ */
+
 // canvas: html canvas reference
-var canvas = document.getElementById("drawScreen");
+var canvas = document.querySelector("#drawScreen > canvas");
     canvas.width = window.innerWidth * 0.88;
-    //canvas.width = window.innerWidth - (window.innerWidth * 0.1);
     canvas.height = 500;
 
 if(canvas.getContext)
@@ -19,11 +18,11 @@ var graph;
 // currentTool: used when user picks up a tool for drawing in the canvas 
 var currentTool;
 
-// array storing nodes drawned in canvas
-var network = new Array();
+// network: array storing nodes drawned in canvas
+var network = [];
 
 // arcMap: array of arcs already drawed
-var arcMap = new Array();
+var arcMap = [];
 
 /*
  *   arc:
@@ -35,7 +34,7 @@ var arc = {
     'layers': {
         'origin': '',
         'destiny': ''
-    }
+    },
 };
 
 /* 
@@ -44,7 +43,10 @@ var arc = {
 */
 var pickTool = function () {
     currentTool = document.querySelector("[name=tool]:checked").value;
-
+    
+    $(".currentTool").removeClass("currentTool") 
+    
+    $("[name=tool]:checked").parent().addClass("currentTool");
     // GET VALUE FROM TOOL SELECTED BY USER
     var toolImg = document.querySelector("[name=tool]:checked + img");
 
@@ -81,13 +83,22 @@ var getMousePos = function (canvas, evt) {
     };
 };
 
+var getNetworkLength = function (nodetype) {
+    var n_layers = 0;
+    for(var i = 0; i < network.length; i++) {
+        if(network[i].data.element == nodetype)
+            ++n_layers;
+    }
+    return n_layers;
+};
+
 /* 
 *  drawImage
 *  Draw image on canvas
 */
 var drawImage = function (source, posX, posY, width, height) {
-    $("canvas#drawScreen").addLayer({
-      name: "element" + network.length,
+    $(canvas).addLayer({
+      name: currentTool + getNetworkLength(currentTool),
       type: 'image',
       source: source,
       x: posX, y: posY,
@@ -101,69 +112,80 @@ var drawImage = function (source, posX, posY, width, height) {
         }
       },
       click: function(layer) {
-
-          if(currentTool == "arc" && arc.enable) {
+               if(currentTool == "arc" && arc.enable) {
             
-            if(!arc.layers.origin) {
-                arc.layers.origin = layer;
-                arcMap.push({
-                    name: layer.name,
-                    element: layer.data.element,
-                    x: layer.x,
-                    y: layer.y,
-                });
+                    if(!arc.layers.origin) {
+                        arc.layers.origin = layer;
+                        arcMap.push({
+                            name: layer.name,
+                            element: layer.data.element,
+                            x: layer.x,
+                            y: layer.y,
+                        });
 
-            }
-            else {
-                // TROCAR ESSA RUMA DE ELSE IF POR SWITCH (VAMU FAZER DIREITO U.U)
-                if(arc.layers.origin.data.element === layer.data.element) {
-                    alert("you can't create an arc between same tools");
-                    arc.layers.origin = '';
-                    arc.layers.destiny = '';
-                    return;
-                }
-                else if (arc.layers.origin.data.element == "repository" && layer.data.element != "activity") {
-                    alert("repositories can only be linked with activities");
-                    arc.layers.origin = '';
-                    arc.layers.destiny = '';
-                    return;
-                }
-                else if (arc.layers.origin.data.element == "event" && layer.data.element != "transition") {
-                    alert("events can only be linked to transitions");
-                    arc.layers.origin = '';
-                    arc.layers.destiny = '';
-                }
-                else if (arc.layers.origin.data.element == "transition" && (layer.data.element != "activity" && layer.data.element != "composition")) {
-                    alert("transitions can only be linked to activities or composite activities");
-                    arc.layers.origin = '';
-                    arc.layers.destiny = '';
-                }
-                else if(arc.layers.origin.data.element == "activity" && (layer.data.element != "transition" && layer.data.element != "repository")) {
-                    alert("activities can only be linked to transitions or repositories");
-                    arc.layers.origin = '';
-                    arc.layers.destiny = '';
-                }
-                else if(arc.layers.origin.data.element == "composition" && layer.data.element != "transition") {
-                    alert("composite activities can only be linked to transition");
-                    arc.layers.origin = '';
-                    arc.layers.destiny = '';
-                }
-                else {
-                    arc.layers.destiny = layer;
-                    arcMap.push({
-                        name: layer.name,
-                        element: layer.data.element,
-                        x: layer.x,
-                        y: layer.y
-                    });
-                    drawArc(arc);    
-                }        
-            }
-           }
-      }
+                    }
+                    else {
+                        // TROCAR ESSA RUMA DE ELSE IF POR SWITCH (VAMU FAZER DIREITO U.U)
+                        if(arc.layers.origin.data.element === layer.data.element) {
+                            alert("you can't create an arc between same tools");
+                            arc.layers.origin = '';
+                            arc.layers.destiny = '';
+                            return;
+                        }
+                        else if (arc.layers.origin.data.element == "repository" && layer.data.element != "activity") {
+                            alert("repositories can only be linked with activities");
+                            arc.layers.origin = '';
+                            arc.layers.destiny = '';
+                            return;
+                        }
+                        else if (arc.layers.origin.data.element == "event" && layer.data.element != "transition") {
+                            alert("events can only be linked to transitions");
+                            arc.layers.origin = '';
+                            arc.layers.destiny = '';
+                        }
+                        else if (arc.layers.origin.data.element == "transition" && (layer.data.element != "activity" && layer.data.element != "composition")) {
+                            alert("transitions can only be linked to activities or composite activities");
+                            arc.layers.origin = '';
+                            arc.layers.destiny = '';
+                        }
+                        else if(arc.layers.origin.data.element == "activity" && (layer.data.element != "transition" && layer.data.element != "repository")) {
+                            alert("activities can only be linked to transitions or repositories");
+                            arc.layers.origin = '';
+                            arc.layers.destiny = '';
+                        }
+                        else if(arc.layers.origin.data.element == "composition" && layer.data.element != "transition") {
+                            alert("composite activities can only be linked to transition");
+                            arc.layers.origin = '';
+                            arc.layers.destiny = '';
+                        }
+                        else {
+                            arc.layers.destiny = layer;
+                            arcMap.push({
+                                name: layer.name,
+                                element: layer.data.element,
+                                x: layer.x,
+                                y: layer.y
+                            });
+                            drawArc(arc);    
+                        }        
+                    }
+               }
+      },
+    
+      dblclick : function (layer) {
+          if (layer.data.element == "composition" && currentTool == "cursor") {
+              $(canvas).parent().hide();
+              canvas = document.querySelector("#" + layer.name + " > canvas");
+              $("#" + layer.name).show();
+          }
+      },
     })
     .drawLayers();
-    network.push($("canvas#drawScreen").getLayer("element" + network.length));
+    if(currentTool === "composition") {
+       newSubnet(currentTool + (getNetworkLength(currentTool)));
+    }
+    network.push($(canvas).getLayer(currentTool + (getNetworkLength(currentTool))));
+    console.log("Node inserted to network.");
 };
 
 var configArc = function (layer) {
@@ -171,19 +193,19 @@ var configArc = function (layer) {
 };
 
 var drawArc = function (arc) {
-    $("canvas#drawScreen").drawLine({
+    $(canvas).drawLine({
         layer: true, 
         name: 'arc' + (Math.floor(arcMap.length / 2) + 1), 
         strokeStyle: '#000',
-        strokeWidth: 4,
+        strokeWidth: 1,
         rounded: true,
         draggable: false,
         startArrow: false,
         endArrow: true,
         arrowRadius: 15,
         arrowAngle: 90,
-        x1: arc.layers.origin.x, y1: arc.layers.origin.y,
-        x2: arc.layers.destiny.x, y2: arc.layers.destiny.y,
+        x1: arc.layers.origin.x + 16, y1: arc.layers.origin.y,
+        x2: arc.layers.destiny.x - 16, y2: arc.layers.destiny.y,
     });
     
     attribArcToLayers(arc, "arc" + (Math.floor(arcMap.length/2) + 1));
@@ -193,8 +215,8 @@ var drawArc = function (arc) {
 };
 
 var attribArcToLayers = function (arc, arcName) {
-    $("canvas#drawScreen").getLayer(arc.layers.origin.name).data.arc["output"].push($("canvas#drawScreen").getLayer(arcName));
-    $("canvas#drawScreen").getLayer(arc.layers.destiny.name).data.arc["input"].push($("canvas#drawScreen").getLayer(arcName)); 
+    $(canvas).getLayer(arc.layers.origin.name).data.arc["output"].push($(canvas).getLayer(arcName));
+    $(canvas).getLayer(arc.layers.destiny.name).data.arc["input"].push($(canvas).getLayer(arcName)); 
 };
 
 var updateArcOnDragLayers = function (arc) {
@@ -203,16 +225,16 @@ var updateArcOnDragLayers = function (arc) {
             
             for(var i = 0; i < layer.data.arc.input.length; i++) {
                 if(layer.data.arc.input[i] != '') {
-                    var input = $("canvas#drawScreen").getLayer(layer.data.arc.input[i].name);
-                    input.x2 = layer.x;
+                    var input = $(canvas).getLayer(layer.data.arc.input[i].name);
+                    input.x2 = layer.x - 16;
                     input.y2 = layer.y;
                 }
             }
             
             for(var j = 0; j < layer.data.arc.output.length; j++) {
                 if(layer.data.arc.output[j] != '') {
-                    var output = $("canvas#drawScreen").getLayer(layer.data.arc.output[j].name);
-                    output.x1 = layer.x;
+                    var output = $(canvas).getLayer(layer.data.arc.output[j].name);
+                    output.x1 = layer.x + 16;
                     output.y1 = layer.y;
                 }
             }
@@ -224,7 +246,41 @@ $("input[name=tool]").each(function (index, value) {
     $(value).on("change", pickTool);
 });
 
-$('#drawScreen').on({
+/*
+ *  NewSubnet:
+ *  creates a new canvas for subnet
+ *  @param name:
+ *  reference to the subnet associated
+ */
+var newSubnet = function (name) {
+    
+    $("<div></div>", {
+      "id": name,
+      "class": "subnet-info",
+    }).appendTo( "#drawingArea" ).hide();
+    
+    $("<button><i class='fa fa-arrow-left'></i> exit subnet</button>", {
+      "class" : "subnet-exit"
+    }).appendTo("#" + name).on({
+        click: function(){
+        $("#" + name).hide();
+        canvas = document.querySelector("#drawScreen > canvas");
+        $("#drawScreen").show();  
+      }});
+    
+    $("#drawScreen > canvas")
+           .clone()
+           .clearCanvas()
+           .appendTo("#" + name)
+           .on({
+                "mousemove": function (evt) {
+                    mouse = getMousePos(canvas, evt);
+                },
+                "click": function(evt) { interactCanvas(evt); }
+            });
+};
+
+$(canvas).on({
     "mousemove": function (evt) {
         mouse = getMousePos(canvas, evt);
     },
@@ -236,6 +292,7 @@ var interactCanvas = function (event) {
         // default behavior
     }
     else {
-        drawImage(graph.src, mouse.x + graph.width/2, mouse.y + graph.height/2, graph.width, graph.height);        
+        if(!($(canvas).hasClass("forbidden")))
+            drawImage(graph.src, mouse.x + graph.width/2, mouse.y + graph.height/2, graph.width, graph.height);        
     }
 }
