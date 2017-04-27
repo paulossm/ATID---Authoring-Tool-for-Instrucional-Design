@@ -86,7 +86,7 @@ var getMousePos = function (canvas, evt) {
 var getNetworkLength = function (nodetype) {
     var n_layers = 0;
     for(var i = 0; i < network.length; i++) {
-        if(network[i].data.element == nodetype)
+        if(network[i].layer.data.element == nodetype)
             ++n_layers;
     }
     return n_layers;
@@ -181,12 +181,50 @@ var drawImage = function (source, posX, posY, width, height) {
       },
     })
     .drawLayers();
+    
+    if(!(currentTool === "transition")) {
+        promptDescription(currentTool);
+    }
+    
     if(currentTool === "composition") {
        newSubnet(currentTool + (getNetworkLength(currentTool)));
     }
-    network.push($(canvas).getLayer(currentTool + (getNetworkLength(currentTool))));
+    network.push({
+        'id': network.length,
+        'node': currentTool,
+        'posX': mouse.x,
+        'posY': mouse.y,
+        'layer': $(canvas).getLayer(currentTool + (getNetworkLength(currentTool))),
+        'label': ''
+    });
     console.log("Node inserted to network.");
 };
+
+var promptDescription = function ( tool ) {
+    document.getElementById("descriptionTitle").innerHTML = tool;
+    var descriptionDiv = document.getElementById("descriptionInput");
+    descriptionDiv.style.left = mouse.x + 40 + "px";
+    descriptionDiv.style.top = mouse.y + 40 + "px";        
+    descriptionDiv.hidden = false;
+}
+
+var submitDescription = function () {
+    var nodeDescription = document.getElementById("nodeTitle").value;
+    var descriptionDiv = document.getElementById("descriptionInput");
+    if(nodeDescription != "") {
+        // precisa ter o dado de qual nó está sendo gravado o nome
+    }
+    $(canvas).drawText({
+      layer: true,
+      fillStyle: '#000',      
+      x: descriptionDiv.style.left.substr(0, descriptionDiv.style.left.length - 2), y: descriptionDiv.style.top.substr(0, descriptionDiv.style.top.length - 2),
+      fontSize: 11,
+      fontFamily: 'Arial, sans-serif',
+      text: nodeDescription,  
+    });
+    $("#nodeTitle").val("");
+    document.getElementById("descriptionInput").hidden = true;
+}
 
 var configArc = function (layer) {
     arc.enable = true;
@@ -204,8 +242,8 @@ var drawArc = function (arc) {
         endArrow: true,
         arrowRadius: 15,
         arrowAngle: 90,
-        x1: arc.layers.origin.x + 16, y1: arc.layers.origin.y,
-        x2: arc.layers.destiny.x - 16, y2: arc.layers.destiny.y,
+        x1: arc.layers.origin.x, y1: arc.layers.origin.y,
+        x2: arc.layers.destiny.x, y2: arc.layers.destiny.y,
     });
     
     attribArcToLayers(arc, "arc" + (Math.floor(arcMap.length/2) + 1));
@@ -226,7 +264,7 @@ var updateArcOnDragLayers = function (arc) {
             for(var i = 0; i < layer.data.arc.input.length; i++) {
                 if(layer.data.arc.input[i] != '') {
                     var input = $(canvas).getLayer(layer.data.arc.input[i].name);
-                    input.x2 = layer.x - 16;
+                    input.x2 = layer.x;
                     input.y2 = layer.y;
                 }
             }
@@ -234,7 +272,7 @@ var updateArcOnDragLayers = function (arc) {
             for(var j = 0; j < layer.data.arc.output.length; j++) {
                 if(layer.data.arc.output[j] != '') {
                     var output = $(canvas).getLayer(layer.data.arc.output[j].name);
-                    output.x1 = layer.x + 16;
+                    output.x1 = layer.x;
                     output.y1 = layer.y;
                 }
             }
@@ -296,3 +334,19 @@ var interactCanvas = function (event) {
             drawImage(graph.src, mouse.x + graph.width/2, mouse.y + graph.height/2, graph.width, graph.height);        
     }
 }
+
+var saveNetwork = function () {
+    var output = [];
+    for(var obj in network) {
+        var one = JSON.stringify(obj, function(key, val) {
+                    if (val != null && typeof val == "object") {
+                            return "object";
+                        }
+                        return val;
+                    });
+        output.push(one);
+        // output.push(JSON.stringify(network[obj]));
+    }
+        
+    document.write(output);
+};

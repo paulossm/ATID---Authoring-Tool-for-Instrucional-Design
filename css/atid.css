@@ -1,12 +1,13 @@
 @import url("font-awesome-4.7.0/css/font-awesome.min.css");
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 
 body#atid-desktop {
+    font-family: 'Open Sans', sans-serif;
     font-size: 13px;
     overflow-x: hidden;
     background-color: #EEE;
 }
-
-
 
 header {
     background-color: #D8335B;
@@ -191,5 +192,20 @@ canvas.tool-transition {
     cursor: url("images/tools/transition.svg"), auto;
 }
 
+#atid-desktop .loginScreen, #atid-desktop.signupScreen {
+    background-color: white;
+}
 
+form .signupForm, form .loginForm {
+    padding: 12px 15px;
+    background-color: transparent;
+    color: #D8335B;
+}
 
+.loginScreen .centered, .signupScreen .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -60%);
+}

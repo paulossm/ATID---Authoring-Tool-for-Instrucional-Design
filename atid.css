@@ -82,7 +82,7 @@ ul.headerBar #course .courseName {
     padding-bottom: 0px;
     border-top: solid 1px #FFF;
     
-    display: none;
+    /* display: none;*/
 }
 
 #control-tools li {
@@ -110,7 +110,7 @@ ul.headerBar #course .courseName {
     background-color: transparent;
     position: relative;
     
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 #drawingArea #drawTools {
@@ -166,5 +166,18 @@ canvas {
     box-shadow: 0px 1px 6px rgba(30,30,30,.2);
 }
 
-
+#descriptionInput {
+    padding: 30px;
+    background-color: white;
+    color: black;
+    width: 220px;
+    height: auto;
+    
+    border: solid 1px #D8335B;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 95;
+}
 

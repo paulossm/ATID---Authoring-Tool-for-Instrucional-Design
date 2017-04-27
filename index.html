@@ -45,13 +45,13 @@
         
         <!-- CONTROL TOOLS -->
         <ul id="control-tools" class="col-xs-12 col-lg-12" style="list-style-type: none;">
-            <li style="display: inline;"><button type="button"><i class="fa fa-file-o" aria-hidden="true"></i>
+            <!--<li style="display: inline;"><button type="button"><i class="fa fa-file-o" aria-hidden="true"></i>
  new</button></li>
             <li style="display: inline;"><button type="button"><i class="fa fa-folder-open-o" aria-hidden="true"></i>
-open</button></li>
-            <li style="display: inline;"><button type="button"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+open</button></li>-->
+            <li style="display: inline;"><button type="button" onclick="saveNetwork()"><i class="fa fa-floppy-o" aria-hidden="true"></i>
 save</button></li>
-            <li style="display: inline;"><button type="button"><i class="fa fa-share-square-o" aria-hidden="true"></i>
+            <!--<li style="display: inline;"><button type="button"><i class="fa fa-share-square-o" aria-hidden="true"></i>
 share</button></li>
             <li style="display: inline;"><button type="button"><i class="fa fa-undo" aria-hidden="true"></i>
 undo</button></li>
@@ -63,7 +63,7 @@ copy</button></li>
 cut</button></li>
             <li style="display: inline;"><button type="button"><i class="fa fa-clipboard" aria-hidden="true"></i>
 paste</button></li>
-            <li style="display: inline;"><button type="button">reachability</button></li>
+            <li style="display: inline;"><button type="button">reachability</button></li>-->
         </ul>
         
 
@@ -114,6 +114,13 @@ paste</button></li>
         </form>      
         <div id="drawScreen">
             <canvas class="tool-cursor">Your browser doesn't support canvas</canvas>
+            
+            <div id="descriptionInput" hidden>                
+                <h4 id="descriptionTitle"></h4>
+                <label for="nodeTitle">título</label>
+                <input type="text" id="nodeTitle">
+                <button type="button" onclick="submitDescription()" id="submitDescription">Ok</button>
+            </div>
         </div>
         
 
