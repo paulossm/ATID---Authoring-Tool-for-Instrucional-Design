@@ -30,7 +30,7 @@
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="login">
-                    <form class="loginForm">                
+                    <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                
                         <fieldset class="form-group">
                             <label for="email">Email</label>
                             <input class="form-control" type="email" name="email" id="email" placeholder="email@dominio.com" required>
@@ -45,8 +45,8 @@
                     </form>        
                 </div>
                 <div role="tabpanel" class="tab-pane" id="signup">
-                    <form class="signupForm">                
-                        <fieldset class="form-group">
+                    <form class="signupForm" action="<?=base_url()?>index.php/Principal/cadastrar_usuario" method="post">                
+                        <fieldset class="form-group" >
                             <label for="nome">Nome completo</label>
                             <input class="form-control" type="text" name="nome" id="nome" placeholder="nome completo" required>
                         </fieldset>

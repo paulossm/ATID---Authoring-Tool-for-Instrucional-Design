@@ -3,6 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Principal extends CI_Controller {
 
+	function __construct() {
+		 parent::__construct();
+
+        $this->load->helper("url");
+        $this->load->model("usuario_model", "usuario");
+    }	
+
+
 	/**
 	 * Index Page for this controller.
 	 *
@@ -20,33 +28,77 @@ class Principal extends CI_Controller {
 	 */
 	public function index()
 	{	
-		$this->load->helper('url');
-		$this->load->view('login_view');
+		session_start();
+		if(!isset ($_SESSION['id_usuario']) == true)
+		{	
+			unset ($_SESSION['id_usuario']);
+        	unset ($_SESSION['email']);
+        	unset ($_SESSION['nome']);
+        	$this->load->view('login_view');
+		}else{
+			$this->atid();
+		}
+		
 	}
 
 	function autenticar($password = '', $login = '') 
-   	{$this->load->helper('url');
-
-   		$this->load->model("usuario_model", "usuario");
-		if($password == ""||$login == ""){
-			$login = $this->input->post('usuario_login');
-			$password = $this->input->post('usuario_senha');
+   	{
+   		session_start();
+   		if($password == ""||$login == ""){
+			$login = $this->input->post('email');
+			$senha = md5($this->input->post('senha'));
 		}
 
-        $loga = $this->usuario->autenticar($login, $password);
+        $loga = $this->usuario->autenticar($login, $senha);
         if (count($loga) > 0) {
-            echo "entrou";
-			redirect(base_url() . 'index.php/Teste/atid');
+        	$_SESSION['id_usuario'] = $loga->id_usuario;
+        	$_SESSION['email'] = $loga->email;
+        	$_SESSION['nome'] = $loga->nome;
+			$this->atid();
         } else {
-            echo 'não logou';
-			redirect(base_url() . 'index.php/Teste/', 'refresh');
+        	unset ($_SESSION['id_usuario']);
+        	unset ($_SESSION['email']);
+        	unset ($_SESSION['nome']);
+			redirect(base_url(), 'refresh');
             
         }
+    }
+
+    function deslogar() 
+   	{
+   		session_start();
+   		unset ($_SESSION['id_usuario']);
+        unset ($_SESSION['email']);
+        unset ($_SESSION['nome']);
+		redirect(base_url(), 'refresh');
     }
 	
 	public function atid()
 	{	
-		$this->load->helper('url');
 		$this->load->view('draw_view');
 	}
+
+	function cadastrar_usuario() {
+		$senha = md5($this->input->post('senha'));
+		$confirmacao = md5($this->input->post('senha-confirma'));
+		if($confirmacao != $senha){
+            print_r("As senhas não correspondem!");
+            //$this->load->view("principal/", $data);
+		}else {
+			$loga = $this->usuario->verificar_email($this->input->post("email"));
+	        if (count($loga) > 0) {
+	            print_r("E-mail já cadastrado!");
+				redirect(base_url());
+	        } else {
+				
+			$data = array(
+					"nome" => $this->input->post("nome"),
+					"email" => $this->input->post("email"),
+					"senha" =>  md5($this->input->post("senha")),
+				);
+				$this->usuario->insert($data);
+				$this->autenticar($senha, $this->input->post("email"));
+			}
+		}
+    }
 }

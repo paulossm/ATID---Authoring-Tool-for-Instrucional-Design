@@ -1,3 +1,4 @@
+
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -78,7 +79,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'postgres',
 	'password' => '123',
-	'database' => 'teste',
+	'database' => 'atid',
 	'dbdriver' => 'postgre',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
