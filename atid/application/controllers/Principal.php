@@ -41,10 +41,10 @@ class Principal extends CI_Controller {
 		
 	}
 
-	function autenticar($password = '', $login = '') 
+	function autenticar($senha = '', $login = '') 
    	{
    		session_start();
-   		if($password == ""||$login == ""){
+   		if($senha == ""||$login == ""){
 			$login = $this->input->post('email');
 			$senha = md5($this->input->post('senha'));
 		}
@@ -59,7 +59,8 @@ class Principal extends CI_Controller {
         	unset ($_SESSION['id_usuario']);
         	unset ($_SESSION['email']);
         	unset ($_SESSION['nome']);
-			redirect(base_url(), 'refresh');
+			//redirect(base_url(), 'refresh');
+			echo "aqui";
             
         }
     }
@@ -88,7 +89,7 @@ class Principal extends CI_Controller {
 			$loga = $this->usuario->verificar_email($this->input->post("email"));
 	        if (count($loga) > 0) {
 	            print_r("E-mail já cadastrado!");
-				redirect(base_url());
+				//redirect(base_url());
 	        } else {
 				
 			$data = array(
