@@ -1,9 +1,11 @@
 @import url("font-awesome-4.7.0/css/font-awesome.min.css");
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,400i,700|Raleway:400,400i,700');
 
 body#atid-desktop {
     font-size: 13px;
+    font-family: 'Raleway', 'Helvetica', 'Segoe UI', Arial, Verdana, sans-serif;
     overflow-x: hidden;
-    background-color: #EEE;
+    background-color: #f9f6f6;
 }
 
 
@@ -12,17 +14,40 @@ header {
     background-color: white;
 }
 
+#atid-desktop h1,
+#atid-desktop h2,
+#atid-desktop h3 {
+    color: #444;
+    text-transform: uppercase;
+}
+
+#networkCounter {
+    padding-left: 22px;    
+}
+
+#networkCounter::before {
+    content: '';
+    width: 0px;
+    height: 0px;
+    padding: 4px 0px 0px 1px;
+    font-size: 14pt;
+    background-color: rgba(30,30,30,.2);
+    position: relative;
+    right: 14px;
+    color: rgba(30,30,30,.2);
+}
+
 #logo{
     text-decoration: none;
-    font-size: 28px;
+    font-size: 22px;
     letter-spacing: .1em;
-    background-color: #D8335B;
-    color: white;
+    background-color: white;
+    color: #D8335B;
     font-weight: bold;
-
+    font-family: 'Monstserrat', sans-serif;
     text-align: center;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top:8px;
+    padding-bottom: 8px;
 }
 
 ul.headerBar {
@@ -31,8 +56,8 @@ ul.headerBar {
     margin-bottom: 0px;
 }
 ul.headerBar li {
-    padding: 12px 0px 0px;
-    color: #D8335B;
+    padding: 6px 0px 0px;
+    color: #444;
 }
 ul.headerBar h2 {
     line-height: 1.42857143;
@@ -58,23 +83,23 @@ ul.headerBar #course .courseName {
     font-weight: bold;
     font-style: normal;
 }
+
 #userInfo h4, #userInfo h5 {
     font-size: 13px;
-    line-height: 1.42857143;
-}
-#userInfo .media img.media-object {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    font-weight: bold;
+    line-height: 1.2;
 }
 
-#userInfo #logout {
-    background: white;
-    border: solid 1px #D8335B;
-    border-radius: 8px;
-    font-size: 18px;
-    color: #D8335B;
+#userInfo #userRole {
+    color: #777;
+    font-weight: normal;
+}
+
+#userInfo .media img.media-object {
+    border-radius: 12%;
+    width: 32px;
+    height: 32px;
+    margin-right: 0px;
 }
 
 #control-tools {
@@ -82,7 +107,7 @@ ul.headerBar #course .courseName {
     padding-bottom: 0px;
     border-top: solid 1px #FFF;
     
-    display: none;
+    /* display: none;*/
 }
 
 #control-tools li {
@@ -110,7 +135,7 @@ ul.headerBar #course .courseName {
     background-color: transparent;
     position: relative;
     
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 #drawingArea #drawTools {
@@ -166,5 +191,68 @@ canvas {
     box-shadow: 0px 1px 6px rgba(30,30,30,.2);
 }
 
+#descriptionInput {
+    padding: 30px;
+    background-color: white;
+    color: black;
+    width: 220px;
+    height: auto;
+    
+    border: solid 1px #D8335B;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 95;
+}
 
+#atid-desktop button.btn {
+    border-radius: 20px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 5px 12px;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+#atid-desktop button.btn:hover, #atid-desktop button.btn:active {
+    background-color: ghostwhite;
+    color: #444;
+}
 
+button#logout {
+    background-color: white;
+    color: indianred;
+}
+button.btn#logout:hover, button.btn#logout:active {
+    background-color: indianred;
+    color: white;
+}
+#networks {
+    padding-top: 12px;
+}
+#networks::before {
+    content: '';
+    padding: 0px 100% 0px 0px;
+    background-color: rgba(30,30,30,.1);
+    position: relative;
+    bottom: 6px;
+    color: aliceblue;
+    right: 0px;
+    width: 100%;
+    border-top: solid 1px rgba(30,30,30,.1);
+    height: 0px;
+    font-size: 0em;
+}
+
+#networks > li {
+    list-style: none;
+}
+
+#networks .panel-title {
+    font-weight: bold;
+    color: #D8335B;
+}
+
+#networks .panel-footer {
+    background-color: white;
+}
