@@ -37,7 +37,7 @@
                             </a>
                         </div>
                         <div class="media-right media-middle">
-                            <button id="logout" type="button"><a href="<?php echo base_url(); ?>index.php/Principal/deslogar"><i class="fa fa-sign-out"></i></button>
+                            <button id="logout" type="button"><a href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i></a></button>
                         </div>
                     </div>
                 </li>
