@@ -36,7 +36,7 @@ class Principal extends CI_Controller {
         	unset ($_SESSION['nome']);
         	$this->load->view('login_view');
 		}else{
-			$this->atid();
+			redirect("dashboard/");
 		}
 		
 	}
@@ -54,13 +54,12 @@ class Principal extends CI_Controller {
         	$_SESSION['id_usuario'] = $loga->id_usuario;
         	$_SESSION['email'] = $loga->email;
         	$_SESSION['nome'] = $loga->nome;
-			$this->atid();
+			redirect("dashboard/");
         } else {
         	unset ($_SESSION['id_usuario']);
         	unset ($_SESSION['email']);
         	unset ($_SESSION['nome']);
-			//redirect(base_url(), 'refresh');
-			echo "aqui";
+			redirect(base_url(), 'refresh');
             
         }
     }
@@ -74,10 +73,6 @@ class Principal extends CI_Controller {
 		redirect(base_url(), 'refresh');
     }
 	
-	public function atid()
-	{	
-		$this->load->view('draw_view');
-	}
 
 	function cadastrar_usuario() {
 		$senha = md5($this->input->post('senha'));
