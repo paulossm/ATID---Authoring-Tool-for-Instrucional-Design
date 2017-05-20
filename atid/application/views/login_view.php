@@ -18,7 +18,7 @@
     
     <body id="atid-desktop" class="row signupScreen">
         
-        <section id="authentication" class="col-xs-12 col-md-4 centered">
+        <section id="authentication" class="col-xs-12 col-md-4 col-md-offset-4">
             <div class="artwork text-center">
                 <h1 class="text-primary">ATID</h1>
                 <small>Authoring Tool for Instructional Design</small>

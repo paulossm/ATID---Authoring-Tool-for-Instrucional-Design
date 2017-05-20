@@ -206,7 +206,7 @@ canvas {
     z-index: 95;
 }
 
-#atid-desktop button.btn {
+#atid-desktop .btn {
     border-radius: 20px;
     border-width: 1px;
     border-style: solid;
@@ -214,16 +214,15 @@ canvas {
     font-size: 13px;
     text-transform: uppercase;
 }
-#atid-desktop button.btn:hover, #atid-desktop button.btn:active {
-    background-color: ghostwhite;
-    color: #444;
+#atid-desktop .btn:hover, #atid-desktop .btn:active, #atid-desktop .btn:focus {
+    border: solid 1px;
 }
 
-button#logout {
+#logout {
     background-color: white;
     color: indianred;
 }
-button.btn#logout:hover, button.btn#logout:active {
+.btn#logout:hover, .btn#logout:active, .btn#logout:focus {
     background-color: indianred;
     color: white;
 }

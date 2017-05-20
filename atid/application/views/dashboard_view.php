@@ -6,7 +6,7 @@
         <title>ATID - Authoring Tool for Instructional Design</title>
         
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>css/atid.css" type="text/css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>font-awesome-4.7.0/css/font-awesome.min.css" type="text/css">
 
@@ -30,43 +30,47 @@
                             <h4 class="media-heading"><?php echo @$_SESSION['nome'];?><br><span id="userRole">Instructor</span></h4>
                         </div>
                         <div class="media-right media-middle btn-group" role="group">
-                            <button id="logout" type="button"  class="btn"><a href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Sair</a></button>
+                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Sair</a>
                         </div>
                     </div>
                 </li>
             </ul>
         </header>
         <section id="networkList" class="col-xs-12 col-lg-12">
-            <header>
-
-            </header>
-            <h2>Minhas redes <span id="networkCounter"><?php echo $qtd?></span></h2>
-            <ul id="networks" class="list-group">
+            <h2 class="col-xs-9 col-md-3">Minhas redes <span id="networkCounter"><?php echo $qtd?></span></h2>
+            <h3 class="col-xs-3 col-md-2"><a class="btn btn-success" href="#"><i class="fa fa-plus fa-fw"></i> Criar</a></h3>
+            <ul id="networks" class="list-group col-xs-12">
                 
 
-                <?php foreach ($list as $item): 
-                    $nome = $item->nome;
-                    $usuario = $item->nome_usuario;
-                    $data = $item->data_modificacao;?>
+                <?php 
+                if (empty($list)) { ?>
+                    <h4 class="text-muted">Nenhuma rede criada</h4>
+                <?php }
+                else {
+                    foreach ($list as $item): 
+                        $nome = $item->nome;
+                        $usuario = $item->nome_usuario;
+                        $data = $item->data_modificacao;?>
 
-                     <li class="col-xs-6 col-lg-3">
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><?php echo $nome?></h3>
+                        <li class="col-xs-6 col-lg-3">
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><?php echo $nome?></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <p><i class="fa fa-lightbulb-o"></i> criado por: <span class="author"><?php echo $usuario?></span>
+                                    <p><i class="fa fa-clock-o"></i> última edição: <?php echo $data?></p>
+                                </div>
+                                <div class="panel-footer text-center">
+                                    <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar"/><i class="fa fa-pencil-square-o"></i> editar</a></button>
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                <p><i class="fa fa-lightbulb-o"></i> criado por: <span class="author"><?php echo $usuario?></span>
-                                <p><i class="fa fa-clock-o"></i> última edição: <?php echo $data?></p>
-                            </div>
-                            <div class="panel-footer text-center">
-                                <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar"/><i class="fa fa-pencil-square-o"></i> editar</a></button>
-                            </div>
-                        </div>
-                    </li>
-
-                <?php endforeach ?>
-                
-            </div>
+                        </li>
+                    <?php 
+                    endforeach;
+                    } 
+                    ?>
+            </ul>
         </section>
         
         <script
