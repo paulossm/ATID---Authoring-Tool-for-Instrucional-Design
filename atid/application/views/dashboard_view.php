@@ -30,15 +30,15 @@
                             <h4 class="media-heading"><?php echo @$_SESSION['nome'];?><br><span id="userRole">Instructor</span></h4>
                         </div>
                         <div class="media-right media-middle btn-group" role="group">
-                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Sair</a>
+                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Log Out</a>
                         </div>
                     </div>
                 </li>
             </ul>
         </header>
         <section id="networkList" class="col-xs-12 col-lg-12">
-            <h2 class="col-xs-9 col-md-3">Minhas redes <span id="networkCounter"><?php echo $qtd?></span></h2>
-            <h3 class="col-xs-3 col-md-2"><a class="btn btn-success" href="#"><i class="fa fa-plus fa-fw"></i> Criar</a></h3>
+            <h2 class="col-xs-9 col-md-3">My Networks <span id="networkCounter"><?php echo $qtd?></span></h2>
+            <h3 class="col-xs-3 col-md-2"><a class="btn btn-success" href="<?php echo base_url(); ?>index.php/Draw/"><i class="fa fa-plus fa-fw"></i> New</a></h3>
             <ul id="networks" class="list-group col-xs-12">
                 
 
@@ -49,6 +49,7 @@
                 else {
                     foreach ($list as $item): 
                         $nome = $item->nome;
+                        $id = $item->id_rede;
                         $usuario = $item->nome_usuario;
                         $data = $item->data_modificacao;?>
 
@@ -62,7 +63,7 @@
                                     <p><i class="fa fa-clock-o"></i> última edição: <?php echo $data?></p>
                                 </div>
                                 <div class="panel-footer text-center">
-                                    <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar"/><i class="fa fa-pencil-square-o"></i> editar</a></button>
+                                    <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a></button>
                                 </div>
                             </div>
                         </li>

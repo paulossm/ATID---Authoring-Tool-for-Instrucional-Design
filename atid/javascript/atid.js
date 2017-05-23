@@ -345,7 +345,7 @@ var saveNetwork = function () {
                         return val;
                     });
         output.push(one);
-        // output.push(JSON.stringify(network[obj]));
+        //output.push(JSON.stringify(network[obj]));
     }
         
     document.write(output);

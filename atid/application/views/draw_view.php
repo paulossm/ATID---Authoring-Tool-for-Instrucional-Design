@@ -36,8 +36,8 @@
                             <img class="media-object" src="<?php echo base_url(); ?>images/profile.jpg" alt="user profile picture">
                             </a>
                         </div>
-                        <div class="media-right media-middle">
-                            <button id="logout" type="button"><a href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i></a></button>
+                        <div class="media-right media-middle btn-group" role="group">
+                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i>Log Out</a>
                         </div>
                     </div>
                 </li>

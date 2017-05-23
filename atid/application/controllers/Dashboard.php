@@ -22,8 +22,9 @@ class Dashboard extends CI_Controller {
 		
 	}
 
-	public function editar()
+	public function editar($id_rede='')
 	{	
+		session_start();
 		$this->load->view('draw_view');
 	}
 }
