@@ -77,8 +77,8 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	   => '',//'host=localhost port=5432 dbname=atid user=postgres password=123',
 	'hostname' => 'localhost',
-	'username' => 'postgres',
-	'password' => '123',
+	'username' => 'atid',
+	'password' => '1234',
 	'database' => 'atid',
 	'dbdriver' => 'postgre',
 	'dbprefix' => '',
