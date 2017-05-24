@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
-        <title>ATID - Authoring Tool for Instructional Design</title>
+        <title>Dashboard - ATID - Authoring Tool for Instructional Design</title>
         
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css">
@@ -44,7 +44,7 @@
 
                 <?php 
                 if (empty($list)) { ?>
-                    <h4 class="text-muted">Nenhuma rede criada</h4>
+                    <h4 class="text-muted">You haven't created any network</h4>
                 <?php }
                 else {
                     foreach ($list as $item): 
@@ -59,8 +59,8 @@
                                     <h3 class="panel-title"><?php echo $nome?></h3>
                                 </div>
                                 <div class="panel-body">
-                                    <p><i class="fa fa-lightbulb-o"></i> criado por: <span class="author"><?php echo $usuario?></span>
-                                    <p><i class="fa fa-clock-o"></i> última edição: <?php echo $data?></p>
+                                    <p><i class="fa fa-lightbulb-o"></i> created by: <span class="author"><?php echo $usuario?></span>
+                                    <p><i class="fa fa-clock-o"></i> last modified: <?php echo $data?></p>
                                 </div>
                                 <div class="panel-footer text-center">
                                     <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a></button>

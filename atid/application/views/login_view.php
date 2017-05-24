@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="en-US">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
-        <title>ATID - Cadastrar</title>
+        <title>ATID - Authoring Tool for Instructional Design</title>
         
         <link rel="stylesheet" href="<?php echo base_url(); ?>css/base.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>css/atid.css">
@@ -25,7 +25,7 @@
             </div>
             <ul class="nav nav-tabs formTabs">
                 <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-                <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Criar conta</a></li>
+                <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
             </ul>
 
             <div class="tab-content">
@@ -33,40 +33,40 @@
                     <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                
                         <fieldset class="form-group">
                             <label for="email">Email</label>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="email@dominio.com" required>
+                            <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label for="senha">Senha</label>
-                            <input class="form-control" type="password" name="senha" id="senha" placeholder="insira sua senha" required>
+                            <label for="senha">Password</label>
+                            <input class="form-control" type="password" name="senha" id="senha" placeholder="type your password" required>
                         </fieldset>
 
-                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        <button type="submit" class="btn btn-primary">Log me in</button>
                     </form>        
                 </div>
                 <div role="tabpanel" class="tab-pane" id="signup">
                     <form class="signupForm" action="<?=base_url()?>index.php/Principal/cadastrar_usuario" method="post">                
                         <fieldset class="form-group" >
-                            <label for="nome">Nome completo</label>
-                            <input class="form-control" type="text" name="nome" id="nome" placeholder="nome completo" required>
+                            <label for="nome">Full name</label>
+                            <input class="form-control" type="text" name="nome" id="nome" placeholder="type your name" required>
                         </fieldset>
 
                         <fieldset class="form-group">
                             <label for="email">Email</label>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="email@dominio.com" required>
+                            <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label for="senha">Senha</label>
-                            <input class="form-control" type="password" name="senha" id="senha" required>
+                            <label for="senha">Password</label>
+                            <input class="form-control" type="password" name="senha" id="senha" placeholder="choose a password" required>
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label for="senha-confirma">Confirme a senha</label>
-                            <input class="form-control" type="password" name="senha-confirma" id="senha-confirma" required>
+                            <label for="senha-confirma">Confirm password</label>
+                            <input class="form-control" type="password" name="senha-confirma" placeholder="confirm the password" id="senha-confirma" required>
                         </fieldset>
 
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <button type="submit" class="btn btn-primary">Sign me up</button>
                     </form>
                 </div>
             </div>
