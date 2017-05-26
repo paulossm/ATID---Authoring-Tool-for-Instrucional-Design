@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.6
 -- Dumped by pg_dump version 9.5.6
 
--- Started on 2017-05-23 12:10:36 BRT
+-- Started on 2017-05-26 08:53:38 BRT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -24,7 +24,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2221 (class 0 OID 0)
+-- TOC entry 2233 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -68,7 +68,7 @@ CREATE SEQUENCE arco_id_arco_seq
 ALTER TABLE arco_id_arco_seq OWNER TO postgres;
 
 --
--- TOC entry 2222 (class 0 OID 0)
+-- TOC entry 2234 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: arco_id_arco_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -108,7 +108,7 @@ CREATE SEQUENCE atividade_id_atividade_seq
 ALTER TABLE atividade_id_atividade_seq OWNER TO postgres;
 
 --
--- TOC entry 2223 (class 0 OID 0)
+-- TOC entry 2235 (class 0 OID 0)
 -- Dependencies: 185
 -- Name: atividade_id_atividade_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -147,7 +147,7 @@ CREATE SEQUENCE evento_id_evento_seq
 ALTER TABLE evento_id_evento_seq OWNER TO postgres;
 
 --
--- TOC entry 2224 (class 0 OID 0)
+-- TOC entry 2236 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: evento_id_evento_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -188,7 +188,7 @@ CREATE SEQUENCE rede_id_rede_seq
 ALTER TABLE rede_id_rede_seq OWNER TO postgres;
 
 --
--- TOC entry 2225 (class 0 OID 0)
+-- TOC entry 2237 (class 0 OID 0)
 -- Dependencies: 183
 -- Name: rede_id_rede_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -227,12 +227,51 @@ CREATE SEQUENCE repositorio_id_repositorio_seq
 ALTER TABLE repositorio_id_repositorio_seq OWNER TO postgres;
 
 --
--- TOC entry 2226 (class 0 OID 0)
+-- TOC entry 2238 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: repositorio_id_repositorio_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE repositorio_id_repositorio_seq OWNED BY repositorio.id_repositorio;
+
+
+--
+-- TOC entry 196 (class 1259 OID 16530)
+-- Name: subrede; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE subrede (
+    id_subrede integer NOT NULL,
+    posicao_x integer,
+    posicao_y integer,
+    id_rede integer
+);
+
+
+ALTER TABLE subrede OWNER TO postgres;
+
+--
+-- TOC entry 195 (class 1259 OID 16528)
+-- Name: subrede_id_subrede_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE subrede_id_subrede_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE subrede_id_subrede_seq OWNER TO postgres;
+
+--
+-- TOC entry 2239 (class 0 OID 0)
+-- Dependencies: 195
+-- Name: subrede_id_subrede_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE subrede_id_subrede_seq OWNED BY subrede.id_subrede;
 
 
 --
@@ -266,7 +305,7 @@ CREATE SEQUENCE transicao_id_transicao_seq
 ALTER TABLE transicao_id_transicao_seq OWNER TO postgres;
 
 --
--- TOC entry 2227 (class 0 OID 0)
+-- TOC entry 2240 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: transicao_id_transicao_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -306,7 +345,7 @@ CREATE SEQUENCE usuario_id_usuario_seq
 ALTER TABLE usuario_id_usuario_seq OWNER TO postgres;
 
 --
--- TOC entry 2228 (class 0 OID 0)
+-- TOC entry 2241 (class 0 OID 0)
 -- Dependencies: 181
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -315,7 +354,7 @@ ALTER SEQUENCE usuario_id_usuario_seq OWNED BY usuario.id_usuario;
 
 
 --
--- TOC entry 2065 (class 2604 OID 16524)
+-- TOC entry 2071 (class 2604 OID 16524)
 -- Name: id_arco; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -323,7 +362,7 @@ ALTER TABLE ONLY arco ALTER COLUMN id_arco SET DEFAULT nextval('arco_id_arco_seq
 
 
 --
--- TOC entry 2061 (class 2604 OID 16472)
+-- TOC entry 2067 (class 2604 OID 16472)
 -- Name: id_atividade; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -331,7 +370,7 @@ ALTER TABLE ONLY atividade ALTER COLUMN id_atividade SET DEFAULT nextval('ativid
 
 
 --
--- TOC entry 2063 (class 2604 OID 16498)
+-- TOC entry 2069 (class 2604 OID 16498)
 -- Name: id_evento; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -339,7 +378,7 @@ ALTER TABLE ONLY evento ALTER COLUMN id_evento SET DEFAULT nextval('evento_id_ev
 
 
 --
--- TOC entry 2060 (class 2604 OID 16411)
+-- TOC entry 2066 (class 2604 OID 16411)
 -- Name: id_rede; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -347,7 +386,7 @@ ALTER TABLE ONLY rede ALTER COLUMN id_rede SET DEFAULT nextval('rede_id_rede_seq
 
 
 --
--- TOC entry 2064 (class 2604 OID 16511)
+-- TOC entry 2070 (class 2604 OID 16511)
 -- Name: id_repositorio; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -355,7 +394,15 @@ ALTER TABLE ONLY repositorio ALTER COLUMN id_repositorio SET DEFAULT nextval('re
 
 
 --
--- TOC entry 2062 (class 2604 OID 16485)
+-- TOC entry 2072 (class 2604 OID 16533)
+-- Name: id_subrede; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY subrede ALTER COLUMN id_subrede SET DEFAULT nextval('subrede_id_subrede_seq'::regclass);
+
+
+--
+-- TOC entry 2068 (class 2604 OID 16485)
 -- Name: id_transicao; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -363,7 +410,7 @@ ALTER TABLE ONLY transicao ALTER COLUMN id_transicao SET DEFAULT nextval('transi
 
 
 --
--- TOC entry 2058 (class 2604 OID 16399)
+-- TOC entry 2064 (class 2604 OID 16399)
 -- Name: id_usuario; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -371,7 +418,7 @@ ALTER TABLE ONLY usuario ALTER COLUMN id_usuario SET DEFAULT nextval('usuario_id
 
 
 --
--- TOC entry 2213 (class 0 OID 16521)
+-- TOC entry 2223 (class 0 OID 16521)
 -- Dependencies: 194
 -- Data for Name: arco; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -381,7 +428,7 @@ COPY arco (id_arco, id_origem, id_destino) FROM stdin;
 
 
 --
--- TOC entry 2229 (class 0 OID 0)
+-- TOC entry 2242 (class 0 OID 0)
 -- Dependencies: 193
 -- Name: arco_id_arco_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -390,7 +437,7 @@ SELECT pg_catalog.setval('arco_id_arco_seq', 1, false);
 
 
 --
--- TOC entry 2205 (class 0 OID 16469)
+-- TOC entry 2215 (class 0 OID 16469)
 -- Dependencies: 186
 -- Data for Name: atividade; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -400,7 +447,7 @@ COPY atividade (id_atividade, nome, posicao_x, posicao_y, id_rede) FROM stdin;
 
 
 --
--- TOC entry 2230 (class 0 OID 0)
+-- TOC entry 2243 (class 0 OID 0)
 -- Dependencies: 185
 -- Name: atividade_id_atividade_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -409,7 +456,7 @@ SELECT pg_catalog.setval('atividade_id_atividade_seq', 1, false);
 
 
 --
--- TOC entry 2209 (class 0 OID 16495)
+-- TOC entry 2219 (class 0 OID 16495)
 -- Dependencies: 190
 -- Data for Name: evento; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -419,7 +466,7 @@ COPY evento (id_evento, posicao_x, posicao_y, id_rede) FROM stdin;
 
 
 --
--- TOC entry 2231 (class 0 OID 0)
+-- TOC entry 2244 (class 0 OID 0)
 -- Dependencies: 189
 -- Name: evento_id_evento_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -428,7 +475,7 @@ SELECT pg_catalog.setval('evento_id_evento_seq', 1, false);
 
 
 --
--- TOC entry 2203 (class 0 OID 16408)
+-- TOC entry 2213 (class 0 OID 16408)
 -- Dependencies: 184
 -- Data for Name: rede; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -440,7 +487,7 @@ COPY rede (id_rede, data_criacao, data_modificacao, id_criador, id_modificador, 
 
 
 --
--- TOC entry 2232 (class 0 OID 0)
+-- TOC entry 2245 (class 0 OID 0)
 -- Dependencies: 183
 -- Name: rede_id_rede_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -449,7 +496,7 @@ SELECT pg_catalog.setval('rede_id_rede_seq', 2, true);
 
 
 --
--- TOC entry 2211 (class 0 OID 16508)
+-- TOC entry 2221 (class 0 OID 16508)
 -- Dependencies: 192
 -- Data for Name: repositorio; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -459,7 +506,7 @@ COPY repositorio (id_repositorio, posicao_x, posicao_y, id_rede) FROM stdin;
 
 
 --
--- TOC entry 2233 (class 0 OID 0)
+-- TOC entry 2246 (class 0 OID 0)
 -- Dependencies: 191
 -- Name: repositorio_id_repositorio_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -468,7 +515,26 @@ SELECT pg_catalog.setval('repositorio_id_repositorio_seq', 1, false);
 
 
 --
--- TOC entry 2207 (class 0 OID 16482)
+-- TOC entry 2225 (class 0 OID 16530)
+-- Dependencies: 196
+-- Data for Name: subrede; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY subrede (id_subrede, posicao_x, posicao_y, id_rede) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2247 (class 0 OID 0)
+-- Dependencies: 195
+-- Name: subrede_id_subrede_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('subrede_id_subrede_seq', 1, false);
+
+
+--
+-- TOC entry 2217 (class 0 OID 16482)
 -- Dependencies: 188
 -- Data for Name: transicao; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -478,7 +544,7 @@ COPY transicao (id_transicao, posicao_x, posicao_y, id_rede) FROM stdin;
 
 
 --
--- TOC entry 2234 (class 0 OID 0)
+-- TOC entry 2248 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: transicao_id_transicao_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -487,7 +553,7 @@ SELECT pg_catalog.setval('transicao_id_transicao_seq', 1, false);
 
 
 --
--- TOC entry 2201 (class 0 OID 16396)
+-- TOC entry 2211 (class 0 OID 16396)
 -- Dependencies: 182
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -510,7 +576,7 @@ COPY usuario (id_usuario, nome, email, senha, ativo) FROM stdin;
 
 
 --
--- TOC entry 2235 (class 0 OID 0)
+-- TOC entry 2249 (class 0 OID 0)
 -- Dependencies: 181
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -519,7 +585,7 @@ SELECT pg_catalog.setval('usuario_id_usuario_seq', 13, true);
 
 
 --
--- TOC entry 2079 (class 2606 OID 16526)
+-- TOC entry 2086 (class 2606 OID 16526)
 -- Name: id_arco; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -528,7 +594,7 @@ ALTER TABLE ONLY arco
 
 
 --
--- TOC entry 2071 (class 2606 OID 16474)
+-- TOC entry 2078 (class 2606 OID 16474)
 -- Name: id_atividade; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -537,7 +603,7 @@ ALTER TABLE ONLY atividade
 
 
 --
--- TOC entry 2075 (class 2606 OID 16500)
+-- TOC entry 2082 (class 2606 OID 16500)
 -- Name: id_evento; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -546,7 +612,7 @@ ALTER TABLE ONLY evento
 
 
 --
--- TOC entry 2069 (class 2606 OID 16413)
+-- TOC entry 2076 (class 2606 OID 16413)
 -- Name: id_rede; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -555,7 +621,7 @@ ALTER TABLE ONLY rede
 
 
 --
--- TOC entry 2077 (class 2606 OID 16513)
+-- TOC entry 2084 (class 2606 OID 16513)
 -- Name: id_repositorio; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -564,7 +630,16 @@ ALTER TABLE ONLY repositorio
 
 
 --
--- TOC entry 2073 (class 2606 OID 16487)
+-- TOC entry 2088 (class 2606 OID 16535)
+-- Name: id_subrede; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY subrede
+    ADD CONSTRAINT id_subrede PRIMARY KEY (id_subrede);
+
+
+--
+-- TOC entry 2080 (class 2606 OID 16487)
 -- Name: id_transicao; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -573,7 +648,7 @@ ALTER TABLE ONLY transicao
 
 
 --
--- TOC entry 2067 (class 2606 OID 16405)
+-- TOC entry 2074 (class 2606 OID 16405)
 -- Name: id_usuario; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -582,7 +657,7 @@ ALTER TABLE ONLY usuario
 
 
 --
--- TOC entry 2080 (class 2606 OID 16414)
+-- TOC entry 2089 (class 2606 OID 16414)
 -- Name: id_criador; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -591,7 +666,7 @@ ALTER TABLE ONLY rede
 
 
 --
--- TOC entry 2081 (class 2606 OID 16419)
+-- TOC entry 2090 (class 2606 OID 16419)
 -- Name: id_modificador; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -600,7 +675,7 @@ ALTER TABLE ONLY rede
 
 
 --
--- TOC entry 2082 (class 2606 OID 16475)
+-- TOC entry 2091 (class 2606 OID 16475)
 -- Name: id_rede; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -609,7 +684,7 @@ ALTER TABLE ONLY atividade
 
 
 --
--- TOC entry 2083 (class 2606 OID 16488)
+-- TOC entry 2092 (class 2606 OID 16488)
 -- Name: id_rede; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -618,7 +693,7 @@ ALTER TABLE ONLY transicao
 
 
 --
--- TOC entry 2084 (class 2606 OID 16501)
+-- TOC entry 2093 (class 2606 OID 16501)
 -- Name: id_rede; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -627,7 +702,7 @@ ALTER TABLE ONLY evento
 
 
 --
--- TOC entry 2085 (class 2606 OID 16514)
+-- TOC entry 2094 (class 2606 OID 16514)
 -- Name: id_rede; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -636,7 +711,16 @@ ALTER TABLE ONLY repositorio
 
 
 --
--- TOC entry 2220 (class 0 OID 0)
+-- TOC entry 2095 (class 2606 OID 16536)
+-- Name: id_rede; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY subrede
+    ADD CONSTRAINT id_rede FOREIGN KEY (id_rede) REFERENCES rede(id_rede);
+
+
+--
+-- TOC entry 2232 (class 0 OID 0)
 -- Dependencies: 6
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -647,7 +731,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2017-05-23 12:10:36 BRT
+-- Completed on 2017-05-26 08:53:39 BRT
 
 --
 -- PostgreSQL database dump complete

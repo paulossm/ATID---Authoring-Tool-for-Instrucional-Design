@@ -51,7 +51,9 @@
                         $nome = $item->nome;
                         $id = $item->id_rede;
                         $usuario = $item->nome_usuario;
-                        $data = $item->data_modificacao;?>
+                        $data = $item->data_modificacao;
+                        $hora = explode(" ", $data);
+                        $dia = explode("-", $hora[0]);?>
 
                         <li class="col-xs-6 col-lg-3">
                             <div class="panel">
@@ -60,7 +62,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <p><i class="fa fa-lightbulb-o"></i> created by: <span class="author"><?php echo $usuario?></span>
-                                    <p><i class="fa fa-clock-o"></i> last modified: <?php echo $data?></p>
+                                    <p><i class="fa fa-clock-o"></i> last modified: <?php echo $dia[0].'/'.$dia[2].'/'.$dia[1].' '.$hora[1]?></p>
                                 </div>
                                 <div class="panel-footer text-center">
                                     <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a></button>
