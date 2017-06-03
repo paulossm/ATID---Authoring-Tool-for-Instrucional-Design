@@ -23,5 +23,29 @@ class Dashboard_model extends CI_Model {
         return $query->row();
     }
 
+    function emailCadastrados($email = NULL){
+        $this->db->select('email');
+        $this->db->like('email', $email);
+        $query = $this->db->get('usuario');
+        echo $this->db->last_query();
+        if($query->num_rows() > 0){
+          foreach ($query->result_array() as $row){
+            $row_set[] = htmlentities(stripslashes($row['email'])); //build an array
+          }
+          echo json_encode($row_set); //format the array into json data
+        }
+    }
+
+    function get_usuario($email) {
+        $query = $this->db->query("select id_usuario from usuario where email='".$email."'");
+        //echo $this->db->last_query();
+        return $query->row();
+    }
+    
+    function insertRedeCompartilhada($data) {
+        $this->db->insert('redes_compartilhadas',$data);
+            //echo $this->db->last_query();
+    }
+
 
 }?>

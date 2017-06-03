@@ -346,7 +346,8 @@ var saveNetwork = function () {
                     });
         output.push(one);
         // output.push(JSON.stringify(network[obj]));
+        document.write(output);
     }
         
-    document.write(output);
+    
 };
