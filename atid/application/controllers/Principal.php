@@ -103,7 +103,7 @@ class Principal extends CI_Controller {
 		$hora_envio = date('H:i:s');
 		$arquivo = "Hello, " . $nome ."<br> We are glad that you decided to try ATID!
 					<br><br>
-					Your account was succesfully created
+					Your account was succesfully created!
 					<br><br>
 					<center><h1 style='color:#d8335b; margin-bottom: 0px;'>ATID</h1>
 					<small>Authoring Tool for Instructional Design</small></center>
