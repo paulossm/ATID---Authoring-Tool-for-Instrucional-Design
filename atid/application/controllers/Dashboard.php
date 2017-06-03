@@ -15,20 +15,10 @@ class Dashboard extends CI_Controller {
 	public function index()
 	{	
 		session_start();
-		if(!isset ($_SESSION['id_usuario']) == true)
-		{	
-			unset ($_SESSION['id_usuario']);
-        	unset ($_SESSION['email']);
-        	unset ($_SESSION['nome']);
-        	redirect("principal/");
-		}else{
 			$qtd_redes = $this->model->qtd_redes($_SESSION['id_usuario']);
 			$data['qtd'] = $qtd_redes->qtd;
 			$data['list'] = $this->model->redes($_SESSION['id_usuario']);
 			$this->load->view('dashboard_view', $data);
-		}
-		
-		
 	}
 
 	public function editar($id_rede='')
