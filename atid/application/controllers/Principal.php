@@ -72,7 +72,73 @@ class Principal extends CI_Controller {
         unset ($_SESSION['nome']);
 		redirect(base_url(), 'refresh');
     }
-	
+
+    function resetar_senha($id='')
+	{	
+		if($id=='')
+			$this->load->view('resetar_senha_view');
+		else{
+			$usua = $this->usuario->verificar_id($id);
+			$data['email'] = $usua->email;
+			$data['id'] = $usua->id_usuario;
+			$this->load->view('recuperar_senha_view', $data);
+		}
+	}
+
+	function recuperar_senha() {
+		$email=$this->input->post("email");
+		$usua = $this->usuario->verificar_email($email);
+		 if (count($usua) > 0) {
+			$arquivo = "Hello, " . $usua->nome ."
+						<br>We heard that you lost your ATID password. Sorry about that!
+						<br><br>But don’t worry! You can use the following link within the next day to reset your password:
+						<br><br>
+						<a href='". base_url() ."index.php/Principal/resetar_senha/".md5($usua->id_usuario)."'>click here</a>
+						<br><br>
+						<center><h1 style='color:#d8335b; margin-bottom: 0px;'>ATID</h1>
+						<small>Authoring Tool for Instructional Design</small></center>
+						";
+			$assunto = "ATID - Reset Password";
+	  		$init_mail["mailtype"] = "html";
+				    $init_mail["protocol"] = "smtp";
+				    $init_mail["newline"] = "\r\n";
+				    $init_mail["crlf"] = "\r\n";
+				    $init_mail["charset"] = "UTF-8";
+				    $init_mail["validate"] = TRUE;
+				    $init_mail["_smtp_auth"]  = TRUE;
+				    $init_mail["smtp_host"] = "ssl://smtp.googlemail.com";
+				    $init_mail["smtp_user"] = "atidnaoresponder@gmail.com";
+				    $init_mail["smtp_pass"] = "4t1d4t1d";
+				    $init_mail["smtp_port"] = "465";
+				    $this->load->library("email", $init_mail);
+				    $this->email->from($email, "ATID - Authoring Tool for Instructional Design");
+				    $this->email->to($email);
+				    $this->email->subject($assunto);
+				    $this->email->message($arquivo);
+				    if($this->email->send()){
+				    }else{
+						echo "<h3>Erro no envio</h3>";
+						echo "<p>Informe o erro abaixo, com o email autenticador: </p>";
+						echo $this->email->print_debugger();
+				    }
+			redirect("Principal/resetar_senha");
+		}
+    }
+	function mudar_senha($id='') {
+		$senha = md5($this->input->post('senha'));
+		$confirmacao = md5($this->input->post('senha-confirma'));
+		if($confirmacao != $senha){
+            echo "As senhas não correspondem!";
+            redirect(base_url());
+		}else {
+			$data = array(
+				"senha" =>  md5($this->input->post("senha")),
+			);
+			$this->usuario->update($data,$id);
+			$a = $this->usuario->get_id($id);
+			$this->autenticar($senha, $a->email);
+		}
+    }
 
 	function cadastrar_usuario() {
 		$senha = md5($this->input->post('senha'));

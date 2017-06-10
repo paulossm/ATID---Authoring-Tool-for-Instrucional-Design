@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>css/atid.css">
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css">
         
 
         <!-- CANVAS SUPPORT FOR INTERNET EXPLORER 8 AND EARLIER -->
@@ -39,6 +39,7 @@
                         <fieldset class="form-group">
                             <label for="senha">Password</label>
                             <input class="form-control" type="password" name="senha" id="senha" placeholder="type your password" required>
+                            <a href="<?php echo base_url(); ?>index.php/Principal/resetar_senha">Forgot password?</a>
                         </fieldset>
 
                         <button type="submit" class="btn btn-primary">Log me in</button>
