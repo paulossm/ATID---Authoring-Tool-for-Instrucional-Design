@@ -7,12 +7,13 @@ var canvas = document.querySelector("#drawScreen > canvas");
     canvas.height = 500;
 
 if(canvas.getContext)
+    // is it able to draw?
     var canvasCtx = canvas.getContext('2d');
 
 // mouse: window mouse position reference
 var mouse = {};
 
-// graph: used while drawing a graph into the canvas. stores temporary the image file 
+// graph: used while drawing a graph into the canvas. stores temporarily the image file 
 var graph;
  
 // currentTool: used when user picks up a tool for drawing in the canvas 
@@ -27,7 +28,7 @@ var arcMap = [];
 /*
  *   arc:
  *   used when user is drawing a new arc between two tools.
- *   dinamically updated when user select origin and destiny for the arc
+ *   dinamically updated when user selects origin and destiny for the arc
  */
 var arc = {
     'enable': false,
@@ -37,8 +38,13 @@ var arc = {
     },
 };
 
+/*
+ *  allowAction: defines if an action is allowed over the drawing screen
+ */
+var allowAction = true;
+
 /* 
-*  pickTool
+*  pickTool:
 *  TRIGERRED WHEN USER SELECTS A TOOL IN THE TOOLBAR
 */
 var pickTool = function () {
@@ -57,7 +63,7 @@ var pickTool = function () {
     graph.src = toolImg.src;
     
     // set mouse cursor
-    setCursorClass(toolImg.src);
+    setCursorClass(toolImg.src, graph.widht, graph.height);
 
     if(currentTool == "arc")
         configArc();
@@ -68,7 +74,7 @@ var pickTool = function () {
 *  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
 */
 var setCursorClass = function(tool) {
-    canvas.style.cursor = "url('" + tool + "'), auto";
+    canvas.style.cursor = "url('" + tool + "') " + graph.width / 2 + " " + graph.height / 2 + ", auto";
 };
 
 /* 
@@ -97,11 +103,24 @@ var getNetworkLength = function (nodetype) {
 *  Draw image on canvas
 */
 var drawImage = function (source, posX, posY, width, height) {
+
+    // AREA FOR TOOL IMG 
     $(canvas).addLayer({
+        type: 'rectangle',
+        x: posX, y: posY,
+        width: 96,
+        height: 96,
+        fromCenter: true,
+        mouseover: function (area) { mouseOver(area); },
+        mouseout: function (area) { mouseOut(area); }
+    })
+    // DRAW TOOL ON CENTER OF AREA
+    .addLayer({
       name: currentTool + getNetworkLength(currentTool),
       type: 'image',
       source: source,
       x: posX, y: posY,
+      fromCenter: true,
       width: width, height: height,
       draggable: true,
       data : {
@@ -111,6 +130,8 @@ var drawImage = function (source, posX, posY, width, height) {
             output: [],
         }
       },
+      mouseover: function (area) { mouseOver(area); },
+      mouseout: function (area) { mouseOut(area); },
       click: function(layer) {
                if(currentTool == "arc" && arc.enable) {
             
@@ -197,8 +218,21 @@ var drawImage = function (source, posX, posY, width, height) {
         'layer': $(canvas).getLayer(currentTool + (getNetworkLength(currentTool))),
         'label': ''
     });
+
+    setBorderLimit(source, posX, posY, width, height);
     console.log("Node inserted to network.");
 };
+
+var setBorderLimit = function (src, posX, posY, wid, hei) {
+    $(canvas).setPixels({
+        x: posX, y: posY,
+        width: wid, height: hei,
+        // loop through each pixel
+        each: function(px) {
+            
+        }
+    })
+}
 
 var promptDescription = function ( tool ) {
     document.getElementById("descriptionTitle").innerHTML = tool;
@@ -329,11 +363,11 @@ var interactCanvas = function (event) {
     if(currentTool == "cursor" || currentTool == "arc") {
         // default behavior
     }
-    else {
+    else {        
         if(!($(canvas).hasClass("forbidden")))
-            drawImage(graph.src, mouse.x + graph.width/2, mouse.y + graph.height/2, graph.width, graph.height);        
+            drawImage(graph.src, mouse.x, mouse.y, graph.width, graph.height);
     }
-}
+};
 
 var saveNetwork = function () {
     var output = [];
@@ -350,3 +384,22 @@ var saveNetwork = function () {
         
     document.write(output);
 };
+
+var mouseOver = function (layer) {
+    if(currentTool != "arc" && currentTool != "cursor") {
+        /* Cannot draw node over another */
+        $(canvas).addClass("forbidden");
+    }
+};
+
+/* mouseOut :
+ * treats the event when the user leaves a place where it isn't allowed to draw over
+ */
+var mouseOut = function (layer) {
+    if($(canvas).hasClass("forbidden"))
+        /* if user wasn't able to draw over another node,
+         * whenener he/she leaves the wrong place,
+         * it is now able to draw.
+         */
+        $(canvas).removeClass("forbidden");
+}
