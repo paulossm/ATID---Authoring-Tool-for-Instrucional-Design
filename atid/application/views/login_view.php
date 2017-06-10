@@ -37,7 +37,7 @@
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label for="senha">Password</label>
+                            <label for="senha">Passsword</label>
                             <input class="form-control" type="password" name="senha" id="senha" placeholder="type your password" required>
                             <a href="<?php echo base_url(); ?>index.php/Principal/resetar_senha">Forgot password?</a>
                         </fieldset>
