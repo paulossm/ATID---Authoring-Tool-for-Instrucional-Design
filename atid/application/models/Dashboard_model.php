@@ -23,11 +23,10 @@ class Dashboard_model extends CI_Model {
         return $query->row();
     }
 
-    function emailCadastrados($email = NULL){
+    function emailsCadastrados($email){
         $this->db->select('email');
         $this->db->like('email', $email);
-        $query = $this->db->get('usuario');
-        echo $this->db->last_query();
+        $query = $this->db->get('usuario');        
         if($query->num_rows() > 0){
           foreach ($query->result_array() as $row){
             $row_set[] = htmlentities(stripslashes($row['email'])); //build an array

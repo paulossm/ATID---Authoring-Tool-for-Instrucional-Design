@@ -23,41 +23,13 @@
                 <h1 class="text-primary">ATID</h1>
                 <small>Authoring Tool for Instructional Design</small>
             </div>
-            <ul class="nav nav-tabs formTabs">
-                <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-                <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
-            </ul>
 
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="login">
-                    <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                
-                        <fieldset class="form-group">
-                            <label for="email">E-mail</label>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
+                    <form class="loginForm" action="<?=base_url()?>index.php/Principal/mudar_senha/<?=$id?>" method="post">                
+                         <fieldset class="form-group">
+                            <label for="senha">Change password for <?= $email?></label>
                         </fieldset>
-
-                        <fieldset class="form-group">
-                            <label for="senha">Passsword</label>
-                            <input class="form-control" type="password" name="senha" id="senha" placeholder="type your password" required>
-                            <a href="<?php echo base_url(); ?>index.php/Principal/resetar_senha">Forgot password?</a>
-                        </fieldset>
-
-                        <button type="submit" class="btn btn-primary">Log me in</button>
-                    </form>        
-                </div>
-                <div role="tabpanel" class="tab-pane" id="signup">
-                    <form class="signupForm" action="<?=base_url()?>index.php/Principal/cadastrar_usuario" method="post">                
-                        <fieldset class="form-group" >
-                            <label for="nome">Full name</label>
-                            <input class="form-control" type="text" name="nome" id="nome" placeholder="type your name" required>
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <label for="email">E-mail</label>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
-                        </fieldset>
-
-                        <fieldset class="form-group">
+                         <fieldset class="form-group">
                             <label for="senha">Password</label>
                             <input class="form-control" type="password" name="senha" id="senha" placeholder="choose a password" required>
                         </fieldset>
@@ -67,9 +39,9 @@
                             <input class="form-control" type="password" name="senha-confirma" placeholder="confirm the password" id="senha-confirma" required>
                         </fieldset>
 
-                        <button type="submit" class="btn btn-primary">Sign me up</button>
+                        <button type="submit" class="btn btn-primary">Change Password</button>
                     </form>
-                </div>
+               
             </div>
             <div class="col-xs-12">
                 <ul class="partners">

@@ -4,13 +4,47 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
         <title>Dashboard - ATID - Authoring Tool for Instructional Design</title>
-        
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" href="<?php echo base_url(); ?>css/atid.css" type="text/css">
-        <link rel="stylesheet" href="<?php echo base_url(); ?>font-awesome-4.7.0/css/font-awesome.min.css" type="text/css">
+                 
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+                integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+                crossorigin="anonymous">                
+        </script>
+            <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+                crossorigin="anonymous">
+                    
+        </script>
+        <script src="<?php echo base_url(); ?>javascript/jcanvas.js"></script>
+        <script src="<?php echo base_url(); ?>javascript/atid.js"></script> 
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>               
+        <script src="<?php echo base_url(); ?>javascript/jquery-ui-1.12.1.custom/jquery-ui.js"></script> 
 
+        <!--Functions to share a network and autocomplete for e-mails of Users already registered-->
+        <script>          
+            $(function(){
+                $("#email").autocomplete({
+                    source: "<?php echo base_url(); ?>index.php/Dashboard/autoCompleteEmails"
+                    
+                })
+            });
+
+            function compartilhar (idDado){
+                //seta o caminho para quando clicar em "Apagar".
+                var value =  idDado;
+                //adiciona atributo de delecao ao link
+                $('#id_rede').prop("value", value);
+            }
+        </script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="<?php echo base_url(); ?>css/atid.css" type="text/css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">        
+        <link rel="stylesheet" href="<?php echo base_url(); ?>font-awesome-4.7.0/css/font-awesome.min.css" type="text/css">                
+        <link rel="stylesheet" href="<?php echo base_url(); ?>javascript/jquery-ui-1.12.1.custom/jquery-ui.css" type="text/css">
+    
         <!-- CANVAS SUPPORT FOR INTERNET EXPLORER 8 AND EARLIER -->
         <!--[if lte IE 8]><script type="text/javascript" src="javascript/excanvas.js"></script><![endif]-->
     </head>
@@ -37,7 +71,8 @@
                     </div>
                 </li>
             </ul>
-        </header>
+        </header>        
+
         <section id="networkList" class="col-xs-12 col-lg-12">
             <h2 class="col-xs-9 col-md-3">My Networks <span id="networkCounter"><?php echo $qtd?></span></h2>
             <h3 class="col-xs-3 col-md-2"><a class="btn btn-edit" href="<?php echo base_url(); ?>index.php/Draw/"><i class="fa fa-plus fa-fw"></i> New</a></h3>
@@ -91,17 +126,13 @@
                                         
                                         <form action="<?=base_url()?>index.php/Dashboard/cadastrarRedeCompartilhada" method="get">
                                             <label>E-Mail</label>
-                                            <input class="form-control email" name="email" id="email"  placeholder="email@you.com" type="text">
-                                            <input type="hidden" name="id_rede" id="id_rede" />
-                                            
+                                            <input class="form-control email" name="email" id="email"  placeholder="email@you.com" type="text" />     
+                                            <input type="hidden" name="id_rede" id="id_rede" />                                            
                                     </div>
-                                    <div class="modal-footer">
-                                        
-                                        
+                                    <div class="modal-footer">                                                                                
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             <button id="<?php echo ($id) ?>" name="<?php echo ($id) ?>" type="submit" class="btn btn-default">Send</button>
                                         </form>    
-                                            
                                     </div>
                                 </div>
 
@@ -110,35 +141,11 @@
                         
                     <?php 
                     endforeach;
-                    } 
+                } 
                     ?>
             </ul>
         </section>
 
-        <script>
-            $(function(){
-                $("#txtEmail").autocomplete({
-                    source: "Dashboard/sautoCompleteEmails"
-                })
-            })
 
-            function compartilhar (idDado){
-                //seta o caminho para quando clicar em "Apagar".
-                var value =  idDado;
-                //adiciona atributo de delecao ao link
-                $('#id_rede').prop("value", value);
-            }
-        </script>
-        
-        <script
-			  src="https://code.jquery.com/jquery-2.2.4.min.js"
-			  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-			  crossorigin="anonymous"></script>
-            <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="<?php echo base_url(); ?>javascript/jcanvas.js"></script>
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-        <script src="<?php echo base_url(); ?>javascript/atid.js"></script> 
     </body>
 </html>

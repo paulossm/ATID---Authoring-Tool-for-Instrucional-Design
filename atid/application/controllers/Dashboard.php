@@ -11,7 +11,6 @@ class Dashboard extends CI_Controller {
         $this->load->model("Dashboard_model", "model");
     }	
 
-
 	public function index()
 	{	
 		session_start();
@@ -30,8 +29,8 @@ class Dashboard extends CI_Controller {
 	public function autoCompleteEmails()
 	{
         if (isset($_GET['term'])){
-	      $email = strtolower($_GET['term']);
-	      $this->model->emailCadastrados($email);
+	      $email = strtolower($_GET['term']);	      	     
+	      $this->model->emailsCadastrados($email);
 	    }  
 	}
 
