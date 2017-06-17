@@ -26,18 +26,18 @@
                     <h2>Current Editing <span class="courseName">Tecnico em Tecnologia da Informação</span></h2>
                 </li>
                 
-                <li id="userInfo" style="display: inline;" class="col-lg-6">
+                 <li id="userInfo" style="display: inline;" class="col-lg-3 pull-right">
                     <div class="media">
-                        <div class="text-right media-body">
-                            <h4 class="media-heading"><?php echo @$_SESSION['nome'];?><br><span id="userRole">Instructor</span></h4>
-                        </div>
-                        <div class="media-right media-middle">
+                        <div class="media-left media-middle">
                             <a href="#">
                             <img class="media-object" src="<?php echo base_url(); ?>images/profile.jpg" alt="user profile picture">
                             </a>
                         </div>
+                        <div class="text-left media-body media-middle">
+                            <h4 class="media-heading"><?php echo @$_SESSION['nome'];?><br><span id="userRole">Instructor</span></h4>
+                        </div>
                         <div class="media-right media-middle btn-group" role="group">
-                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i>Log Out</a>
+                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Log Out</a>
                         </div>
                     </div>
                 </li>
@@ -50,7 +50,7 @@
  new</button></li>
             <li style="display: inline;"><button type="button"><i class="fa fa-folder-open-o" aria-hidden="true"></i>
 open</button></li>-->
-            <li style="display: inline;"><button type="button" onclick="saveNetwork()"><i class="fa fa-floppy-o" aria-hidden="true"></i>
+            <li style="display: inline;"><button type="button" onclick="saveNetwork()" ><i class="fa fa-floppy-o" aria-hidden="true" ></i>
 save</button></li>
             <!--<li style="display: inline;"><button type="button"><i class="fa fa-share-square-o" aria-hidden="true"></i>
 share</button></li>

@@ -15,9 +15,10 @@
         <!--[if lte IE 8]><script type="text/javascript" src="javascript/excanvas.js"></script><![endif]-->
     </head>
     
-    <body id="atid-desktop" class="">
+    <body id="atid-desktop" class="row">
         <header class="col-xs-12 col-lg-12">
             <a id="logo" class="logo col-lg-2">ATID</a>
+
             <ul class="headerBar col-lg-10" style="list-style-type: none;">
                 
                 <li id="userInfo" style="display: inline;" class="col-lg-3 pull-right">
@@ -39,10 +40,9 @@
         </header>
         <section id="networkList" class="col-xs-12 col-lg-12">
             <h2 class="col-xs-9 col-md-3">My Networks <span id="networkCounter"><?php echo $qtd?></span></h2>
-            <h3 class="col-xs-3 col-md-2"><a class="btn btn-success" href="<?php echo base_url(); ?>index.php/Draw/"><i class="fa fa-plus fa-fw"></i> New</a></h3>
+            <h3 class="col-xs-3 col-md-2"><a class="btn btn-edit" href="<?php echo base_url(); ?>index.php/Draw/"><i class="fa fa-plus fa-fw"></i> New</a></h3>
             <ul id="networks" class="list-group col-xs-12">
-                
-
+            
                 <?php 
                 if (empty($list)) { ?>
                     <h4 class="text-muted">You haven't created any network</h4>
@@ -66,8 +66,12 @@
                                     <p><i class="fa fa-clock-o"></i> last modified: <?php echo $dia[0].'/'.$dia[2].'/'.$dia[1].' '.$hora[1]?></p>
                                 </div>
                                 <div class="panel-footer text-center">
-                                    <button type="button" class="btn btn-warning"><a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a></button>
-                                    <button type="button" class="btn btn-warning" ><a  data-toggle="modal" onclick="compartilhar(<?php echo $id ?>)" data-target="#myModal"><i class="fa fa-share-square-o"></i>share</a></button>
+                                    <a class="btn btn-edit" <a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a>
+                                    <a class="btn btn-success" data-toggle="modal" onclick="compartilhar(<?php echo $id ?>)" data-target="#myModal"><i class="fa fa-share-square-o"></i> share</a>
+
+                            
+
+
                                 </div>
                             </div>
                         </li>

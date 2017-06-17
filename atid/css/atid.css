@@ -118,7 +118,7 @@ ul.headerBar #course .courseName {
 }
 #control-tools li button {
     border: none;
-    background-color: transparent;
+    background-color: green;
     opacity: 0.7;
 }
 
@@ -206,6 +206,14 @@ canvas {
     z-index: 95;
 }
 
+#atid-desktop .btn-edit {
+    background-color: #D8335B;
+    color:white;
+}
+#atid-desktop .btn-edit:hover{
+    background-color: #cc3056;
+}
+
 #atid-desktop .btn {
     border-radius: 20px;
     border-width: 1px;
@@ -255,3 +263,4 @@ canvas {
 #networks .panel-footer {
     background-color: white;
 }
+
