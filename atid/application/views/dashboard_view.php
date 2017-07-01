@@ -36,6 +36,12 @@
                 //adiciona atributo de delecao ao link
                 $('#id_rede').prop("value", value);
             }
+
+            function validarEmail () {
+
+            }
+
+
         </script>
 
         <!-- Latest compiled and minified CSS -->
@@ -126,7 +132,7 @@
                                         
                                         <form action="<?=base_url()?>index.php/Dashboard/cadastrarRedeCompartilhada" method="get">
                                             <label>E-Mail</label>
-                                            <input class="form-control email" name="email" id="email"  placeholder="email@you.com" type="text" />     
+                                            <input class="form-control email" name="email" id="email"  placeholder="email@you.com" type="email" />     
                                             <input type="hidden" name="id_rede" id="id_rede" />                                            
                                     </div>
                                     <div class="modal-footer">                                                                                
