@@ -43,6 +43,16 @@ var arc = {
  */
 var allowAction = true;
 
+/*
+ *  dragControl: defines if an action is allowed over the drawing screen
+ */
+var dragControl = {
+    initialX: '',
+    initialY: '',
+    isDragging: false
+};
+
+
 /* 
 *  pickTool:
 *  TRIGERRED WHEN USER SELECTS A TOOL IN THE TOOLBAR
@@ -107,28 +117,62 @@ var drawImage = function (source, posX, posY, width, height) {
     // AREA FOR TOOL IMG 
     $(canvas).addLayer({
         type: 'rectangle',
+        strokeWidth: '1px',
+        strokeStyle: '#000',
+        name: 'farea-' + network.length,
+        draggable: true,
+        groups: ['layer-' + network.length],
+        dragGroups: ['layer-' + network.length],
         x: posX, y: posY,
         width: 96,
         height: 96,
         fromCenter: true,
         mouseover: function (area) { mouseOver(area); },
-        mouseout: function (area) { mouseOut(area); }
+        mouseout: function (area) { mouseOut(area); },
+        
     })
     // DRAW TOOL ON CENTER OF AREA
     .addLayer({
       name: currentTool + getNetworkLength(currentTool),
       type: 'image',
+      name: 'node-' + network.length,
+      arealimiter: $(canvas).getLayer('farea-' + network.length),
+      groups: ['layer-' + network.length],
+      dragGroups: ['layer-' + network.length],
+      draggable: true,
       source: source,
       x: posX, y: posY,
       fromCenter: true,
       width: width, height: height,
-      draggable: true,
       data : {
         element: currentTool,
         arc: {
             input: [],
             output: [],
         }
+      },
+
+      dragstart: function(layer) {
+          dragControl.initialX = layer.x;
+          dragControl.initialY = layer.y;
+          dragControl.isDragging = true;
+      },
+      drag: function(layer) {
+          dragControl.isDragging = true;
+      },
+      dragstop: function(layer) {
+          if(!allowAction)
+            layer.x = dragControl.initialX;
+            layer.y = dragControl.initialY;
+            dragControl.isDragging = false;    
+            allowAction = !allowAction;
+      },
+      dragcancel: function(layer) {
+          if(!allowAction)
+            layer.x = dragControl.initialX;
+            layer.y = dragControl.initialY;
+            dragControl.isDragging = false;
+            allowAction = !allowAction;
       },
       mouseover: function (area) { mouseOver(area); },
       mouseout: function (area) { mouseOut(area); },
@@ -215,7 +259,7 @@ var drawImage = function (source, posX, posY, width, height) {
         'node': currentTool,
         'posX': mouse.x,
         'posY': mouse.y,
-        'layer': $(canvas).getLayer(currentTool + (getNetworkLength(currentTool))),
+        'layer': $(canvas).getLayer('node-' + (getNetworkLength(currentTool))),
         'label': ''
     });
 
@@ -386,6 +430,9 @@ var saveNetwork = function () {
 };
 
 var mouseOver = function (layer) {
+    if(dragControl.isDragging) {
+        allowAction = false;
+    }
     if(currentTool != "arc" && currentTool != "cursor") {
         /* Cannot draw node over another */
         $(canvas).addClass("forbidden");
