@@ -25,14 +25,13 @@
             </div>
 
             <div class="tab-content">
-                    <form class="loginForm" action="<?=base_url()?>index.php/Principal/recuperar_senha" method="post">                
-                        <fieldset class="form-group">
-                            <label for="email">Reset your password</label>
-                            <p >Enter your email address and we will send you a link to reset your password.</p>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
-                        </fieldset>
-                        <button type="submit" class="btn btn-primary">Send password reset e-mail</button>
-                    </form>
+                <form class="loginForm" action="<?=base_url()?>index.php/Principal/" method="post">
+                    <fieldset class="form-group">
+                    <label for="email">Reset your password</label>
+                    <p >Check your email for a link to reset your password. If it doesn't appear within a few minutes, check your spam folder.</p>
+                    </fieldset>
+                        <button type="submit" class="btn btn-primary">Return to sing in</button>
+                 </form>
                
             </div>
             <div class="col-xs-12">

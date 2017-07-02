@@ -121,9 +121,16 @@ class Principal extends CI_Controller {
 						echo "<p>Informe o erro abaixo, com o email autenticador: </p>";
 						echo $this->email->print_debugger();
 				    }
-			redirect("Principal/resetar_senha");
+			redirect("Principal/confirma_resetar");
 		}
+		redirect("Principal/resetar_senha");
     }
+
+	function confirma_resetar()
+	{	
+		$this->load->view('confirma_resetar_view');		
+	}
+
 	function mudar_senha($id='') {
 		$senha = md5($this->input->post('senha'));
 		$confirmacao = md5($this->input->post('senha-confirma'));
