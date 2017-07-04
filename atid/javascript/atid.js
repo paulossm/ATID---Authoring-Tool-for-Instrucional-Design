@@ -52,6 +52,8 @@ var dragControl = {
     isDragging: false
 };
 
+/* whether is creating an arc */
+var linking = false;
 
 /* 
 *  pickTool:
@@ -84,7 +86,10 @@ var pickTool = function () {
 *  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
 */
 var setCursorClass = function(tool) {
-    canvas.style.cursor = "url('" + tool + "') " + graph.width / 2 + " " + graph.height / 2 + ", auto";
+    if(currentTool != "arc")
+        canvas.style.cursor = "url('" + tool + "') " + graph.width / 2 + " " + graph.height / 2 + ", auto";
+    else 
+        canvas.style.cursor = "url('" + tool + "'), auto";
 };
 
 /* 
@@ -187,40 +192,40 @@ var drawImage = function (source, posX, posY, width, height) {
                             x: layer.x,
                             y: layer.y,
                         });
-
+                        linking = true;
                     }
                     else {
                         // TROCAR ESSA RUMA DE ELSE IF POR SWITCH (VAMU FAZER DIREITO U.U)
                         if(arc.layers.origin.data.element === layer.data.element) {
                             alert("you can't create an arc between same tools");
-                            arc.layers.origin = '';
+                            //arc.layers.origin = '';
                             arc.layers.destiny = '';
                             return;
                         }
                         else if (arc.layers.origin.data.element == "repository" && layer.data.element != "activity") {
                             alert("repositories can only be linked with activities");
-                            arc.layers.origin = '';
+                            //arc.layers.origin = '';
                             arc.layers.destiny = '';
                             return;
                         }
                         else if (arc.layers.origin.data.element == "event" && layer.data.element != "transition") {
                             alert("events can only be linked to transitions");
-                            arc.layers.origin = '';
+                            //arc.layers.origin = '';
                             arc.layers.destiny = '';
                         }
                         else if (arc.layers.origin.data.element == "transition" && (layer.data.element != "activity" && layer.data.element != "composition")) {
                             alert("transitions can only be linked to activities or composite activities");
-                            arc.layers.origin = '';
+                            //arc.layers.origin = '';
                             arc.layers.destiny = '';
                         }
                         else if(arc.layers.origin.data.element == "activity" && (layer.data.element != "transition" && layer.data.element != "repository")) {
                             alert("activities can only be linked to transitions or repositories");
-                            arc.layers.origin = '';
+                            //arc.layers.origin = '';
                             arc.layers.destiny = '';
                         }
                         else if(arc.layers.origin.data.element == "composition" && layer.data.element != "transition") {
                             alert("composite activities can only be linked to transition");
-                            arc.layers.origin = '';
+                            //arc.layers.origin = '';
                             arc.layers.destiny = '';
                         }
                         else {
@@ -231,6 +236,7 @@ var drawImage = function (source, posX, posY, width, height) {
                                 x: layer.x,
                                 y: layer.y
                             });
+                            linking = false;
                             drawArc(arc);    
                         }        
                     }
@@ -307,7 +313,33 @@ var configArc = function (layer) {
     arc.enable = true;
 };
 
+var drawTempArc = function (layer) {
+    if($(canvas).getLayer("temparc") == undefined) {
+        $(canvas).drawLine({
+            layer: true,
+            name: "temparc",
+            type: "arc",
+            strokeStyle: '#000',
+            strokeWidth: 1,
+            rounded: true,
+            draggable: false,
+            startArrow: false,
+            endArrow: true,
+            arrowRadius: 15,
+            arrowAngle: 90,
+            x1: layer.x, y1: layer.y,
+            x2: (mouse.x-2), y2: (mouse.y-2),    
+        });
+    } else {
+        var temp = $(canvas).getLayer("temparc");
+        temp.x2 = mouse.x - 2;
+        temp.y2 = mouse.y - 2; 
+        $(canvas).drawLayers();
+    }
+};
+
 var drawArc = function (arc) {
+    $(canvas).removeLayer("temparc");
     $(canvas).drawLine({
         layer: true, 
         type: "arc",
@@ -327,8 +359,12 @@ var drawArc = function (arc) {
     updateArcOnDragLayers(arc);
     network.push({
         'type': 'arc',
-        'origin': arc.layers.origin,
-        'destiny': arc.layers.destiny
+        'originName': arc.layers.origin.name,
+        'x1': arc.layers.origin.x,
+        'y1': arc.layers.origin.y,
+        'destinyName': arc.layers.destiny.name,
+        'x2': arc.layers.destiny.x,
+        'y2': arc.layers.destiny.y
     });
     arc.layers.origin = '';
     arc.layers.destiny = '';
@@ -403,6 +439,9 @@ var newSubnet = function (name) {
 $(canvas).on({
     "mousemove": function (evt) {
         mouse = getMousePos(canvas, evt);
+        if(linking == true) {
+            drawTempArc(arc.layers.origin);
+        }
     },
     "click": function(evt) { interactCanvas(evt); }
 });         
