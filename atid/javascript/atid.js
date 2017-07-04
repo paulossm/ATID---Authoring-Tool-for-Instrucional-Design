@@ -114,7 +114,7 @@ var getNetworkLength = function (nodetype) {
 */
 var drawImage = function (source, posX, posY, width, height) {
 
-    // AREA FOR TOOL IMG 
+    /* AREA FOR TOOL IMG 
     $(canvas).addLayer({
         type: 'rectangle',
         strokeWidth: '1px',
@@ -130,10 +130,10 @@ var drawImage = function (source, posX, posY, width, height) {
         mouseover: function (area) { mouseOver(area); },
         mouseout: function (area) { mouseOut(area); },
         
-    })
+    }) */
     // DRAW TOOL ON CENTER OF AREA
-    .addLayer({
-      name: currentTool + getNetworkLength(currentTool),
+    $(canvas).addLayer({
+      // name: currentTool + getNetworkLength(currentTool),
       type: 'image',
       name: 'node-' + network.length,
       arealimiter: $(canvas).getLayer('farea-' + network.length),
@@ -174,8 +174,8 @@ var drawImage = function (source, posX, posY, width, height) {
             dragControl.isDragging = false;
             allowAction = !allowAction;
       },
-      mouseover: function (area) { mouseOver(area); },
-      mouseout: function (area) { mouseOut(area); },
+      //mouseover: function (area) { mouseOver(area); },
+      //mouseout: function (area) { mouseOut(area); },
       click: function(layer) {
                if(currentTool == "arc" && arc.enable) {
             
@@ -254,16 +254,13 @@ var drawImage = function (source, posX, posY, width, height) {
     if(currentTool === "composition") {
        newSubnet(currentTool + (getNetworkLength(currentTool)));
     }
+    //network.push($(canvas).getLayer('node-' + (getNetworkLength(currentTool))));
     network.push({
-        'id': network.length,
-        'node': currentTool,
-        'posX': mouse.x,
-        'posY': mouse.y,
-        'layer': $(canvas).getLayer('node-' + (getNetworkLength(currentTool))),
-        'label': ''
+        'name': "node-" + network.lengh,
+        'x': posX,
+        'y': posY
     });
-
-    setBorderLimit(source, posX, posY, width, height);
+    //setBorderLimit(source, posX, posY, width, height);
     console.log("Node inserted to network.");
 };
 
@@ -294,7 +291,9 @@ var submitDescription = function () {
     }
     $(canvas).drawText({
       layer: true,
-      fillStyle: '#000',      
+      fillStyle: '#000',  
+      groups: ['layer-' + network.length],
+      dragGroups: ['layer-' + network.length],    
       x: descriptionDiv.style.left.substr(0, descriptionDiv.style.left.length - 2), y: descriptionDiv.style.top.substr(0, descriptionDiv.style.top.length - 2),
       fontSize: 11,
       fontFamily: 'Arial, sans-serif',
@@ -311,6 +310,7 @@ var configArc = function (layer) {
 var drawArc = function (arc) {
     $(canvas).drawLine({
         layer: true, 
+        type: "arc",
         name: 'arc' + (Math.floor(arcMap.length / 2) + 1), 
         strokeStyle: '#000',
         strokeWidth: 1,
@@ -323,9 +323,13 @@ var drawArc = function (arc) {
         x1: arc.layers.origin.x, y1: arc.layers.origin.y,
         x2: arc.layers.destiny.x, y2: arc.layers.destiny.y,
     });
-    
     attribArcToLayers(arc, "arc" + (Math.floor(arcMap.length/2) + 1));
     updateArcOnDragLayers(arc);
+    network.push({
+        'type': 'arc',
+        'origin': arc.layers.origin,
+        'destiny': arc.layers.destiny
+    });
     arc.layers.origin = '';
     arc.layers.destiny = '';
 };
@@ -413,22 +417,6 @@ var interactCanvas = function (event) {
     }
 };
 
-var saveNetwork = function () {
-    var output = [];
-    for(var obj in network) {
-        var one = JSON.stringify(obj, function(key, val) {
-                    if (val != null && typeof val == "object") {
-                            return "object";
-                        }
-                        return val;
-                    });
-        output.push(one);
-        //output.push(JSON.stringify(network[obj]));
-    }
-        
-    document.write(output);
-};
-
 var mouseOver = function (layer) {
     if(dragControl.isDragging) {
         allowAction = false;
@@ -449,4 +437,18 @@ var mouseOut = function (layer) {
          * it is now able to draw.
          */
         $(canvas).removeClass("forbidden");
-}
+};
+
+var saveNetwork = function () {
+    var stringData = "";
+    for(var node in network) {
+        stringData += JSON.stringify(network[node]);
+    } 
+    console.log(stringData);
+    $.ajax({
+        type: 'POST',
+        url: "salvarRede",
+        data: {"rede": stringData},
+        cache: false
+    });
+};

@@ -24,4 +24,15 @@ class Draw extends CI_Controller {
 		session_start();
 		
 	}
+
+	public function salvarRede()
+	{
+		session_start();// precisa disso em toda action?
+		$rede = $_POST['rede'];
+		/* 
+			metodo_para_salvar_rede($rede);
+			return true;
+		*/
+		echo ($rede);
+	}
 }
