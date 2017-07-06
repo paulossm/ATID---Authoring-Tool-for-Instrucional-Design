@@ -107,8 +107,9 @@ var getMousePos = function (canvas, evt) {
 var getNetworkLength = function (nodetype) {
     var n_layers = 0;
     for(var i = 0; i < network.length; i++) {
-        if(network[i].layer.data.element == nodetype)
-            ++n_layers;
+        if(network[i].data != undefined)
+            if(network[i].data.element == nodetype)
+                ++n_layers;
     }
     return n_layers;
 };
@@ -262,7 +263,8 @@ var drawImage = function (source, posX, posY, width, height) {
     }
     //network.push($(canvas).getLayer('node-' + (getNetworkLength(currentTool))));
     network.push({
-        'name': "node-" + network.lengh,
+        'name': "node-" + network.length,
+        'type': $(canvas).getLayer('node-' + network.length).data.element,
         'x': posX,
         'y': posY
     });
