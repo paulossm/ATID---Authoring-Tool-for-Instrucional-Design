@@ -157,7 +157,7 @@ var drawImage = function (source, posX, posY, width, height) {
             output: [],
         }
       },
-
+      /*
       dragstart: function(layer) {
           dragControl.initialX = layer.x;
           dragControl.initialY = layer.y;
@@ -179,7 +179,7 @@ var drawImage = function (source, posX, posY, width, height) {
             layer.y = dragControl.initialY;
             dragControl.isDragging = false;
             allowAction = !allowAction;
-      },
+      },*/
       //mouseover: function (area) { mouseOver(area); },
       //mouseout: function (area) { mouseOut(area); },
       click: function(layer) {
@@ -255,7 +255,7 @@ var drawImage = function (source, posX, posY, width, height) {
     .drawLayers();
     
     if(!(currentTool === "transition")) {
-        promptDescription(currentTool);
+        promptDescription(currentTool, network.length);
     }
     
     if(currentTool === "composition") {
@@ -283,15 +283,20 @@ var setBorderLimit = function (src, posX, posY, wid, hei) {
     })
 }
 
-var promptDescription = function ( tool ) {
+var promptDescription = function ( tool, id ) {
     document.getElementById("descriptionTitle").innerHTML = tool;
     var descriptionDiv = document.getElementById("descriptionInput");
+    document.getElementById("nodeTitle").value = $(canvas).getLayer("node-" + id).name;
+    $("#submitDescription").unbind("click").on("click", function() {
+        submitDescription($(canvas).getLayer("node-" + id).name, id);
+    });
     descriptionDiv.style.left = mouse.x + 40 + "px";
     descriptionDiv.style.top = mouse.y + 40 + "px";        
     descriptionDiv.hidden = false;
+
 }
 
-var submitDescription = function () {
+var submitDescription = function (layerName, id) {
     var nodeDescription = document.getElementById("nodeTitle").value;
     var descriptionDiv = document.getElementById("descriptionInput");
     if(nodeDescription != "") {
@@ -300,13 +305,15 @@ var submitDescription = function () {
     $(canvas).drawText({
       layer: true,
       fillStyle: '#000',  
-      groups: ['layer-' + network.length],
-      dragGroups: ['layer-' + network.length],    
-      x: descriptionDiv.style.left.substr(0, descriptionDiv.style.left.length - 2), y: descriptionDiv.style.top.substr(0, descriptionDiv.style.top.length - 2),
+      groups: ['layer-' + id],
+      dragGroups: ['layer-' + id],  
+      draggable: true,  
+      x: $(canvas).getLayer(layerName).x, y: ($(canvas).getLayer(layerName).y + ($(canvas).getLayer(layerName).height - 10)),
       fontSize: 11,
       fontFamily: 'Arial, sans-serif',
       text: nodeDescription,  
     });
+    $(canvas).getLayer(layerName).name = nodeDescription;
     $("#nodeTitle").val("");
     document.getElementById("descriptionInput").hidden = true;
 }
@@ -459,9 +466,9 @@ var interactCanvas = function (event) {
 };
 
 var mouseOver = function (layer) {
-    if(dragControl.isDragging) {
+    /*if(dragControl.isDragging) {
         allowAction = false;
-    }
+    }*/
     if(currentTool != "arc" && currentTool != "cursor") {
         /* Cannot draw node over another */
         $(canvas).addClass("forbidden");

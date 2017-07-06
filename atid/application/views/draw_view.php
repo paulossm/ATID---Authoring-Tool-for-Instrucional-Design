@@ -120,7 +120,7 @@ paste</button></li>
                 <h4 id="descriptionTitle"></h4>
                 <label for="nodeTitle">title</label>
                 <input type="text" id="nodeTitle">
-                <button type="button" onclick="submitDescription()" id="submitDescription">Ok</button>
+                <button type="button" id="submitDescription">Ok</button>
             </div>
         </div>
         
