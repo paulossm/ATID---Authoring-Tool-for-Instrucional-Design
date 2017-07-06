@@ -156,7 +156,8 @@ ul.headerBar #course .courseName {
 }
 
 #drawingArea #drawTools label.currentTool {
-    background-color: rgb(245,245,245);
+    border: solid 1px #D8335B;
+    background-color: rgb(255,255,255);
 }
 
 #drawingArea #drawTools input.tool {
