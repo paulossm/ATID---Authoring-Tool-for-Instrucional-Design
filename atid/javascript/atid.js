@@ -70,12 +70,17 @@ var pickTool = function () {
 
     // CREATE NEW IMAGE ELEMENT FROM TOOL SELECTED
     graph = new Image();
-    graph.width = 32;
-    graph.height = 32;
+    if(currentTool == "transition") {
+        graph.width = 19;
+        graph.height = 32;
+    } else {
+        graph.width = 32;
+        graph.height = 32;
+    }
     graph.src = toolImg.src;
     
     // set mouse cursor
-    setCursorClass(toolImg.src, graph.widht, graph.height);
+    setCursorClass(toolImg.src, graph.width, graph.height);
 
     if(currentTool == "arc")
         configArc();
@@ -141,6 +146,7 @@ var drawImage = function (source, posX, posY, width, height) {
     $(canvas).addLayer({
       // name: currentTool + getNetworkLength(currentTool),
       type: 'image',
+      nodeType: currentTool,
       name: 'node-' + network.length,
       arealimiter: $(canvas).getLayer('farea-' + network.length),
       groups: ['layer-' + network.length],
@@ -158,7 +164,7 @@ var drawImage = function (source, posX, posY, width, height) {
         }
       },
 
-      dragstart: function(layer) {
+      /*dragstart: function(layer) {
           dragControl.initialX = layer.x;
           dragControl.initialY = layer.y;
           dragControl.isDragging = true;
@@ -179,7 +185,7 @@ var drawImage = function (source, posX, posY, width, height) {
             layer.y = dragControl.initialY;
             dragControl.isDragging = false;
             allowAction = !allowAction;
-      },
+      },*/
       //mouseover: function (area) { mouseOver(area); },
       //mouseout: function (area) { mouseOut(area); },
       click: function(layer) {
@@ -316,10 +322,21 @@ var configArc = function (layer) {
 };
 
 var drawTempArc = function (layer) {
-    if($(canvas).getLayer("temparc") == undefined) {
+    if($(canvas).getLayer("temparc") === undefined && $(canvas).getLayer("templayer") === undefined) {
+
+        $(canvas).addLayer({
+        layer: true,
+        name: "templayer",
+        x: mouse.x,
+        y: mouse.y
+        }).drawLayers();
+
+        var startPoint = getRelativePosition($(canvas).getLayer("templayer"), arc.layers.origin);
+
         $(canvas).drawLine({
             layer: true,
             name: "temparc",
+            nodeType: "temporary",
             type: "arc",
             strokeStyle: '#000',
             strokeWidth: 1,
@@ -329,19 +346,49 @@ var drawTempArc = function (layer) {
             endArrow: true,
             arrowRadius: 15,
             arrowAngle: 90,
-            x1: layer.x, y1: layer.y,
-            x2: (mouse.x-2), y2: (mouse.y-2),    
+            x1: startPoint.x,
+            y1: startPoint.y,
+            x2: ((mouse.x < layer.x) ? (mouse.x+3) : (mouse.x-3)),
+            y2: ((mouse.y < layer.y) ? (mouse.y+3) : (mouse.y-3)),
         });
     } else {
+        var tempLayer = $(canvas).getLayer("templayer");
+        tempLayer.x = mouse.x;
+        tempLayer.y = mouse.y;
+        $(canvas).drawLayers();
+
+        startPoint = getRelativePosition(tempLayer, arc.layers.origin);
         var temp = $(canvas).getLayer("temparc");
-        temp.x2 = mouse.x - 2;
-        temp.y2 = mouse.y - 2; 
+        temp.x1 = startPoint.x;
+        temp.y1 = startPoint.y;
+        temp.x2 = ((mouse.x < layer.x) ? (mouse.x+3) : (mouse.x-3));
+        temp.y2 = ((mouse.y < layer.y) ? (mouse.y+3) : (mouse.y-3));
         $(canvas).drawLayers();
     }
 };
 
 var drawArc = function (arc) {
+    // get rid of temporary layers
     $(canvas).removeLayer("temparc");
+    $(canvas).removeLayer("templayer");
+
+    var endPoint = getRelativePosition(arc.layers.origin, arc.layers.destiny);
+    var startPoint = getRelativePosition(arc.layers.destiny, arc.layers.origin);
+
+    /*
+    var radius = 16;
+    var distance = Math.sqrt(Math.pow((arc.layers.origin.x - arc.layers.destiny.x), 2) + Math.pow((arc.layers.origin.y - arc.layers.destiny.y), 2));
+    var distanceEdges = distance - radius;
+
+    var ratio = distanceEdges / distance;
+
+    var dx = (arc.layers.destiny.x - arc.layers.origin.x) * ratio;
+    var dy = (arc.layers.destiny.y - arc.layers.origin.y) * ratio;
+
+    var finalx = arc.layers.origin.x + dx;
+    var finaly = arc.layers.origin.y + dy;*/
+
+
     $(canvas).drawLine({
         layer: true, 
         type: "arc",
@@ -354,8 +401,12 @@ var drawArc = function (arc) {
         endArrow: true,
         arrowRadius: 15,
         arrowAngle: 90,
-        x1: arc.layers.origin.x, y1: arc.layers.origin.y,
-        x2: arc.layers.destiny.x, y2: arc.layers.destiny.y,
+        x1: startPoint.x, y1: startPoint.y,
+        x2: endPoint.x, y2: endPoint.y,
+        data: {
+            originLayer: arc.layers.origin,
+            destinyLayer: arc.layers.destiny
+        }
     });
     attribArcToLayers(arc, "arc" + (Math.floor(arcMap.length/2) + 1));
     updateArcOnDragLayers(arc);
@@ -378,26 +429,110 @@ var attribArcToLayers = function (arc, arcName) {
 };
 
 var updateArcOnDragLayers = function (arc) {
+    
+
     $.each(arc.layers, function (key, value) {
         value.drag = function (layer) {
             
             for(var i = 0; i < layer.data.arc.input.length; i++) {
-                if(layer.data.arc.input[i] != '') {
+                if(layer.data.arc.input[i] !== '') {
+
                     var input = $(canvas).getLayer(layer.data.arc.input[i].name);
-                    input.x2 = layer.x;
-                    input.y2 = layer.y;
+                    var endPoint = getRelativePosition(input.data.originLayer, layer);
+                    input.x2 = endPoint.x;
+                    input.y2 = endPoint.y;
+
+                    var startPoint = getRelativePosition(layer, input.data.originLayer);
+                    input.x1 = startPoint.x;
+                    input.y1 = startPoint.y;
+
+                    /*
+                    var radius = 16;
+                    var distance = Math.sqrt(Math.pow((input.x1 - layer.x), 2) + Math.pow((input.y1 - layer.y), 2));
+                    var distanceEdges = distance - radius;
+
+                    var ratio = distanceEdges / distance;
+
+                    var dx = (layer.x - input.x1) * ratio;
+                    var dy = (layer.y - input.y1) * ratio;
+
+                    var finalx = input.x1 + dx;
+                    var finaly = input.y1 + dy;
+
+                    
+                    input.x2 = finalx;
+                    input.y2 = finaly;*/
                 }
             }
             
             for(var j = 0; j < layer.data.arc.output.length; j++) {
-                if(layer.data.arc.output[j] != '') {
+                if(layer.data.arc.output[j] !== '') {
                     var output = $(canvas).getLayer(layer.data.arc.output[j].name);
-                    output.x1 = layer.x;
+
+                    var endPoint = getRelativePosition(layer, output.data.destinyLayer);
+                    output.x2 = endPoint.x;
+                    output.y2 = endPoint.y;
+
+                    var startPoint = getRelativePosition(output.data.destinyLayer, layer);
+                    output.x1 = startPoint.x;
+                    output.y1 = startPoint.y;
+
+                    /*output.x1 = layer.x;
                     output.y1 = layer.y;
+
+                    // d = distance between A and B; // (sqrt((xB-xA)² + (yB-yA)²)).
+                    radius = 16;
+                    distance = Math.sqrt(Math.pow((layer.x - output.data.destinyLayer.x), 2) + Math.pow((layer.y - output.data.destinyLayer.y), 2));
+                    distanceEdges = distance - radius;
+                    ratio = distanceEdges / distance;
+
+                    dx = (output.data.destinyLayer.x - layer.x) * ratio;
+                    dy = (output.data.destinyLayer.y - layer.y) * ratio;
+
+                    finalx = output.x1 + dx;
+                    finaly = output.y1 + dy;
+
+                    output.x2 = finalx;
+                    output.y2 = finaly;*/
                 }
             }
         };
     });
+};
+
+var getRelativePosition = function(origin, destiny) {
+    /* CALCULATES ARC EDGES BASED ON DEFINED $JCANVAS LAYER ORIGIN AND DESTINY ELEMENTS */
+    switch(destiny.nodeType) {
+        /* decides which calculations to do in order to get relative position based on type of node */
+        case "transition":
+            var distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
+            var ratiox = (destiny.width/2 + 1) / distance,
+                ratioy = (destiny.height/2 + 1) / distance;
+
+            var differencex = (destiny.x - origin.x) * ratiox,
+                differencey = (destiny.y - origin.y) * ratioy;
+
+            var finalx = destiny.x - differencex,
+                finaly = destiny.y - differencey;
+            break;
+
+        default:
+            var radius = 16;
+            distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
+            var distanceEdges = distance - radius;
+            var ratio = distanceEdges / distance;
+
+            differencex = (destiny.x - origin.x) * ratio;
+            differencey = (destiny.y - origin.y) * ratio;
+
+            finalx = origin.x + differencex;
+            finaly = origin.y + differencey;
+            break;
+    }
+    return {
+        x: finalx,
+        y: finaly
+    };
 };
 
 $("input[name=tool]").each(function (index, value) {
@@ -459,9 +594,9 @@ var interactCanvas = function (event) {
 };
 
 var mouseOver = function (layer) {
-    if(dragControl.isDragging) {
+    /*if(dragControl.isDragging) {
         allowAction = false;
-    }
+    }*/
     if(currentTool != "arc" && currentTool != "cursor") {
         /* Cannot draw node over another */
         $(canvas).addClass("forbidden");
