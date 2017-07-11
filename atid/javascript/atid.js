@@ -70,12 +70,17 @@ var pickTool = function () {
 
     // CREATE NEW IMAGE ELEMENT FROM TOOL SELECTED
     graph = new Image();
-    graph.width = 32;
-    graph.height = 32;
+    if(currentTool == "transition") {
+        graph.width = 19;
+        graph.height = 32;
+    } else {
+        graph.width = 32;
+        graph.height = 32;
+    }
     graph.src = toolImg.src;
     
     // set mouse cursor
-    setCursorClass(toolImg.src, graph.widht, graph.height);
+    setCursorClass(toolImg.src, graph.width, graph.height);
 
     if(currentTool == "arc")
         configArc();
@@ -140,6 +145,7 @@ var drawImage = function (source, posX, posY, width, height) {
     $(canvas).addLayer({
       // name: currentTool + getNetworkLength(currentTool),
       type: 'image',
+      nodeType: currentTool,
       name: 'node-' + network.length,
       arealimiter: $(canvas).getLayer('farea-' + network.length),
       groups: ['layer-' + network.length],
@@ -328,6 +334,7 @@ var drawTempArc = function (layer) {
         $(canvas).drawLine({
             layer: true,
             name: "temparc",
+            nodeType: "temporary",
             type: "arc",
             strokeStyle: '#000',
             strokeWidth: 1,
@@ -493,17 +500,33 @@ var updateArcOnDragLayers = function (arc) {
 
 var getRelativePosition = function(origin, destiny) {
     /* CALCULATES ARC EDGES BASED ON DEFINED $JCANVAS LAYER ORIGIN AND DESTINY ELEMENTS */
-    var radius = 16;
-    var distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
-    var distanceEdges = distance - radius;
-    var ratio = distanceEdges / distance;
+    switch(destiny.nodeType) {
+        /* decides which calculations to do in order to get relative position based on type of node */
+        case "transition":
+            var distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
+            var ratiox = (destiny.width/2 + 1) / distance,
+                ratioy = (destiny.height/2 + 1) / distance;
 
-    var dx = (destiny.x - origin.x) * ratio;
-    var dy = (destiny.y - origin.y) * ratio;
+            var differencex = (destiny.x - origin.x) * ratiox,
+                differencey = (destiny.y - origin.y) * ratioy;
 
-    finalx = origin.x + dx;
-    finaly = origin.y + dy;
+            var finalx = destiny.x - differencex,
+                finaly = destiny.y - differencey;
+            break;
 
+        default:
+            var radius = 16;
+            distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
+            var distanceEdges = distance - radius;
+            var ratio = distanceEdges / distance;
+
+            differencex = (destiny.x - origin.x) * ratio;
+            differencey = (destiny.y - origin.y) * ratio;
+
+            finalx = origin.x + differencex;
+            finaly = origin.y + differencey;
+            break;
+    }
     return {
         x: finalx,
         y: finaly
