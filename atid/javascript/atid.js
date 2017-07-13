@@ -631,8 +631,8 @@ var saveNetwork = function () {
         data: {"rede": stringData},
         cache: false,
         success: function(data){
-            alert(data);
-            // window.location = 'http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Dashboard';
+            //alert(data);
+            window.location = 'http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Dashboard';
         }
     });
 };

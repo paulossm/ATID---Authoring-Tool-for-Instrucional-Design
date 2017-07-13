@@ -52,7 +52,7 @@ class Draw extends CI_Controller {
 				);
 				$this->model->insert_atividade($teste);
 			}
-			else{
+			elseif($no->type != 'arc'){
 				$teste = array(
 					"posicao_x" => $no->x,
 					"posicao_y"	=> $no->y,
