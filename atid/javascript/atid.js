@@ -91,10 +91,16 @@ var pickTool = function () {
 *  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
 */
 var setCursorClass = function(tool) {
-    if(currentTool != "arc")
-        canvas.style.cursor = "url('" + tool + "') " + graph.width / 2 + " " + graph.height / 2 + ", auto";
-    else 
-        canvas.style.cursor = "url('" + tool + "'), auto";
+    if (tool == "move")
+        canvas.style.cursor = "move";
+    else {
+        if(currentTool != "arc")
+            canvas.style.cursor = "url('" + tool + "') " + graph.width / 2 + " " + graph.height / 2 + ", auto";
+        
+        else 
+            canvas.style.cursor = "url('" + tool + "'), auto";
+    }
+    
 };
 
 /* 
@@ -186,8 +192,8 @@ var drawImage = function (source, posX, posY, width, height) {
             dragControl.isDragging = false;
             allowAction = !allowAction;
       },*/
-      //mouseover: function (area) { mouseOver(area); },
-      //mouseout: function (area) { mouseOut(area); },
+      mouseover: function (area) { mouseOver(area); },
+      mouseout: function (area) { mouseOut(area); },
       click: function(layer) {
                if(currentTool == "arc" && arc.enable) {
             
@@ -201,39 +207,35 @@ var drawImage = function (source, posX, posY, width, height) {
                         });
                         linking = true;
                     }
+                    
                     else {
+                        arc.layers.origin.shadowBlur = null;
+                        arc.layers.origin.shadowColor = null;
+                        arc.layers.destiny.shadowColor = null;
+                        arc.layers.destiny.shadowBlur = null;
                         // TROCAR ESSA RUMA DE ELSE IF POR SWITCH (VAMU FAZER DIREITO U.U)
                         if(arc.layers.origin.data.element === layer.data.element) {
                             alert("you can't create an arc between same tools");
-                            //arc.layers.origin = '';
-                            arc.layers.destiny = '';
-                            return;
                         }
                         else if (arc.layers.origin.data.element == "repository" && layer.data.element != "activity") {
                             alert("repositories can only be linked with activities");
-                            //arc.layers.origin = '';
-                            arc.layers.destiny = '';
-                            return;
+                            
                         }
                         else if (arc.layers.origin.data.element == "event" && layer.data.element != "transition") {
                             alert("events can only be linked to transitions");
-                            //arc.layers.origin = '';
-                            arc.layers.destiny = '';
+                        
                         }
                         else if (arc.layers.origin.data.element == "transition" && (layer.data.element != "activity" && layer.data.element != "composition")) {
                             alert("transitions can only be linked to activities or composite activities");
-                            //arc.layers.origin = '';
-                            arc.layers.destiny = '';
+                            
                         }
                         else if(arc.layers.origin.data.element == "activity" && (layer.data.element != "transition" && layer.data.element != "repository")) {
                             alert("activities can only be linked to transitions or repositories");
-                            //arc.layers.origin = '';
-                            arc.layers.destiny = '';
+                           
                         }
                         else if(arc.layers.origin.data.element == "composition" && layer.data.element != "transition") {
                             alert("composite activities can only be linked to transition");
-                            //arc.layers.origin = '';
-                            arc.layers.destiny = '';
+                            
                         }
                         else {
                             arc.layers.destiny = layer;
@@ -245,7 +247,9 @@ var drawImage = function (source, posX, posY, width, height) {
                             });
                             linking = false;
                             drawArc(arc);    
-                        }        
+                        } 
+                        arc.layers.origin = '';
+                        arc.layers.destiny = '';       
                     }
                }
       },
@@ -261,7 +265,7 @@ var drawImage = function (source, posX, posY, width, height) {
     .drawLayers();
     
     if(!(currentTool === "transition")) {
-        promptDescription(currentTool);
+        promptDescription(currentTool, "node-" + network.length);
     }
     
     if(currentTool === "composition") {
@@ -289,32 +293,54 @@ var setBorderLimit = function (src, posX, posY, wid, hei) {
     })
 }
 
-var promptDescription = function ( tool ) {
-    document.getElementById("descriptionTitle").innerHTML = tool;
+var promptDescription = function ( tool, node = "node-" + network.length ) {
+    document.getElementById("descriptionTitle").innerHTML = "new " + tool;
     var descriptionDiv = document.getElementById("descriptionInput");
-    descriptionDiv.style.left = mouse.x + 40 + "px";
-    descriptionDiv.style.top = mouse.y + 40 + "px";        
-    descriptionDiv.hidden = false;
+    document.getElementById("origin").value = node;
+    
+    var posx = mouse.x + 20 + "px";
+    if(mouse.y > (canvas.height / 2))
+        posy = (mouse.y - (190)) + "px";
+    else
+        posy = mouse.y + 30 + "px";
+    descriptionDiv.style.left = posx;
+    descriptionDiv.style.top = posy;  
+    var placeholder;
+    switch (currentTool) {
+        case "activity":
+            placeholder = "ex.: read article, homework...";
+            break;
+        case "event":
+            placeholder = "ex.: review exams";
+            break;
+        case "repository":
+            placeholder = "ex.: submit resume";
+            break;
+        case "subnet":
+            placeholder = "ex.: prepare & present paper";
+            break;
+    }
+    document.getElementById("nodeTitle").placeholder = placeholder;    
+    descriptionDiv.hidden = false; 
 }
 
 var submitDescription = function () {
     var nodeDescription = document.getElementById("nodeTitle").value;
+    var nodeOrigin = $(canvas).getLayer($("#origin").val());
     var descriptionDiv = document.getElementById("descriptionInput");
-    if(nodeDescription != "") {
-        // precisa ter o dado de qual nó está sendo gravado o nome
-    }
     $(canvas).drawText({
       layer: true,
       fillStyle: '#000',  
-      groups: ['layer-' + network.length],
-      dragGroups: ['layer-' + network.length],    
-      x: descriptionDiv.style.left.substr(0, descriptionDiv.style.left.length - 2), y: descriptionDiv.style.top.substr(0, descriptionDiv.style.top.length - 2),
+      groups: nodeOrigin.groups,
+      dragGroups: nodeOrigin.dragGroups,    
+      x: nodeOrigin.x,
+      y: nodeOrigin.y + 28,
       fontSize: 11,
       fontFamily: 'Arial, sans-serif',
       text: nodeDescription,  
     });
     $("#nodeTitle").val("");
-    document.getElementById("descriptionInput").hidden = true;
+    descriptionDiv.hidden = true;
 }
 
 var configArc = function (layer) {
@@ -344,7 +370,7 @@ var drawTempArc = function (layer) {
             draggable: false,
             startArrow: false,
             endArrow: true,
-            arrowRadius: 15,
+            arrowRadius: 10,
             arrowAngle: 90,
             x1: startPoint.x,
             y1: startPoint.y,
@@ -399,7 +425,7 @@ var drawArc = function (arc) {
         draggable: false,
         startArrow: false,
         endArrow: true,
-        arrowRadius: 15,
+        arrowRadius: 10,
         arrowAngle: 90,
         x1: startPoint.x, y1: startPoint.y,
         x2: endPoint.x, y2: endPoint.y,
@@ -597,22 +623,54 @@ var mouseOver = function (layer) {
     /*if(dragControl.isDragging) {
         allowAction = false;
     }*/
-    if(currentTool != "arc" && currentTool != "cursor") {
+    if(currentTool == "arc") {
+        console.log("colorfy");
+        if(arc.layers.origin == "") {
+            console.log("colorfy2");
+            layer.shadowBlur = 10;
+            layer.shadowColor = "#58d";
+        }
+        else if (arc.layers.origin != "" && arc.layers.destiny == "") {
+            if(arc.layers.origin.nodeType == layer.nodeType) {
+                layer.shadowBlur = 10;
+                layer.shadowColor = "#d58";
+                arc.layers.origin.shadowBlur = 10;
+                arc.layers.origin.shadowColor = "#d58"; 
+            } else {
+                drawTemporary(arc.layers.origin, layer);
+                layer.shadowColor = "#58d";
+                layer.shadowblur = 10;
+                arc.layers.origin.shadowColor = "#58d";
+                arc.layers.origin.shadowBlur = 10; 
+            }
+        }
+    }
+    else if(currentTool == "cursor") {
+        
+    }
+    else {
         /* Cannot draw node over another */
         $(canvas).addClass("forbidden");
     }
+    $(canvas).drawLayers();
 };
 
 /* mouseOut :
  * treats the event when the user leaves a place where it isn't allowed to draw over
  */
 var mouseOut = function (layer) {
+    if(layer.shadowBlur != null) {
+        layer.shadowBlur = null;
+        layer.shadowColor = null;
+    }
+        
     if($(canvas).hasClass("forbidden"))
         /* if user wasn't able to draw over another node,
          * whenener he/she leaves the wrong place,
          * it is now able to draw.
          */
         $(canvas).removeClass("forbidden");
+    $(canvas).drawLayers();
 };
 
 var saveNetwork = function () {

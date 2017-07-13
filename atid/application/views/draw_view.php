@@ -118,9 +118,12 @@ paste</button></li>
             
             <div id="descriptionInput" hidden>                
                 <h4 id="descriptionTitle"></h4>
-                <label for="nodeTitle">title</label>
-                <input type="text" id="nodeTitle">
-                <button type="button" onclick="submitDescription()" id="submitDescription">Ok</button>
+                <div class="form-group">
+                    <label for="nodeTitle">title</label>
+                    <input type="text" id="nodeTitle" class="form-control" placeholder="">
+                    <input type="hidden" id="origin" value="">
+                </div>
+                <button class="btn btn-edit pull-right" type="button" onclick="submitDescription()" id="submitDescription">Ok</button>
             </div>
         </div>
         

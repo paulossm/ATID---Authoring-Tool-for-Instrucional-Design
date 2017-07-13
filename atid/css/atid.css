@@ -153,10 +153,18 @@ ul.headerBar #course .courseName {
     display: block;
     text-align: center;
     padding: 6px;
+    transition: all ease-in-out .3s;
+    border: solid 1px transparent;
 }
+#drawingArea #drawTools label:hover, #drawingArea #drawTools label:focus {
+    border: solid 1px #666;
+    /*background-color: rgb(255,255,255);*/
+    transform: scale(0.98);
+    transition: all ease-in-out .3s;
+} 
 
 #drawingArea #drawTools label.currentTool {
-    border: solid 1px #D8335B;
+    border: solid 1px #444;
     background-color: rgb(255,255,255);
 }
 
@@ -193,7 +201,7 @@ canvas {
 }
 
 #descriptionInput {
-    padding: 30px;
+    padding: 8px 16px;
     background-color: white;
     color: black;
     width: 220px;
