@@ -34,8 +34,12 @@ class Dashboard_model extends CI_Model {
           echo json_encode($row_set); //format the array into json data
         }
         else{
-        	$row_set[] = "Nenhum resultado encontrado";   
+        	
+            /*
+            $row_set[] = "Nenhum resultado encontrado";   
         	echo json_encode($row_set); //format the array into json data	                 
+            */
+
         }
     }
 
