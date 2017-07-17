@@ -21,7 +21,7 @@ class Dashboard_model extends CI_Model {
                                     where id_criador = ".$id_usuario);
         //echo $this->db->last_query();
         return $query->row();
-    }
+    }    
 
     function emailsCadastrados($email){
         $this->db->select('email');
@@ -31,7 +31,12 @@ class Dashboard_model extends CI_Model {
           foreach ($query->result_array() as $row){
             $row_set[] = htmlentities(stripslashes($row['email'])); //build an array
           }
+          
+          
+          
           echo json_encode($row_set); //format the array into json data
+          //$listaEmails = json_encode($row_set); 
+          //return  $listaEmails;
         }
         else{
         	

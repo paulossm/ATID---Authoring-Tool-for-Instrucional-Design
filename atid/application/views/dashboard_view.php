@@ -24,13 +24,55 @@
                 
         <!--Functions to share a network and autocomplete for e-mails of Users already registered-->
         <script type="text/javascript">          
-                    
-            $(function(){
-                $("#email").autocomplete({
-                    source: "<?php echo base_url(); ?>index.php/Dashboard/autoCompleteEmails"
-                    
-                })
-            });
+                      
+            $(document).ready(function(){                
+
+                $("span.help-block").hide();                
+                $("#email").keyup(validar);  
+                
+                //Clean modal when close
+                $(":button").click(function() {
+                    $("#email").parent().parent().attr("class", "form-group");
+                    $("#email").parent().children("span").text("").hide();
+                    $("#email").val("");
+                });
+                                
+                //Autocomplete for emails                        
+                $(function(){                                          
+                    $("#email").autocomplete({                        
+                        source: "<?php echo base_url(); ?>index.php/Dashboard/autoCompleteEmails"                    
+                    })
+                });                                                               
+
+           });
+                     
+            function validar(){                                
+
+                var valor = document.getElementById("email").value;     
+
+                //var emails = [<?php echo base_url(); ?> + "index.php/Dashboard/autoCompleteEmails"];           
+
+                if (valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {                    
+                    //Feedback Error
+                    $("#iconeFeedBack").remove(); 
+                    $("#email").parent().parent().attr("class", "form-group has-error has-feedback");
+                    $("#email").parent().children("span").text("Select a email address from the list").show();
+                    $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-remove form-control-feedback'></span>");
+                    $(":submit").attr("disabled", true);
+                    return false;
+                
+                }                
+                else{
+                    //Feedback Success
+                    $("#iconeFeedBack").remove(); 
+                    $("#email").parent().parent().attr("class", "form-group has-success has-feedback");
+                    $("#email").parent().children("span").text("Email valid").show();
+                    $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-ok form-control-feedback'></span>");
+                    $(":submit").attr("disabled", false);
+                   return true;
+                
+                }                                
+            }                     
             
             function compartilhar (idDado){
                 //seta o caminho para quando clicar em "Apagar".
@@ -38,45 +80,6 @@
                 //adiciona atributo de delecao ao link
                 $('#id_rede').prop("value", value);                
             }
-                        
-            $(document).on("ready", inicio);
-            
-            function inicio(){
-                $("span.help-block").hide();
-                $(":submit").click(validar);  
-                $("#email").keyup(validar);  
-                
-                $(":button").click(function() {
-                    $("#email").parent().parent().attr("class", "form-group");
-                    $("#email").parent().children("span").text("").hide();
-                    $("#email").val("");
-                });
-                             
-            }                               
-
-            function validar(){
-                var valor = document.getElementById("email").value;
-                
-                if (valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {                    
-                    $("#iconeFeedBack").remove(); 
-                    $("#email").parent().parent().attr("class", "form-group has-error has-feedback");
-                    $("#email").parent().children("span").text("Select a email address from the list").show();
-                    $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-remove form-control-feedback'></span>");
-                    $(":submit").attr("disabled", true);
-                    return false;
-                }                
-                else{
-                    $("#iconeFeedBack").remove(); 
-                    $("#email").parent().parent().attr("class", "form-group has-success has-feedback");
-                    $("#email").parent().children("span").text("Email valid").show();
-                    $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-ok form-control-feedback'></span>");
-                    $(":submit").attr("disabled", false);
-                   return true;
-                }                
-                
-            }                     
-            
-
 
 
         </script>
@@ -146,11 +149,7 @@
                                 </div>
                                 <div class="panel-footer text-center">
                                     <a class="btn btn-edit" <a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a>
-                                    <a class="btn btn-success" data-toggle="modal" onclick="compartilhar(<?php echo $id ?>)" data-target="#myModal"><i class="fa fa-share-square-o"></i> share</a>
-
-                            
-
-
+                                    <a class="btn btn-success" data-toggle="modal" onclick="compartilhar(<?php echo $id ?>)" data-target="#myModal"><i class="fa fa-share-square-o"></i> share</a>                        
                                 </div>
                             </div>
                         </li>
@@ -195,35 +194,7 @@
                 } 
                     ?>
             </ul>
-        </section>
-         
-
-        <!--
-
-        <script type="text/javascript">
-            
-            $("#formShareEmail").on("submit", function(e) {
-                var firstName = $("#email");
-
-                // Check if there is an entered value
-                if(!firstName.val()) {
-                  // Add errors highlight
-                  firstName.closest('.form-group').removeClass('has-success').addClass('has-error');
-
-                  // Stop submission of the form
-                  e.preventDefault();
-                } else {
-                  // Remove the errors highlight
-                  firstName.closest('.form-group').removeClass('has-error').addClass('has-success');
-                }
-            });
-
-        </script>
-
-        -->
-        
-
-
+        </section>        
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>                
