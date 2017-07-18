@@ -16,71 +16,125 @@
                     
         </script>
         <script src="<?php echo base_url(); ?>javascript/jcanvas.js"></script>
-        <script src="<?php echo base_url(); ?>javascript/atid.js"></script>                             
-        <script src="<?php echo base_url(); ?>javascript/validator.js"></script>                
+        <script src="<?php echo base_url(); ?>javascript/atid.js"></script>                                                                     
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>               
-        <script src="<?php echo base_url(); ?>javascript/jquery-ui-1.12.1.custom/jquery-ui.js"></script> 
+        <script src="<?php echo base_url(); ?>javascript/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+        <script src="<?php echo base_url(); ?>javascript/notify.js"></script> 
                 
         <!--Functions to share a network and autocomplete for e-mails of Users already registered-->
         <script type="text/javascript">          
-                      
+                                
             $(document).ready(function(){                
-
+                                            
                 $("span.help-block").hide();                
-                $("#email").keyup(validar);  
-                
+                //$("#email").keyup(validar);                                  
+
                 //Clean modal when close
-                $(":button").click(function() {
+                $("#botaoCloseModal").add("#iconeFecharModal").click(function() {
                     $("#email").parent().parent().attr("class", "form-group");
                     $("#email").parent().children("span").text("").hide();
-                    $("#email").val("");
+                    $("#email").val("");                                        
                 });
-                                
+
+                $(":submit").click(function() {
+                   
+                    $("#myModal").on('hidden.bs.modal', function () {
+                        notificarEmailCompartilhado();
+                    });                    
+
+                });                
+  
+                var ehListaEmails = "";                             
                 //Autocomplete for emails                        
                 $(function(){                                          
                     $("#email").autocomplete({                        
-                        source: "<?php echo base_url(); ?>index.php/Dashboard/autoCompleteEmails"                    
+                        source: "<?php echo base_url(); ?>index.php/Dashboard/autoCompleteEmails",   
+                        
+                        response: function( event, ui ) {                                                        
+                            ehListaEmails = true;
+                            validar(ui, ehListaEmails);
+                        },
+                        
+                        select: function( event, ui ) {                            
+                            ehListaEmails = false;                                                                                        
+                            $("#email").attr("value", ui);                                                                                    
+                            validar(ui, ehListaEmails);                            
+                        },
+                        
+                        change: function( event, ui ) {
+                            $("#email").attr("value", ui);
+                            validar(ui, ehListaEmails);
+                        }                        
                     })
-                });                                                               
+                         
+                }); 
+                                                                        
+           });                                            
 
-           });
-                     
-            function validar(){                                
-
-                var valor = document.getElementById("email").value;     
-
-                //var emails = [<?php echo base_url(); ?> + "index.php/Dashboard/autoCompleteEmails"];           
-
-                if (valor == null || valor.length == 0 || /^\s+$/.test(valor) ) {                    
-                    //Feedback Error
-                    $("#iconeFeedBack").remove(); 
-                    $("#email").parent().parent().attr("class", "form-group has-error has-feedback");
-                    $("#email").parent().children("span").text("Select a email address from the list").show();
-                    $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-remove form-control-feedback'></span>");
-                    $(":submit").attr("disabled", true);
-                    return false;
-                
-                }                
-                else{
-                    //Feedback Success
-                    $("#iconeFeedBack").remove(); 
-                    $("#email").parent().parent().attr("class", "form-group has-success has-feedback");
-                    $("#email").parent().children("span").text("Email valid").show();
-                    $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-ok form-control-feedback'></span>");
-                    $(":submit").attr("disabled", false);
-                   return true;
-                
-                }                                
-            }                     
-            
-            function compartilhar (idDado){
-                //seta o caminho para quando clicar em "Apagar".
-                var value =  idDado;
-                //adiciona atributo de delecao ao link
-                $('#id_rede').prop("value", value);                
+            function entradaCorreta(){
+                $("#iconeFeedBack").remove(); 
+                $("#email").parent().parent().attr("class", "form-group has-success has-feedback");
+                $("#email").parent().children("span").text("Email valid").show();
+                $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-ok form-control-feedback'></span>");
+                $(":submit").attr("disabled", false);
+                return true;
             }
 
+            function entradaIncorreta(){
+                $("#iconeFeedBack").remove(); 
+                $("#email").parent().parent().attr("class", "form-group has-error has-feedback");
+                $("#email").parent().children("span").text("Select a email address from the list").show();
+                $("#email").parent().append("<span id='iconeFeedBack' class='glyphicon glyphicon-remove form-control-feedback'></span>");
+                $(":submit").attr("disabled", true);
+                return false;
+            } 
+
+            function validar(emails, flagListaDeEmails){                                
+                
+                var emailDigitado = document.getElementById("email").value;                                      
+
+                //Vazio
+                if(!emailDigitado){
+                    entradaIncorreta();
+                }
+
+                //Lista de Emails ou email selecionado de autocomplete
+                if(flagListaDeEmails == true){
+
+                    for (var i = 0; i < emails.content.length; i++) {                                                      
+                    
+                        if( emailDigitado.localeCompare(emails.content[i].value) == 0 ){
+                            entradaCorreta();                            
+                            break;
+                        }                                            
+                        entradaIncorreta();
+                    }                    
+                }
+                else{
+                    entradaCorreta();
+                }                               
+            }
+            
+            function compartilhar (idDado){
+                
+                //seta o caminho para quando clicar em "Apagar".
+                var value =  idDado;
+                
+                //adiciona atributo de delecao ao link
+                $('#id_rede').prop("value", value);
+                
+            }
+
+            function notificarEmailCompartilhado(){
+                $.notify(
+                        "You have share a network!",
+                        { globalPosition: "bottom left",                                   
+                          hideDuration: 1000,
+                          autoHide: true,
+                          autoHideDelay: 3500  }
+                );
+            }
 
         </script>
 
@@ -162,7 +216,7 @@
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <button id="iconeFecharModal" type="button" class="close" data-dismiss="modal">&times;</button>
                                         <h4 class="modal-title">Share network</h4>
                                     </div>
                                     <div class="modal-body">
@@ -180,7 +234,7 @@
 
                                     </div>
                                     <div class="modal-footer">                                                                                
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button id="botaoCloseModal"  type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                 <button id="<?php echo ($id) ?>" name="<?php echo ($id) ?>" type="submit" class="btn btn-default" disabled="true">Send</button>
                                             </form>    
                                     </div>
@@ -196,8 +250,7 @@
             </ul>
         </section>        
         
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>                
+                       
 
     </body>
 </html>
