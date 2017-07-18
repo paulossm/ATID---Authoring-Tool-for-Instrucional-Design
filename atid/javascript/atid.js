@@ -674,15 +674,23 @@ var mouseOut = function (layer) {
 };
 
 var saveNetwork = function () {
-    var stringData = "";
+    var dataarray = [];
+    var stringData = '{"node":[ ';
     for(var node in network) {
-        stringData += JSON.stringify(network[node]);
-    } 
+        //stringData += JSON.stringify(network[node]);
+        dataarray.push(JSON.stringify(network[node]));
+    }
+    stringData += dataarray.join();
+    stringData += "]} ";
     console.log(stringData);
     $.ajax({
         type: 'POST',
-        url: "salvarRede",
+        url: "http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Draw/salvarRede",
         data: {"rede": stringData},
-        cache: false
+        cache: false,
+        success: function(data){
+            //alert(data);
+            window.location = 'http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Dashboard';
+        }
     });
 };

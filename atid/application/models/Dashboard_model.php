@@ -40,7 +40,7 @@ class Dashboard_model extends CI_Model {
     }
 
     function get_usuario($email) {
-        $query = $this->db->query("select id_usuario from usuario where email='".$email."'");
+        $query = $this->db->query("select id_usuario, nome from usuario where email='".$email."'");
         //echo $this->db->last_query();
         return $query->row();
     }
