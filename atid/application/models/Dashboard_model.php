@@ -30,21 +30,10 @@ class Dashboard_model extends CI_Model {
         if($query->num_rows() > 0){
           foreach ($query->result_array() as $row){
             $row_set[] = htmlentities(stripslashes($row['email'])); //build an array
-          }
-          
-          
-          
-          echo json_encode($row_set); //format the array into json data
-          //$listaEmails = json_encode($row_set); 
-          //return  $listaEmails;
+          }                            
+          echo json_encode($row_set); //format the array into json data          
         }
-        else{
-        	
-            /*
-            $row_set[] = "Nenhum resultado encontrado";   
-        	echo json_encode($row_set); //format the array into json data	                 
-            */
-
+        else{        	            
         }
     }
 
