@@ -1,0 +1,54 @@
+<h4 id="descriptionTitle">activity properties</h4>
+<input type="text" id="node-id" value="" hidden>
+<div class="form-group">
+    <label for="nodeTitle">title</label>
+    <input type="text" id="nodeTitle" class="form-control" placeholder="">
+</div>
+
+<div class="form-group">
+    <label for="start-date">start date</label>
+    <div class="input-group">
+      <span class="input-group-addon" id="calendar1"><i class="fa fa-calendar"></i></span>
+      <input type="text" id="start-date" class="date start form-control" aria-describedby="calendar1">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon" id="clock1"><i class="fa fa-clock-o"></i></span>
+      <input type="text" id="start-time" class="time start form-control" aria-describedby="clock1">
+    </div>
+    
+    
+    <label for="end-date">end date</label>
+    
+    
+    <div class="input-group">
+      <span class="input-group-addon" id="clock2"><i class="fa fa-clock-o"></i></span>
+      <input type="text" id="end-time" class="time end form-control" aria-describedby="clock2">
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-addon" id="calendar2"><i class="fa fa-calendar"></i></span>
+      <input type="text" id="end-date" class="date end form-control" aria-describedby="calendar2">
+    </div>
+</div>
+
+<script>
+    
+        // initialize input widgets first
+        $('#prompt .time').timepicker({
+            'showDuration': true,
+            'timeFormat': 'H:i',
+            'step': 1
+        });
+
+        $('#prompt .date').datepicker({
+            'format': "dd/mm/yyyy",
+            'todayHighlight': true,
+            'autoclose': true
+        });
+
+        // initialize datepair
+        var form = document.getElementById('prompt');
+        var datepair = new Datepair(form); 
+   
+</script>

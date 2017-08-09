@@ -13,7 +13,7 @@
    height="8"
    width="8"
    inkscape:version="0.91 r"
-   sodipodi:docname="arc_hover.svg">
+   sodipodi:docname="arc_point_arrow.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -53,5 +53,5 @@
      inkscape:connector-curvature="0"
      id="path4588"
      d="M 1.7400071,7.9482166 0.07988195,0.11874892 7.9873642,1.7788741 c -6.1929017,0 -6.2473571,6.1693425 -6.2473571,6.1693425 z"
-     style="fill:#3290be;fill-opacity:1;stroke:#3290be;stroke-width:0.12325801;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.12325801;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

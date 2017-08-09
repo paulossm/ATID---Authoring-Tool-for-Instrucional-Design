@@ -6,12 +6,10 @@ body#atid-desktop {
     font-family: 'Raleway', 'Helvetica', 'Segoe UI', Arial, Verdana, sans-serif;
     overflow-x: hidden;
     background-color: #f9f6f6;
-}
-
-
-
-header {
-    background-color: white;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 #atid-desktop h1,
@@ -37,6 +35,13 @@ header {
     color: rgba(30,30,30,.2);
 }
 
+#atid-desktop header {
+    padding: 0%;
+    width: 100%;
+    margin: 0;
+    float: left;
+}
+
 #logo{
     text-decoration: none;
     font-size: 22px;
@@ -50,14 +55,29 @@ header {
     padding-bottom: 8px;
 }
 
+
+#atid-desktop header a#logo {
+    float: left;
+    max-width: 119px;
+}
+
+#atid-desktop #logo .logo-img {
+    width: 100%;
+}
+
+
 ul.headerBar {
+    float: right;
     color: white;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
+    padding: 8px;
+    margin: 0px;
+    max-width: 800px;
+    width: 300px;
 }
 ul.headerBar li {
     padding: 6px 0px 0px;
     color: #444;
+    display: inline-block;
 }
 ul.headerBar h2 {
     line-height: 1.42857143;
@@ -102,118 +122,128 @@ ul.headerBar #course .courseName {
     margin-right: 0px;
 }
 
+
+
+
 #control-tools {
-    padding-top: 6px;
-    padding-bottom: 0px;
+    width: 100%;
+    padding: 8px 0px;
     border-top: solid 1px #FFF;
-    
-    /* display: none;*/
+    float: left;
 }
 
-#control-tools li {
-    margin-right: 2px;    
-}
-#control-tools li:first-child {
-    margin-left: 10px;
-}
-#control-tools li button {
-    border: none;
-    background-color: green;
-    opacity: 0.7;
-}
-
-#control-tools li button:hover {
-    opacity: 1;
-}
-
-#control-tools li:last-child {
+#control-tools .save {
     float: right;
-    margin-right: 100px;
+    margin-right: 10px;
 }
+
+
+
 
 #atid-desktop #drawingArea {
     background-color: transparent;
     position: relative;
-    
-    /* margin-top: 20px; */
+    width: 100%;
+    min-width: 980px;
+    float: left;
 }
 
-#drawingArea #drawTools {
-    /*
-    position: absolute;
-    left: 25px;
-    top: 60px;
-    */
-    padding: 6px;
-    border: none;
-    background: transparent;
-    z-index: 90;
-}
-#drawingArea #drawTools label {
-    display: block;
-    text-align: center;
-    padding: 6px;
-    transition: all ease-in-out .3s;
-    border: solid 1px transparent;
-}
-#drawingArea #drawTools label:hover, #drawingArea #drawTools label:focus {
-    border: solid 1px #666;
-    /*background-color: rgb(255,255,255);*/
-    transform: scale(0.98);
-    transition: all ease-in-out .3s;
-} 
+    #drawingArea #drawTools {
+        padding: 6px;
+        margin: 0;
+        width: 6%;
+        border: none;
+        background: transparent;
+        z-index: 90;
+        float: left;
+    }
 
-#drawingArea #drawTools label.currentTool {
-    border: solid 1px #444;
-    background-color: rgb(255,255,255);
-}
+    #drawingArea #drawTools label {
+        display: block;
+        text-align: center;
+        padding: 6px;
+        transition: all ease-in-out .3s;
+        border: solid 1px transparent;
+    }
+    #drawingArea #drawTools label:hover, #drawingArea #drawTools label:focus {
+        border: solid 1px #999;
+        border-radius: 8px;
+        /*background-color: rgb(255,255,255);*/
+        transition: all ease-in-out .3s;
+    } 
+    #drawingArea #drawTools label:active {
+        transform: scale(0.98);
+        transition: all ease-in-out .1s;
+    }
 
-#drawingArea #drawTools input.tool {
-    display: none;
-}
+    #drawingArea #drawTools label.currentTool {
+        border: solid 1px #444;
+        border-radius: 8px;
+    }
 
-#drawingArea #drawTools input.tool + img {
-    width: 34px;
-    height: 34px;
-    margin-bottom: 1px;
-}
+    #drawingArea #drawTools label.currentTool .tool-title {
+        font-weight: 700;
+    }
 
-#drawingArea #drawTools .tool-title {
-    color: #666;
-    text-align: center;
-    font-size: 9pt;
-    vertical-align: bottom;
-    font-weight: 300;
-    margin-bottom: 0px;
-}
+    #drawingArea #drawTools input.tool {
+        display: none;
+    }
 
-canvas {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    top: 0;
-    left: 0;
-    border: solid 1px white;
-    border-radius: 8px;
-    z-index: 80;
-    background-color: white;
-    box-shadow: 0px 1px 6px rgba(30,30,30,.2);
-}
+    #drawingArea #drawTools input.tool + img {
+        width: 26px;
+        height: 26px;
+        margin-bottom: 1px;
+    }
 
-#descriptionInput {
-    padding: 8px 16px;
-    background-color: white;
-    color: black;
-    width: 220px;
-    height: auto;
-    
-    border: solid 1px #D8335B;
-    
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 95;
-}
+    #drawingArea #drawTools .tool-title {
+        color: #666;
+        text-align: center;
+        font-size: 9pt;
+        vertical-align: bottom;
+        font-weight: 300;
+        margin-bottom: 0px;
+    }
+
+    #drawScreen {
+        float: left;
+        width: 93%;
+        height: 550px;
+        overflow: auto;
+        background-color: white;
+        border: solid 1px white;
+        border-radius: 8px;
+        box-shadow: 0px 1px 6px rgba(30,30,30,.2);
+    }
+
+    #boardSVG {
+    }
+
+        #descriptionInput {
+            padding: 8px 16px;
+            background-color: #D8335B;
+            border-radius: 12px;
+            color: #FEFEFE;
+            width: 280px;
+            height: auto;
+            
+            border: solid 1px white;
+            
+            position: fixed;
+            top: 100px;
+            right: 8px;
+            z-index: 95;
+
+            transition: width linear .3s;
+        }
+
+        #atid-desktop #descriptionInput.hidden {
+            width: 0px;
+            transition: width linear .3s;
+        }
+
+        #descriptionInput .input-group {
+            margin-bottom: 8px;
+        }
 
 #atid-desktop .btn-edit {
     background-color: #D8335B;
@@ -271,5 +301,9 @@ canvas {
 
 #networks .panel-footer {
     background-color: white;
+}
+
+#atid-desktop .draggable {
+    cursor: move;
 }
 

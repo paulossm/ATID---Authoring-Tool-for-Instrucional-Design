@@ -6,14 +6,14 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
-   id="svg2"
-   viewBox="0 0 19 32"
+   id="svg4607"
+   viewBox="0 0 19.228 31.999998"
    height="32"
-   width="19">
+   width="19.228001">
   <defs
-     id="defs4" />
+     id="defs4609" />
   <metadata
-     id="metadata7">
+     id="metadata4612">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -27,12 +27,17 @@
   <g
      transform="translate(0,-1020.3622)"
      id="layer1">
-    <rect
-       y="1020.7175"
-       x="0.35534072"
-       height="31.289318"
-       width="18.289318"
-       id="rect3480"
-       style="fill:none;stroke:#333333;stroke-width:0.71068144px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <g
+       style="stroke:#333333;stroke-width:1.28200316;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="layer1-8"
+       transform="matrix(0.9824543,0,0,0.98245926,0.2806847,18.17857)">
+      <rect
+         style="fill:none;stroke:#333333;stroke-width:1.28200316;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect3480"
+         width="18.289318"
+         height="31.289318"
+         x="0.35534072"
+         y="1020.7175" />
+    </g>
   </g>
 </svg>

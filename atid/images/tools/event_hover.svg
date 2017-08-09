@@ -1,67 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="32"
    height="32"
-   viewBox="0 0 32 32"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r"
-   sodipodi:docname="event_hover.svg">
+   viewBox="0 0 31.999999 31.999998"
+   id="svg4607"
+   version="1.1">
   <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="3.1714217"
-     inkscape:cy="14.70514"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     units="px"
-     showguides="false"
-     inkscape:guide-bbox="true"
-     inkscape:window-width="1317"
-     inkscape:window-height="744"
-     inkscape:window-x="49"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1">
-    <sodipodi:guide
-       position="15,21.696429"
-       orientation="1,0"
-       id="guide3358" />
-    <sodipodi:guide
-       position="30,19.196429"
-       orientation="1,0"
-       id="guide3360" />
-    <sodipodi:guide
-       position="-33.303572,15"
-       orientation="0,1"
-       id="guide3362" />
-    <sodipodi:guide
-       position="-15.714286,30"
-       orientation="0,1"
-       id="guide3364" />
-    <sodipodi:guide
-       position="22.410714,23.125"
-       orientation="1,0"
-       id="guide4301" />
-  </sodipodi:namedview>
+     id="defs4609">
+    <filter
+       height="1.1863749"
+       y="-0.093187474"
+       width="1.1569474"
+       x="-0.078473702"
+       id="filter5365"
+       style="color-interpolation-filters:sRGB">
+      <feGaussianBlur
+         id="feGaussianBlur5367"
+         stdDeviation="1.775" />
+    </filter>
+  </defs>
   <metadata
-     id="metadata7">
+     id="metadata4612">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -73,14 +37,37 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Camada 1"
-     inkscape:groupmode="layer"
+     style="stroke:#3390bf;stroke-opacity:1"
      id="layer1"
-     transform="translate(0,-1020.3622)">
+     transform="matrix(0.99950203,0,0,1.0004999,0.00796486,-1020.88)">
+    <g
+       transform="matrix(0.94431269,0,0,0.93620422,0.86039634,65.576087)"
+       id="layer1-3"
+       style="stroke:#3390bf;stroke-width:2.17957592;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
+      <path
+         id="path4303"
+         d="m 0.83372316,1021.01 15.10280584,30.561 15.28332,-30.6219 z"
+         style="fill:none;stroke:#3390bf;stroke-width:2.17957592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+  <g
+     transform="matrix(0.05153353,0,0,0.05309017,14.191601,15.670383)"
+     id="g9219">
     <path
-       style="fill:none;stroke:#0c0c14;stroke-width:0.67786354px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 0.83372316,1021.01 15.10280584,30.561 15.28332,-30.6219 z"
-       id="path4303"
-       inkscape:connector-curvature="0" />
+       style="fill:none;fill-rule:evenodd;stroke:#3390bf;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5365)"
+       d="m 343.09805,-291.0372 -54.28569,45.71429"
+       id="path5650" />
+    <path
+       id="path5652"
+       d="m 345.91166,261.27566 -54.2857,45.7143"
+       style="fill:none;fill-rule:evenodd;stroke:#3390bf;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5365)" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#3390bf;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5365)"
+       d="m -219.59721,260.12745 -54.2857,45.7143"
+       id="path5654" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#3390bf;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5365)"
+       d="m -218.62902,-290.96087 -54.2857,45.71429"
+       id="path5656" />
   </g>
 </svg>
