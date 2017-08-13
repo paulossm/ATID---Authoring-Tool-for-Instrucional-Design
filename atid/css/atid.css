@@ -303,7 +303,7 @@ ul.headerBar #course .courseName {
     background-color: white;
 }
 
-#atid-desktop .draggable {
+#atid-desktop :not('.arc') .draggable {
     cursor: move;
 }
 

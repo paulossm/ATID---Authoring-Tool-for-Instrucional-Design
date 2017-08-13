@@ -67,6 +67,11 @@ var allowAction = true;
 *  TRIGERRED WHEN USER SELECTS A TOOL IN THE TOOLBAR
 */
 var pickTool = function () {
+    if(linking) {
+        subnet.removeChild(document.getElementById("temp-arc"));
+        arc = undefined;
+        linking = false;
+    }
     currentTool = document.querySelector("[name=tool]:checked").value;
     
     $(".currentTool").removeClass("currentTool") 
@@ -89,27 +94,24 @@ var pickTool = function () {
     
     // set mouse cursor
     setCursorClass(toolImg.src, graph.width, graph.height);
-
-    if(currentTool == "arc")
-        configArc();
+        
 }; 
-
-var configArc = function() {
-};
 
 /* 
 *  setCursorClass
 *  DEFINES CUSTOM CURSOR BASED ON CURRENT TOOL SELECTED
 */
 var setCursorClass = function(tool) {
-    if (tool == "move")
+    if (tool == "move" && currentTool != "arc")
         board.style.cursor = "move";
     else {
         if(currentTool != "arc")
             board.style.cursor = "url('" + tool + "') " + graph.width / 2 + " " + graph.height / 2 + ", auto";
         
-        else 
+        else {
+            $("#drawingArea").addClass("arc");
             board.style.cursor = "url('" + tool + "'), auto";
+        }
     }
 };
 
@@ -143,17 +145,33 @@ var drawNode = function(tool, cursor) {
         var group = document.createElementNS(svgNS, "g");
             group.setAttributeNS(null, "id", "node" + node.id);
             group.setAttribute("class", "draggable");
+            group.setAttribute("transform", "translate(" + (node.x - 16) + "," + (node.y - 16) + ")");
 
         var drawing = document.createElementNS(svgNS, "use");
-            drawing.setAttributeNS(null, "x", node.x - 16);
-            drawing.setAttributeNS(null, "y", node.y - 16);
+            drawing.setAttributeNS(null, "x", 0);
+            drawing.setAttributeNS(null, "y", 0);
             drawing.setAttributeNS(null, "href", "#" + tool);
             drawing.setAttribute("data-type", tool);
             drawing.setAttribute("data-reference", node.id);
 
-        drawing.addEventListener("click", function() {
-            interactElement(node.id);
-        });
+            drawing.addEventListener("click", function() {
+                interactElement(node.id);
+            });
+            drawing.addEventListener("mousedown", function() {
+                if(currentTool != "arc")
+                    startDrag(node.id);
+            });
+            drawing.addEventListener("mousemove", function() {
+                if(drag.isDragging) {
+                    dragging();
+                }
+            });
+            drawing.addEventListener("mouseup", function() {
+                if(drag.isDragging) {
+                    dragEnd();
+                }
+            });
+            
 
         // Add to network object
         network.nodes.push(node)
@@ -181,6 +199,49 @@ var interactElement = function(id) {
     }
 };
 
+var drag = {
+    'node': '',
+    'isDragging': false,
+};
+var startDrag = function(id) {
+    drag.node = network.nodes[id];
+    drag.isDragging = true;
+};
+
+var dragging = function(event) {
+    drag.node.x = mouse.x;
+    drag.node.y = mouse.y;
+    (document.getElementById("node" + drag.node.id)).setAttribute("transform", "translate(" +(drag.node.x - 16)+","+(drag.node.y - 16)+")");
+    updateArcsOnDrag(drag.node.id);
+};
+
+var dragEnd = function(event) {
+    drag.node = undefined;
+    drag.isDragging = false;
+};
+
+var updateArcsOnDrag = function(id) {
+    var inputs = network.nodes[id].arcs.input;
+    if(inputs.length > 0) {
+        for(var i = 0; i < inputs.length; i++) {
+            var start_point = getRelativePosition(inputs[i].destiny, inputs[i].origin);
+            var end_point = getRelativePosition(inputs[i].origin, inputs[i].destiny);
+            var path = document.getElementById("arc" + inputs[i].id);
+                path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + end_point.x + "," + end_point.y);
+        }
+    }
+
+    var outputs = network.nodes[id].arcs.output;
+    if(outputs.length > 0) {
+        for(var i = 0; i < outputs.length; i++) {
+            var start_point = getRelativePosition(outputs[i].destiny, outputs[i].origin);
+            var end_point = getRelativePosition(outputs[i].origin, outputs[i]. destiny);
+            var path = document.getElementById("arc" + outputs[i].id);
+                path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + end_point.x + "," + end_point.y);
+        }
+    }
+};
+
 var arcInteraction = function(node) {
     if(node != undefined) {
         var id = node.id;
@@ -201,6 +262,7 @@ var arcInteraction = function(node) {
                 alert("wrong elements chosen.");
                 subnet.removeChild(document.getElementById("temp-arc"));
                 arc = undefined;
+                $("#drawingArea").removeClass("arc");
             }
             linking = false;
         }
@@ -235,6 +297,7 @@ var isLinkable = function (origin, destiny) {
     }
     return true;
 };
+
 var select = function(id) {
     var node = network.nodes[id];
     
@@ -358,7 +421,7 @@ var configArc = function(tool, cursor) {
 
 var drawArc = function() {
     var newArc = new Arc();
-        newArc.id = network.length;
+        newArc.id = network.nodes.length;
         newArc.origin = arc.origin;
         newArc.destiny = arc.destiny;
 
@@ -371,7 +434,7 @@ var drawArc = function() {
             path.setAttributeNS(null, "marker-end", "url(#arc_arrow)");
             path.setAttributeNS(null, "stroke-width", 2);
             path.setAttributeNS(null, "stroke", "#333");
-            path.setAttributeNS(null, "id", "arc" + network.length);
+            path.setAttribute("id", "arc" + network.nodes.length);
     }
 
     // adiciona arco aos dois elementos
@@ -395,7 +458,7 @@ var drawTempArc = function(origin, mouse) {
     var path = document.createElementNS(svgNS, "path");
     var start_point = getRelativePosition(mouse, origin);
     
-    path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + mouse.x + "," + mouse.y);
+    path.setAttributeNS(null, "d", "M " + start_point.x + "," + start_point.y + " L" + mouse.x + "," + mouse.y);
     path.setAttributeNS(null, "marker-end", "url(#arc_arrow)");
     path.setAttributeNS(null, "stroke-width", 2);
     path.setAttributeNS(null, "stroke", "#333");
@@ -403,23 +466,6 @@ var drawTempArc = function(origin, mouse) {
     
     subnet.appendChild(path);
 };
-
-$(board).on({
-    'mousemove': function (evt) {
-        mouse = trackMousePosition(board, evt);
-        if(linking == true) {
-            drawTempArc(arc.origin, mouse);
-        }
-    },
-    'click': function (evt) {
-        if ($(board).hasClass("prompting") || $(board).hasClass("forbidden")) {
-            return;
-        }
-        if(currentTool != "arc") {
-            drawNode(currentTool, mouse);    
-        }
-    }
-});
 
 var getRelativePosition = function(origin, destiny) {
     /* CALCULATES ARC EDGES BASED ON DEFINED ORIGIN AND DESTINY ELEMENTS */
@@ -455,5 +501,30 @@ var getRelativePosition = function(origin, destiny) {
         y: finaly
     };
 };
+
+$(board).on({
+    'mousemove': function (evt) {
+        mouse = trackMousePosition(board, evt);
+        if(linking == true) {
+            drawTempArc(arc.origin, mouse);
+        }
+        if(drag.isDragging) {
+            dragging();
+        }
+    },
+    'mouseup': function(evt) {
+        if(drag.isDragging) {
+            dragEnd();
+        }
+    },
+    'click': function (evt) {
+        if ($(board).hasClass("prompting") || $(board).hasClass("forbidden")) {
+            return;
+        }
+        if(currentTool != "arc") {
+            drawNode(currentTool, mouse);    
+        }
+    }
+});
 
 document.getElementById("submitDescription").addEventListener("click", submitDescription, false);
