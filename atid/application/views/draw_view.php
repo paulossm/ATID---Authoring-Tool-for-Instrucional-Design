@@ -108,15 +108,15 @@
                     <image id="subnet_hover" x="0" y="0" width="32.5" height="32.5" href="<?php echo base_url(); ?>images/tools/composite_activity_hover.svg"></image>
 
                     <!-- ARC -->
-                    <marker id="arc_arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto" markerUnits="strokeWidth">
+                    <marker id="arc_arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
                         <path d="M 0 0 q 4 4 0 8 l 8 -4 Z" fill="#000000" />
                     </marker>
 
-                    <marker id="arc_hover" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto" markerUnits="strokeWidth">
+                    <marker id="arc_hover" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
                         <path d="M 0 0 q 4 4 0 8 l 8 -4 Z" fill="#3290be" />
                     </marker>
 
-                    <marker id="error" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto" markerUnits="strokeWidth">
+                    <marker id="error" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="strokeWidth">
                         <path d="M 0 4 l 8 0" stroke="#c9283b" stroke-width="1" />
                         <path d="M 4 0 l 0 8" stroke="#c9283b" stroke-width="1" />
                     </marker>
@@ -134,7 +134,57 @@
             
             <div id="descriptionInput" hidden>  
                 <form id="prompt">
-                    <div id="loadForm"></div>
+                    <div id="loadForm">
+                        <h4 class="descriptionTitle">properties</h4>
+                        <div class="form-group">
+                            <label for="nodeTitle">title</label>
+                            <input type="text" id="nodeTitle" class="form-control" placeholder="">
+                        </div>
+
+                        <div id="_activity-form" hidden>
+                            <div class="form-group">
+                                <label for="start-date">start date</label>
+                                <div class="input-group">
+                                  <span class="input-group-addon" id="calendar1"><i class="fa fa-calendar"></i></span>
+                                  <input type="text" id="start-date" class="date start form-control" aria-describedby="calendar1">
+                                </div>
+
+                                <!--<div class="input-group">
+                                  <span class="input-group-addon" id="clock1"><i class="fa fa-clock-o"></i></span>
+                                  <input type="text" id="start-time" class="time start form-control" aria-describedby="clock1">
+                                </div>-->
+                                
+                                
+                                <label for="end-date">end date</label>
+                                
+                                
+                                <!--<div class="input-group">
+                                  <span class="input-group-addon" id="clock2"><i class="fa fa-clock-o"></i></span>
+                                  <input type="text" id="end-time" class="time end form-control" aria-describedby="clock2">
+                                </div>-->
+
+                                <div class="input-group">
+                                  <span class="input-group-addon" id="calendar2"><i class="fa fa-calendar"></i></span>
+                                  <input type="text" id="end-date" class="date end form-control" aria-describedby="calendar2">
+                                </div>
+                            </div> 
+                        </div>
+                        
+                        <div id="_transition-form" hidden>
+                            <div class="form-group">
+                                <label for="condition">condition</label>
+                                <input type="textarea" id="condition" value="" class="form-control">
+                            </div>
+                        </div>
+
+                        <div id="_event-form" hidden></div>
+
+                        <div id="_subnet-form" hidden></div>
+
+                        <div id="_repository-form" hidden></div>
+                    </div>
+
+                    <input type="hidden" id="node-id" value="">
                     <input type="hidden" id="url-reference" value="<?= base_url() . 'application/views/'; ?>">
                     <button class="btn btn-edit pull-right" type="button" id="submitDescription">Ok</button>
                 </form>
@@ -165,5 +215,24 @@
 
         <script src="<?php echo base_url(); ?>javascript/datepair/datepair.js"></script>
         <script src="<?php echo base_url(); ?>javascript/datepair/jquery.datepair.js"></script>
+
+        <script>
+            // initialize input widgets first
+            $('#prompt .date').datepicker({
+                'format': "dd/mm/yyyy",
+                'todayHighlight': true,
+                'autoclose': true
+            });
+
+            // $('#prompt .time').timepicker({
+            //     'showDuration': true,
+            //     'timeFormat': 'H\\hi\\m',
+            //     'step': 5
+            // });
+
+            // initialize datepair
+            var form = document.getElementById('loadForm');
+            var datepair = new Datepair(form);       
+        </script>
     </body>
 </html>

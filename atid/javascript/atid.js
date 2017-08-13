@@ -141,24 +141,19 @@ var drawNode = function(tool, cursor) {
 
         // Generate visualization
         var group = document.createElementNS(svgNS, "g");
-        group.setAttributeNS(null, "id", "node" + network.nodes.length);
-        group.setAttribute("class", "draggable");
+            group.setAttributeNS(null, "id", "node" + node.id);
+            group.setAttribute("class", "draggable");
 
         var drawing = document.createElementNS(svgNS, "use");
-        if(tool !== "arc" && tool !== "cursor") { 
-            drawing.setAttributeNS(null, "x", cursor.x - 16);
-            drawing.setAttributeNS(null, "y", cursor.y - 16);
-        } else {
-            drawing.setAttributeNS(null, "x", cursor.x);
-            drawing.setAttributeNS(null, "y", cursor.y);
-        }
-        
-        drawing.setAttributeNS(null, "href", "#" + tool);
-        drawing.setAttribute("data-type", tool);
-        drawing.setAttribute("data-reference", node.id);
+            drawing.setAttributeNS(null, "x", node.x - 16);
+            drawing.setAttributeNS(null, "y", node.y - 16);
+            drawing.setAttributeNS(null, "href", "#" + tool);
+            drawing.setAttribute("data-type", tool);
+            drawing.setAttribute("data-reference", node.id);
 
-//        group.addEventListener("click", interactGroup, false);
-        drawing.addEventListener("click", interactElement, false);
+        drawing.addEventListener("click", function() {
+            interactElement(node.id);
+        });
 
         // Add to network object
         network.nodes.push(node)
@@ -169,7 +164,7 @@ var drawNode = function(tool, cursor) {
         drawing = group.appendChild(drawing);
 
         currentElement = group;
-        select(drawing);
+        select(node.id);
 
     } else {
         node = new Arc();
@@ -177,14 +172,12 @@ var drawNode = function(tool, cursor) {
     }
 };
 
-var interactElement = function(event) {
+var interactElement = function(id) {
     if(currentTool == "arc") {
-        var clicked_node = event.target | event.srcElement;
-        console.log(clicked_node);
-        clicked_node = network.nodes[clicked_node.dataset.reference];
+        var clicked_node = network.nodes[id];
         arcInteraction(clicked_node);
     } else {
-        select();
+        select(id);
     }
 };
 
@@ -200,31 +193,111 @@ var arcInteraction = function(node) {
             drawTempArc(node, mouse);
             // startDrawing();    
         } else {
-            arc.destiny = node;
-            // deleteTempArc()
-            // drawRealArc();
+            if(isLinkable(arc.origin, node)) {
+                arc.destiny = node;
+                subnet.removeChild(document.getElementById("temp-arc"));
+                drawArc();
+            } else {
+                alert("wrong elements chosen.");
+                subnet.removeChild(document.getElementById("temp-arc"));
+                arc = undefined;
+            }
+            linking = false;
         }
     }
 };
 
-var select = function(element) {
-    var node = currentElement.children[0];
-    node.setAttributeNS(null, "href", "#" + element.dataset.type + "_hover");
-    promptDescription(element);
+/** 
+*   Defines if two elements are linkable
+*/
+var isLinkable = function (origin, destiny) {
+    switch(origin.constructor) {
+        case Activity:
+            if(destiny.constructor != Transition)
+                return false;
+            break;
+        case Transition:
+            if(destiny.constructor != Activity && destiny.constructor != Subnet)
+                return false;
+            break;
+        case Subnet:
+            if(destiny.constructor != Transition)
+                return false;
+            break;
+        case Event:
+            if(destiny.constructor != Transition)
+                return false;
+            break;
+        case Repository:
+            if(destiny.constructor != Activity)
+                return false;
+            break;
+    }
+    return true;
+};
+var select = function(id) {
+    var node = network.nodes[id];
+    
+    if(document.getElementById("node-id").value != "") {
+        if (node.id === document.getElementById("node-id").value)
+            return;
+        else 
+            unselect(document.getElementById("node-id").value);    
+    }
+    
+
+    // Make selected graphic blue
+    var image = document.getElementById("node" + id).children[0];
+        image.setAttributeNS(null, "href", "#" + image.dataset.type + "_hover");
+
+    // Show data modal
+    promptDescription(id, image.dataset.type);
 };
 
-var drawTempArc = function(origin, mouse) {
-    if(document.getElementById("temp-arc") != undefined) {
-        subnet.removeChild(document.getElementById("temp-arc"));
-    }
-    var path = document.createElementNS(svgNS, "path");
-    var start_point = getRelativePosition(mouse, origin);
+var unselect = function(id) {
+    var image = document.getElementById("node" + id).children[0];
+        image.setAttributeNS(null, "href", "#" + image.dataset.type);
+    currentElement = undefined;
+};
+
+var promptDescription = function(id, type) {
+    var base_url = document.getElementById("url-reference").value;
+    var node = network.nodes[id];
     
-    path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " l" + mouse.x + "," + mouse.y);
-    path.setAttributeNS(null, "marker-end", "url(#arc_arrow");
-    path.setAttributeNS(null, "id", "temp-arc");
+    document.getElementById("prompt").reset();
+    document.getElementById("_" + type + "-form").hidden = false;
+
     
-    subnet.appendChild(path);
+    switch (type)  {
+        case "activity":
+            if(node.title)
+                $("#nodeTitle").val(node.title);
+            if(node.startDate)
+                $("#start-date").datepicker("update", node.startDate);
+            // if(node.startTime)
+            //     $("#start-time").timepicker("setTime", node.startTime);
+            // if(node.endTime)
+            //     $("#end-time").timepicker("setTime", node.endTime);
+            if(node.endDate)
+                $("#end-date").datepicker("update", node.endDate);
+            break;
+
+        case "transition":
+            if(node.title)
+                $("#nodeTitle").val(node.title);
+            if(node.condition)
+                $("#condition").val(node.condition);
+            break;
+
+        default:
+            if(node.title)
+                $("#nodeTitle").val(node.title);
+            break;
+    } 
+
+    document.getElementById("node-id").value = node.id;
+    document.getElementById("descriptionInput").hidden = false;
+    $(board).addClass("prompting");
 };
 
 var submitDescription = function() {
@@ -236,18 +309,21 @@ var submitDescription = function() {
     node.title = title;
 
     switch (node.constructor) {
-        case "activity":
-            if($("#start-date").data().datepicker.viewDate != undefined)
-                node.startDate = $("#start-date").data().datepicker.viewDate;
-            if($("#start-time").data().uiTimepickerValue != undefined)
-                node.startTime = $("#start-time").data().uiTimepickerValue; 
-            if($("#end-date").data().datepicker.viewDate != undefined)
-                node.startDate = $("#end-date").data().datepicker.viewDate;
-            if($("#end-time").data().uiTimepickerValue != undefined)
-                node.startTime = $("#end-time").data().uiTimepickerValue; 
+        case Activity:
+            if($("#start-date").datepicker)
+                node.startDate = $("#start-date").datepicker('getDate');
+            // if($("#start-time").timepicker)
+            //     node.startTime = $("#start-time").timepicker("getTime"); 
+            if($("#end-date").datepicker)
+                node.endDate = $("#end-date").datepicker('getDate');
+            // if($("#end-time").timepicker)
+            //     node.endTime = $("#end-time").timepicker("getTime"); 
+
+            document.getElementById("_activity-form").hidden = true;
             break;
-        case "transition":
+        case Transition:
             node.condition = document.getElementById("condition");
+            document.getElementById("_transition-form").hidden = true;
             break;
         default:
             break;
@@ -255,17 +331,12 @@ var submitDescription = function() {
 
     appendDescription(node.id, title);
 
-    $(board).removeClass("prompting");
+    document.getElementById("prompt").reset();
+    
     document.getElementById("descriptionInput").hidden = true;
-};
-
-var promptDescription = function(element) {
-    var base_url = document.getElementById("url-reference").value;
-    $("#loadForm").load(base_url + "_" + element.dataset.type + "-form.html", function() {
-        document.getElementById("descriptionInput").hidden = false;
-        document.getElementById("node-id").value = element.dataset.reference;    
-    });
-    $(board).addClass("prompting");
+    unselect(node.id);
+    $(board).removeClass("prompting");
+    
 };
 
 var appendDescription = function(id, title) {
@@ -285,42 +356,68 @@ var configArc = function(tool, cursor) {
 
 };
 
-var pointMe = function (event) {
-    if(currentTool != "arc")
-        return;
-    
-    var element = event.target || event.srcElement;
+var drawArc = function() {
+    var newArc = new Arc();
+        newArc.id = network.length;
+        newArc.origin = arc.origin;
+        newArc.destiny = arc.destiny;
 
-    if(arc.origin === undefined) {
-        arc.origin = network.nodes[network.indexOf(element.dataset.reference)];
-        // to do: draw temp arc
+    if(arc.origin != undefined && arc.destiny != undefined) {
+        var start_point = getRelativePosition(arc.destiny, arc.origin);
+        var end_point = getRelativePosition(arc.origin, arc.destiny);
+
+        var path = document.createElementNS(svgNS, "path");
+            path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + end_point.x + "," + end_point.y);
+            path.setAttributeNS(null, "marker-end", "url(#arc_arrow)");
+            path.setAttributeNS(null, "stroke-width", 2);
+            path.setAttributeNS(null, "stroke", "#333");
+            path.setAttributeNS(null, "id", "arc" + network.length);
     }
-    else if (arc.destiny === undefined) {
-        // to do: check if it is possible
-        arc.destiny = network.nodes[network.indexOf(element.dataset.reference)];
-        // to do: draw arc
+
+    // adiciona arco aos dois elementos
+    newArc.origin.arcs.output.push(newArc);
+    newArc.destiny.arcs.input.push(newArc);
+    // adiciona arco a rede
+    network.nodes.push(newArc);
+    subnet.appendChild(path);
+
+    // TODO: atrelar arco ao movimento dos nós
+
+    // limpa variavel arc
+    arc = undefined;
+};
+
+var drawTempArc = function(origin, mouse) {
+    if(document.getElementById("temp-arc") != undefined) {
+        subnet.removeChild(document.getElementById("temp-arc"));
     }
+    
+    var path = document.createElementNS(svgNS, "path");
+    var start_point = getRelativePosition(mouse, origin);
+    
+    path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + mouse.x + "," + mouse.y);
+    path.setAttributeNS(null, "marker-end", "url(#arc_arrow)");
+    path.setAttributeNS(null, "stroke-width", 2);
+    path.setAttributeNS(null, "stroke", "#333");
+    path.setAttributeNS(null, "id", "temp-arc");
+    
+    subnet.appendChild(path);
 };
 
 $(board).on({
     'mousemove': function (evt) {
         mouse = trackMousePosition(board, evt);
+        if(linking == true) {
+            drawTempArc(arc.origin, mouse);
+        }
     },
     'click': function (evt) {
         if ($(board).hasClass("prompting") || $(board).hasClass("forbidden")) {
             return;
         }
-        if(currentTool == "arc") {
-            configArc();
-        } else {
+        if(currentTool != "arc") {
             drawNode(currentTool, mouse);    
         }
-        
-
-        /*if($(board).hasClass("forbidden"))
-            return false;
-        else if(currentTool != "cursor" && currentTool != "arc")
-            drawNode(currentTool, mouse);*/
     }
 });
 
@@ -330,7 +427,7 @@ var getRelativePosition = function(origin, destiny) {
         /* decides which calculations to do in order to get relative position based on type of node */
         case Transition:
             var distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
-            var ratiox = (32/2 + 1) / distance,
+            var ratiox = (19/2 + 1) / distance,
                 ratioy = (32/2 + 1) / distance;
 
             var differencex = (destiny.x - origin.x) * ratiox,
@@ -341,7 +438,7 @@ var getRelativePosition = function(origin, destiny) {
             break;
 
         default:
-            var radius = 16.75;
+            var radius = 16;
             distance = Math.sqrt(Math.pow((origin.x - destiny.x), 2) + Math.pow((origin.y - destiny.y), 2));
             var distanceEdges = distance - radius;
             var ratio = distanceEdges / distance;

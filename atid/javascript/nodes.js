@@ -3,6 +3,10 @@ var Node = function() {
 	this.id = "";
 	this.x = "";
 	this.y = "";
+	this.arcs = {
+		"input": [],
+		"output": []
+	}
 };
 
 Node.prototype.getId = function() { return this.id; };
@@ -13,8 +17,8 @@ var Activity = function () {
 	Node.call(this);
 
 	this.title = "";
-	this.startDate = new Date();
-	this.endDate = null;
+	this.startDate = undefined;
+	this.endDate = undefined;
 };
 
 // Node Inheritance
