@@ -151,20 +151,21 @@
     </head>
     
     <body id="atid-desktop" class="row">
-        <header class="col-xs-12 col-lg-12">
-            <a id="logo" class="logo col-lg-2">ATID</a>
-
-            <ul class="headerBar col-lg-10" style="list-style-type: none;">
-                
-                <li id="userInfo" style="display: inline;" class="col-lg-3 pull-right">
+        <header>
+            <a id="logo"><img src="<?php echo base_url(); ?>images/logo.svg" alt="ATID logo" class="logo-img"></a>
+            <ul class="headerBar" style="list-style-type: none;">
+                 <li id="userInfo" style="display: inline;" class="">
                     <div class="media">
                         <div class="media-left media-middle">
-                            <a href="#">
-                            <img class="media-object" src="<?php echo base_url(); ?>images/profile.jpg" alt="user profile picture">
-                            </a>
+                            <span>
+                            <i class="fa fa-user-circle fa-lg"></i>
+                            </span>
                         </div>
                         <div class="text-left media-body media-middle">
-                            <h4 class="media-heading"><?php echo @$_SESSION['nome'];?><br><span id="userRole">Instructor</span></h4>
+                            <h4 class="media-heading"><?php echo @$_SESSION['nome'];?>
+                                <br>
+                                <!--<span id="userRole">Instructor</span>-->
+                            </h4>
                         </div>
                         <div class="media-right media-middle btn-group" role="group">
                             <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Log Out</a>
