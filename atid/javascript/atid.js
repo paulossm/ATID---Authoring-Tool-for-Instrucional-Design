@@ -158,10 +158,13 @@ var drawNode = function(tool, cursor) {
                 interactElement(node.id);
             });
             drawing.addEventListener("mousedown", function() {
-                if(currentTool != "arc")
+                if(currentTool != "arc") {
                     startDrag(node.id);
+                    select(node.id);
+                }
             });
-            drawing.addEventListener("mousemove", function() {
+            drawing.addEventListener("mousemove", function(event) {
+                mouse = trackMousePosition(board, event);
                 if(drag.isDragging) {
                     dragging();
                 }
@@ -209,9 +212,13 @@ var startDrag = function(id) {
 };
 
 var dragging = function(event) {
+    console.log("NODE: x" + drag.node.x + ", y: " + drag.node.y);
+    console.log("MOUSE: x" + mouse.x + ", y: " + mouse.y);
     drag.node.x = mouse.x;
     drag.node.y = mouse.y;
     (document.getElementById("node" + drag.node.id)).setAttribute("transform", "translate(" +(drag.node.x - 16)+","+(drag.node.y - 16)+")");
+    console.log("NODE: x" + drag.node.x + ", y: " + drag.node.y);
+    console.log("MOUSE: x" + mouse.x + ", y: " + mouse.y);
     updateArcsOnDrag(drag.node.id);
 };
 
