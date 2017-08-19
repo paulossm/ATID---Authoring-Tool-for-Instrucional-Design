@@ -405,13 +405,18 @@ var submitDescription = function() {
 var appendDescription = function(id, title) {
     if(title != "") {
         var group = document.getElementById("node" + id);
-
-        var text = document.createElementNS(svgNS, "text");
-        text.setAttributeNS(null, "x", (group.children[0].getAttributeNS(null, "x")));
-        text.setAttributeNS(null, "y", parseInt((group.children[0].getAttributeNS(null, "y")))+50);
-        text.setAttributeNS(null, "fill", "#333");
-        text.innerHTML = title;
-        group.appendChild(text);    
+        if(group.children[1] != undefined) {
+            var text = group.children[1];
+            text.innerHTML = title;
+        } else {
+            var text = document.createElementNS(svgNS, "text");
+            text.setAttributeNS(null, "x", 16.25);
+            text.setAttributeNS(null, "y", 50);
+            text.setAttributeNS(null, "text-anchor", "middle");
+            text.setAttributeNS(null, "fill", "#333");
+            text.innerHTML = title;
+            group.appendChild(text);        
+        }
     }
 };
 
@@ -500,6 +505,16 @@ var getRelativePosition = function(origin, destiny) {
         x: finalx,
         y: finaly
     };
+};
+
+var deleteNode = function(id) {
+    // delete all output arcs
+    
+    // delete all input arcs
+
+    // delete from network
+
+    // delete from board
 };
 
 $(board).on({

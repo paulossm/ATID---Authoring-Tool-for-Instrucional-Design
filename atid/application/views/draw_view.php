@@ -138,7 +138,7 @@
                         <h4 class="descriptionTitle">properties</h4>
                         <div class="form-group">
                             <label for="nodeTitle">title</label>
-                            <input type="text" id="nodeTitle" class="form-control" placeholder="">
+                            <input type="text" maxlength="20" id="nodeTitle" class="form-control" placeholder="">
                         </div>
 
                         <div id="_activity-form" hidden>
