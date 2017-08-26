@@ -1,4 +1,3 @@
-
 var Node = function() {
 	this.id = "";
 	this.x = "";
@@ -52,7 +51,19 @@ Transition.prototype.constructor = Transition;
 
 var Subnet = function() {
 	Node.call(this);
-	this.nodes = [];
+
+	this.title = '';
+    this.begin = '';
+    this.end = '';
+    this.nodes = [];
 };
+
 Subnet.prototype = new Node();
 Subnet.prototype.constructor = Subnet;
+
+var Network = function() {
+	this.title = '';
+	this.begin = '';
+	this.end = '';
+	this.nodes = [];
+};

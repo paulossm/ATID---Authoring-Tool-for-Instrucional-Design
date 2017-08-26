@@ -2,7 +2,7 @@
 /* ~. GLOBALS .~ */
 
 var svg = document.getElementById("boardSVG");
-var subnet = document.getElementById("network");
+var subnet = document.getElementById("subnet-1");
 var board = document.getElementById("board");
 
 // SVG URI
@@ -33,21 +33,8 @@ var currentTool = "cursor";
 var currentElement;
 
 // network: array storing nodes drawned in canvas
-var network = {
-    'title': "test",
-    
-    'begin': {
-        'node': null,
-        'date': new Date()
-    },
-    
-    'end': {
-        'node': null,
-        'date': new Date()
-    },
-
-    'nodes': []
-};
+var network = new Network();
+var currentNetwork = network;
 
 /*
  *   arc:
@@ -61,6 +48,11 @@ var linking = false;
  *  allowAction: defines if an action is allowed over the drawing screen
  */
 var allowAction = true;
+
+
+var menu = document.querySelector("#context-menu");
+var menuState = 0;
+var active = "context-menu--active";
 
 /* 
 *  pickTool:
@@ -134,16 +126,17 @@ var drawNode = function(tool, cursor) {
                 break;
             case "subnet":
                 node = new Subnet();
-                // configSubnet(node);
+                node.nodes = newSubnet(currentNetwork.nodes.length);
                 break;
         };
-        node.id = network.nodes.length;
+        node.id = currentNetwork.nodes.length;
         node.x = cursor.x;
         node.y = cursor.y;
 
         // Generate visualization
         var group = document.createElementNS(svgNS, "g");
             group.setAttributeNS(null, "id", "node" + node.id);
+            group.setAttribute("data-referenceId", node.id);
             group.setAttribute("class", "draggable");
             group.setAttribute("transform", "translate(" + (node.x - 16) + "," + (node.y - 16) + ")");
 
@@ -154,13 +147,21 @@ var drawNode = function(tool, cursor) {
             drawing.setAttribute("data-type", tool);
             drawing.setAttribute("data-reference", node.id);
 
+            if(node.constructor == Subnet) {
+                drawing.addEventListener("dblclick", function() {
+                    console.log("double clicked!");
+                    showSubnet(node.id);
+                });
+            }
+
             drawing.addEventListener("click", function() {
+                console.log("clicked.");
                 interactElement(node.id);
             });
             drawing.addEventListener("mousedown", function() {
+                console.log("mousedowned.");
                 if(currentTool != "arc") {
                     startDrag(node.id);
-                    select(node.id);
                 }
             });
             drawing.addEventListener("mousemove", function(event) {
@@ -170,15 +171,22 @@ var drawNode = function(tool, cursor) {
                 }
             });
             drawing.addEventListener("mouseup", function() {
+                console.log("mouseupped.");
                 if(drag.isDragging) {
                     dragEnd();
                 }
             });
+
+            drawing.addEventListener("contextmenu", function(e) {
+                e.preventDefault();
+                toggleMenuOn();
+              });
+
+        
             
 
         // Add to network object
-        network.nodes.push(node)
-
+        currentNetwork.nodes.push(node);
         // Add to board
         group = subnet.appendChild(group);
 
@@ -186,7 +194,6 @@ var drawNode = function(tool, cursor) {
 
         currentElement = group;
         select(node.id);
-
     } else {
         node = new Arc();
         configArc(node, cursor);
@@ -195,7 +202,7 @@ var drawNode = function(tool, cursor) {
 
 var interactElement = function(id) {
     if(currentTool == "arc") {
-        var clicked_node = network.nodes[id];
+        var clicked_node = currentNetwork.nodes[id];
         arcInteraction(clicked_node);
     } else {
         select(id);
@@ -207,18 +214,14 @@ var drag = {
     'isDragging': false,
 };
 var startDrag = function(id) {
-    drag.node = network.nodes[id];
+    drag.node = currentNetwork.nodes[id];
     drag.isDragging = true;
 };
 
 var dragging = function(event) {
-    console.log("NODE: x" + drag.node.x + ", y: " + drag.node.y);
-    console.log("MOUSE: x" + mouse.x + ", y: " + mouse.y);
     drag.node.x = mouse.x;
     drag.node.y = mouse.y;
-    (document.getElementById("node" + drag.node.id)).setAttribute("transform", "translate(" +(drag.node.x - 16)+","+(drag.node.y - 16)+")");
-    console.log("NODE: x" + drag.node.x + ", y: " + drag.node.y);
-    console.log("MOUSE: x" + mouse.x + ", y: " + mouse.y);
+    (document.querySelector("#" + subnet.id + " #node" + drag.node.id)).setAttribute("transform", "translate(" +(drag.node.x - 16)+","+(drag.node.y - 16)+")");
     updateArcsOnDrag(drag.node.id);
 };
 
@@ -228,22 +231,22 @@ var dragEnd = function(event) {
 };
 
 var updateArcsOnDrag = function(id) {
-    var inputs = network.nodes[id].arcs.input;
+    var inputs = currentNetwork.nodes[id].arcs.input;
     if(inputs.length > 0) {
         for(var i = 0; i < inputs.length; i++) {
             var start_point = getRelativePosition(inputs[i].destiny, inputs[i].origin);
             var end_point = getRelativePosition(inputs[i].origin, inputs[i].destiny);
-            var path = document.getElementById("arc" + inputs[i].id);
+            var path = document.querySelector("#" + subnet.id + "#arc" + inputs[i].id);
                 path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + end_point.x + "," + end_point.y);
         }
     }
 
-    var outputs = network.nodes[id].arcs.output;
+    var outputs = currentNetwork.nodes[id].arcs.output;
     if(outputs.length > 0) {
         for(var i = 0; i < outputs.length; i++) {
             var start_point = getRelativePosition(outputs[i].destiny, outputs[i].origin);
             var end_point = getRelativePosition(outputs[i].origin, outputs[i]. destiny);
-            var path = document.getElementById("arc" + outputs[i].id);
+            var path = document.querySelector("#" + subnet.id + "#arc" + outputs[i].id);
                 path.setAttributeNS(null, "d", "M" + start_point.x + "," + start_point.y + " L" + end_point.x + "," + end_point.y);
         }
     }
@@ -306,33 +309,34 @@ var isLinkable = function (origin, destiny) {
 };
 
 var select = function(id) {
-    var node = network.nodes[id];
+    var node = currentNetwork.nodes[id];
     
     if(document.getElementById("node-id").value != "") {
-        if (node.id === document.getElementById("node-id").value)
+        if (node.id === (document.querySelector(document.getElementById("node-id").value).id))
             return;
-        else 
+        else
             unselect(document.getElementById("node-id").value);    
     }
     
 
     // Make selected graphic blue
-    var image = document.getElementById("node" + id).children[0];
+    var image = document.querySelector("#" + subnet.id + " #node" + id).children[0];
         image.setAttributeNS(null, "href", "#" + image.dataset.type + "_hover");
 
     // Show data modal
     promptDescription(id, image.dataset.type);
 };
 
-var unselect = function(id) {
-    var image = document.getElementById("node" + id).children[0];
+var unselect = function(query) {
+    console.log(query);
+    var image = document.querySelector(query).children[0];
         image.setAttributeNS(null, "href", "#" + image.dataset.type);
     currentElement = undefined;
 };
 
 var promptDescription = function(id, type) {
     var base_url = document.getElementById("url-reference").value;
-    var node = network.nodes[id];
+    var node = currentNetwork.nodes[id];
     
     document.getElementById("prompt").reset();
     document.getElementById("_" + type + "-form").hidden = false;
@@ -365,14 +369,14 @@ var promptDescription = function(id, type) {
             break;
     } 
 
-    document.getElementById("node-id").value = node.id;
+    document.getElementById("node-id").value = "#" + subnet.id + " > #node" + node.id;
     document.getElementById("descriptionInput").hidden = false;
     $(board).addClass("prompting");
 };
 
 var submitDescription = function() {
-    var id = document.getElementById("node-id").value;
-    var node = network.nodes[id];
+    var id = document.querySelector((document.getElementById("node-id").value)).getAttribute("data-referenceId");
+    var node = currentNetwork.nodes[id];
     var title = document.getElementById("nodeTitle").value;
     if(title == undefined)
         title = "";
@@ -395,6 +399,9 @@ var submitDescription = function() {
             node.condition = document.getElementById("condition");
             document.getElementById("_transition-form").hidden = true;
             break;
+        case Subnet:
+            document.getElementById("subnetLink" + node.id).innerHTML = node.title;
+            break;
         default:
             break;
     }
@@ -404,14 +411,14 @@ var submitDescription = function() {
     document.getElementById("prompt").reset();
     
     document.getElementById("descriptionInput").hidden = true;
-    unselect(node.id);
+    unselect("#" + subnet.id + " #node" + node.id);
     $(board).removeClass("prompting");
     
 };
 
 var appendDescription = function(id, title) {
     if(title != "") {
-        var group = document.getElementById("node" + id);
+        var group = document.querySelector("#" + subnet.id + " #node" + id);
         if(group.children[1] != undefined) {
             var text = group.children[1];
             text.innerHTML = title;
@@ -433,7 +440,7 @@ var configArc = function(tool, cursor) {
 
 var drawArc = function() {
     var newArc = new Arc();
-        newArc.id = network.nodes.length;
+        newArc.id = currentNetwork.nodes.length;
         newArc.origin = arc.origin;
         newArc.destiny = arc.destiny;
 
@@ -446,14 +453,14 @@ var drawArc = function() {
             path.setAttributeNS(null, "marker-end", "url(#arc_arrow)");
             path.setAttributeNS(null, "stroke-width", 2);
             path.setAttributeNS(null, "stroke", "#333");
-            path.setAttribute("id", "arc" + network.nodes.length);
+            path.setAttribute("id", "arc" + currentNetwork.nodes.length);
     }
 
     // adiciona arco aos dois elementos
     newArc.origin.arcs.output.push(newArc);
     newArc.destiny.arcs.input.push(newArc);
     // adiciona arco a rede
-    network.nodes.push(newArc);
+    currentNetwork.nodes.push(newArc);
     subnet.appendChild(path);
 
     // TODO: atrelar arco ao movimento dos nós
@@ -524,29 +531,93 @@ var deleteNode = function(id) {
     // delete from board
 };
 
-$(board).on({
-    'mousemove': function (evt) {
-        mouse = trackMousePosition(board, evt);
-        if(linking == true) {
-            drawTempArc(arc.origin, mouse);
+var prepareEnvironment = function(currentBoard) {
+    $(currentBoard).on({
+        'mousemove': function (evt) {
+            mouse = trackMousePosition(currentBoard, evt);
+            if(linking == true) {
+                drawTempArc(arc.origin, mouse);
+            }
+            if(drag.isDragging) {
+                dragging();
+            }
+        },
+        'mouseup': function(evt) {
+            if(drag.isDragging) {
+                dragEnd();
+            }
+        },
+        'click': function (evt) {
+            if ($(currentBoard).hasClass("prompting") || $(currentBoard).hasClass("forbidden")) {
+                return;
+            }
+            if(currentTool != "arc") {
+                drawNode(currentTool, mouse);    
+            }
         }
-        if(drag.isDragging) {
-            dragging();
-        }
-    },
-    'mouseup': function(evt) {
-        if(drag.isDragging) {
-            dragEnd();
-        }
-    },
-    'click': function (evt) {
-        if ($(board).hasClass("prompting") || $(board).hasClass("forbidden")) {
-            return;
-        }
-        if(currentTool != "arc") {
-            drawNode(currentTool, mouse);    
-        }
-    }
-});
+    });    
+};
 
+prepareEnvironment(board);
 document.getElementById("submitDescription").addEventListener("click", submitDescription, false);
+
+
+//var subnet = document.getElementById("subnet-1");
+//var board = document.getElementById("board");
+
+var newSubnet = function(id) { 
+    // return array
+    var result = [];
+
+    var group = document.createElementNS(svgNS, "g");
+        group.setAttributeNS(null, "id", "subnet" + id);        
+        group.setAttribute("class", "subnet");
+
+    var subnetBoard = document.createElementNS(svgNS, "use");
+        subnetBoard.setAttributeNS(null, "x", 0);
+        subnetBoard.setAttributeNS(null, "y", 0);
+        subnetBoard.setAttributeNS(null, "href", "#drawBoard");
+        subnetBoard.setAttributeNS(null, "fill", "#FFF");
+
+    var subnetList = document.querySelector(".subnets > ul");
+    var subnetListItem = document.createElement("LI");
+    var subnetListLink = document.createElement("BUTTON");
+    subnetListLink.setAttribute("type", "button");
+    subnetListLink.setAttribute("class", "btn-link");
+    subnetListLink.setAttribute("id", "subnetLink" + id);
+    subnetListLink.addEventListener("click", function() {
+        showSubnet(id);
+    });
+    subnetListLink.innerHTML = "Subnet " + (id + 1);
+
+    subnetListLink = subnetListItem.appendChild(subnetListLink);
+    subnetListItem = subnetList.appendChild(subnetListItem);
+
+    prepareEnvironment(subnetBoard);
+
+    group = svg.appendChild(group);
+    subnetBoard = group.appendChild(subnetBoard);
+
+    return result;
+};
+
+var showSubnet = function(id) {
+    if (id == -1) {
+        var toShow = document.getElementById("subnet-1");
+        currentNetwork = network;
+    } else {
+        var toShow = document.getElementById("subnet" + id);
+        currentNetwork = currentNetwork.nodes[id];
+
+    }
+    $(subnet).hide();
+    subnet = toShow;
+    board = toShow.children[0];
+    $(subnet).show();
+    document.querySelector(".subnet-active").classList.remove("subnet-active");
+    document.getElementById("subnet" + id).classList.add("subnet-active");
+};
+
+document.addEventListener("contextmenu", function(e) {
+    console.log(e);
+  });

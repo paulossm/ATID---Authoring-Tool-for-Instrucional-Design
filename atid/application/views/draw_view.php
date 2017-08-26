@@ -127,7 +127,7 @@
                     <rect id="drawBoard" width="100%" height="100%" x="0" y="0" />
                 </defs>
                 
-                <g id="network">
+                <g id="subnet-1" class="subnet subnet-active">
                     <use id="board" fill="#fff" x="0" y="0" href="#drawBoard"></use>
                 </g>
             </svg>
@@ -191,7 +191,13 @@
             </div>
         </div>
         
-
+        <footer>
+            <nav class="subnets">
+                <ul>
+                    <li><button type="button" class="btn-link" onclick="showSubnet(-1)">network</button></li>
+                </ul>
+            </nav>
+        </footer>
         
     </section>
         
