@@ -185,6 +185,7 @@
                     </div>
 
                     <input type="hidden" id="node-id" value="">
+                    <input type="hidden" id="base-url" value="<?= base_url() ?>" />
                     <input type="hidden" id="url-reference" value="<?= base_url() . 'application/views/'; ?>">
                     <button class="btn btn-edit pull-right" type="button" id="submitDescription">Ok</button>
                 </form>

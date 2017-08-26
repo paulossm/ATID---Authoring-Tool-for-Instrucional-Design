@@ -621,3 +621,33 @@ var showSubnet = function(id) {
 document.addEventListener("contextmenu", function(e) {
     console.log(e);
   });
+
+var saveNetwork = function() {
+    var dataarray = [];
+    var stringData = '{"network":[ ';
+    for(var i = 0; i < network.nodes.length; i++) {
+        if(network.nodes[i].constructor !== Arc) {
+            if(network.nodes[i].constructor == Subnet) {
+                for(var j = 0; j < network.nodes[i].nodes.length; j++) {
+                    if(network.nodes[i].nodes[j].constructor !== Arc)
+                        network.nodes[i].nodes[j].arcs = null;
+                }
+            }
+            network.nodes[i].arcs = null;
+        }
+        dataarray.push(JSON.stringify(network.nodes[i]));
+    }
+    stringData += dataarray.join();
+    stringData += "]} ";
+
+    $.ajax({
+        type: 'POST',
+        url:  (document.getElementById("base-url").value + "index.php/Draw/salvarRede"),
+        data: {"rede": stringData},
+        cache: false,
+        success: function(data){
+            //alert(data);
+            window.location = 'http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Dashboard';
+        }
+    });
+};

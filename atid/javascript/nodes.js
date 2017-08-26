@@ -18,6 +18,7 @@ var Activity = function () {
 	this.title = "";
 	this.startDate = undefined;
 	this.endDate = undefined;
+	this.type = "activity";
 };
 
 // Node Inheritance
@@ -29,6 +30,7 @@ var Repository = function () {
 	Node.call(this);
 
 	this.title = "";
+    this.type = "repository";
 };
 Repository.prototype = new Node();
 Repository.prototype.constructor = Repository;
@@ -38,6 +40,7 @@ var Event = function() {
 	Node.call(this);
 
 	this.title = "";
+    this.type = "event";
 };
 Event.prototype = new Node();
 Event.prototype.constructor = Event;
@@ -45,6 +48,7 @@ Event.prototype.constructor = Event;
 var Transition = function() {
 	this.title = "";
 	this.conditions = [];
+	this.type = "transition";
 };
 Transition.prototype = new Node();
 Transition.prototype.constructor = Transition;
@@ -56,6 +60,7 @@ var Subnet = function() {
     this.begin = '';
     this.end = '';
     this.nodes = [];
+    this.type = "subnet";
 };
 
 Subnet.prototype = new Node();
