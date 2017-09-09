@@ -56,7 +56,7 @@ class Draw extends CI_Controller {
 					$this->model->insert_evento($data);
 				if($no->type == 'repository')
 					$this->model->insert_repositorio($data);
-				if($no->type == 'composition')
+				if($no->type == 'subnet')
 					$this->model->insert_subrede($data);
 				if($no->type == 'transition')
 					$this->model->insert_transicao($data);
@@ -87,7 +87,6 @@ class Draw extends CI_Controller {
 				if($no->origin->type == 'activity'){
 					$origem = $this->model->get_id_atividade($no->origin->id, $id_rede);
 					$id_origem = $origem->id_atividade;
-					//print_r($origem);
 					$tipo_origem = 1;
 				}
 
@@ -101,7 +100,7 @@ class Draw extends CI_Controller {
 					$id_destino = $destino->id_repositorio;
 					$tipo_destino = 4;
 				}
-				if($no->destiny->type == 'composition'){
+				if($no->destiny->type == 'subnet'){
 					$destino = $this->model->get_id_subrede($no->destiny->id, $id_rede);
 					$id_destino = $destino->id_subrede;
 					$tipo_destino = 3;
