@@ -72,7 +72,8 @@ var saveNetwork = function() {
         cache: false,
         success: function(data){
             //alert(data);
-            window.location = 'http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Dashboard';
+            console.log(data);
+            //window.location = 'http://localhost/ATID---Authoring-Tool-for-Instrucional-Design/atid/index.php/Dashboard';
         }
     });
 };

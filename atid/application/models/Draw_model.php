@@ -38,6 +38,37 @@ class Draw_model extends CI_Model {
             //echo $this->db->last_query();
     }
 
+    function insert_arco($data) {
+        $this->db->insert('arco',$data);
+            //echo $this->db->last_query();
+    }
+
+    function get_id_evento($identificador, $id_rede) {
+        $query = $this->db->query("select id_evento from evento where id_rede= ".$id_rede." and identificador = ".$identificador);
+        return $query->row();
+    }
+
+    function get_id_subrede($identificador, $id_rede) {
+        $query = $this->db->query("select id_subrede from subrede where id_rede= ".$id_rede." and identificador = ".$identificador);
+        return $query->row();
+    }
+
+    function get_id_repositorio($identificador, $id_rede) {
+        $query = $this->db->query("select id_repositorio from repositorio where id_rede= ".$id_rede." and identificador = ".$identificador);
+        return $query->row();
+    }
+
+    function get_id_transicao($identificador, $id_rede) {
+        $query = $this->db->query("select id_transicao from transicao where id_rede= ".$id_rede." and identificador = ".$identificador);
+        return $query->row();
+    }
+
+    function get_id_atividade($identificador, $id_rede) {
+        $query = $this->db->query("select id_atividade from atividade where id_rede= ".$id_rede." and identificador = ".$identificador);
+        echo $this->db->last_query();
+        return $query->row();
+    }
+
     
 
 }?>
