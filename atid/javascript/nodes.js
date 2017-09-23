@@ -57,8 +57,6 @@ var Subnet = function() {
 	Node.call(this);
 
 	this.title = '';
-    this.begin = '';
-    this.end = '';
     this.nodes = [];
     this.type = "subnet";
 };
@@ -66,9 +64,25 @@ var Subnet = function() {
 Subnet.prototype = new Node();
 Subnet.prototype.constructor = Subnet;
 
+var Begin = function() {
+    Node.call(this);
+    
+    this.title = "Begin";
+    this.type = "begin";
+};
+Begin.prototype = new Node();
+Begin.prototype.constructor = Begin;
+
+var End = function() {
+    Node.call(this);
+    
+    this.title = "End";
+    this.type = "end";
+};
+End.prototype = new Node();
+End.prototype.constructor = End;
+
 var Network = function() {
 	this.title = '';
-	this.begin = '';
-	this.end = '';
 	this.nodes = [];
 };

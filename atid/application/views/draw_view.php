@@ -29,7 +29,7 @@
                             </h4>
                         </div>
                         <div class="media-right media-middle btn-group" role="group">
-                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"/><i class="fa fa-sign-out"></i> Log Out</a>
+                            <a id="logout" class="btn" href="<?php echo base_url(); ?>index.php/Principal/deslogar"><i class="fa fa-sign-out"></i> Log Out</a>
                         </div>
                     </div>
                 </li>
@@ -120,10 +120,12 @@
                         <path d="M 0 4 l 8 0" stroke="#c9283b" stroke-width="1" />
                         <path d="M 4 0 l 0 8" stroke="#c9283b" stroke-width="1" />
                     </marker>
-
-
-                   
-
+                    
+                    <!-- BEGIN & END -->
+                    <image id="begin" x="0" y="0" width="32.5" height="32.5" href="<?php echo base_url(); ?>images/tools/begin.svg"></image>
+                    <image id="end" x="0" y="0" width="32.5" height="32.5" href="<?php echo base_url(); ?>images/tools/end.svg"></image>
+                    
+                    <!-- BOARD -->
                     <rect id="drawBoard" width="100%" height="100%" x="0" y="0" />
                 </defs>
                 
@@ -211,7 +213,23 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="<?php echo base_url(); ?>javascript/nodes.js"></script>
         <script src="<?php echo base_url(); ?>javascript/arc.js"></script>
+        <script src="<?php echo base_url(); ?>javascript/environment.js"></script>
+        <script src="<?php echo base_url(); ?>javascript/ui.js"></script>
         <script src="<?php echo base_url(); ?>javascript/atid.js"></script> 
+        <script>
+            $(document).ready(function() {
+                document.addEventListener("contextmenu", function(e) {
+                    console.log(e);
+                });
+
+                prepareEnvironment(board);
+                document.getElementById("submitDescription").addEventListener("click", submitDescription, false);
+
+                //drawBeginEndNodes();
+                //drawNode("begin", {x: 30, y: ($(svg).height() / 2)}, subnet);
+                //drawNode("end", {x: $(svg).width() - 30, y: ($(svg).height() / 2)}, subnet);
+            });
+        </script>
 
         <!-- DATE AND TIME PICKERS -->
         <script src="https://jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
