@@ -75,14 +75,8 @@ class Principal extends CI_Controller {
 
     function resetar_senha($id='')
 	{	
-		if($id=='')
-			$this->load->view('resetar_senha_view');
-		else{
-			$usua = $this->usuario->verificar_id($id);
-			$data['email'] = $usua->email;
-			$data['id'] = $usua->id_usuario;
-			$this->load->view('recuperar_senha_view', $data);
-		}
+		$data['id'] = $id;
+		$this->load->view('resetar_senha_view', $data);
 	}
 
 	function recuperar_senha() {
@@ -93,7 +87,7 @@ class Principal extends CI_Controller {
 						<br>We heard that you lost your ATID password. Sorry about that!
 						<br><br>But don’t worry! You can use the following link within the next day to reset your password:
 						<br><br>
-						<a href='". base_url() ."index.php/Principal/resetar_senha/".md5($usua->id_usuario)."'>click here</a>
+						<a href='". base_url() ."index.php/Principal/alterar_senha/".md5($usua->id_usuario)."'>click here</a>
 						<br><br>
 						<center><h1 style='color:#d8335b; margin-bottom: 0px;'>ATID</h1>
 						<small>Authoring Tool for Instructional Design</small></center>
@@ -123,12 +117,21 @@ class Principal extends CI_Controller {
 				    }
 			redirect("Principal/confirma_resetar");
 		}
-		redirect("Principal/resetar_senha");
+		redirect("Principal/resetar_senha/1");
     }
 
-	function confirma_resetar()
+	function confirma_resetar($id = 1)
 	{	
-		$this->load->view('confirma_resetar_view');		
+		$data['id'] = $id;
+		$this->load->view('confirma_resetar_view', $data);		
+	}
+
+	function alterar_senha($id)
+	{	
+		$usua = $this->usuario->verificar_id($id);
+		$data['email'] = $usua->email;
+		$data['id'] = $usua->id_usuario;
+		$this->load->view('recuperar_senha_view', $data);
 	}
 
 	function mudar_senha($id='') {

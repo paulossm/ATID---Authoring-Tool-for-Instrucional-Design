@@ -28,6 +28,11 @@
                     <form class="loginForm" action="<?=base_url()?>index.php/Principal/recuperar_senha" method="post">                
                         <fieldset class="form-group">
                             <label for="email">Reset your password</label>
+
+                            <?php if($id == 1) :?>
+                                <p  style="color: red;">E-mail not found</p>
+                            <?php endif; ?>
+
                             <p >Enter your email address and we will send you a link to reset your password.</p>
                             <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>
                         </fieldset>
@@ -44,9 +49,9 @@
         </section>
         
         <script
-			  src="https://code.jquery.com/jquery-2.2.4.min.js"
-			  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-			  crossorigin="anonymous"></script>
+              src="https://code.jquery.com/jquery-2.2.4.min.js"
+              integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+              crossorigin="anonymous"></script>
             <!-- Latest compiled and minified JavaScript -->
         <script src="<?php echo base_url(); ?>javascript/bootstrap.min.js"></script>
         <script src="<?php echo base_url(); ?>javascript/jcanvas.js"></script>
