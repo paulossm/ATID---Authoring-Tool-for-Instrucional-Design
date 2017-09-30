@@ -37,12 +37,25 @@ class Draw extends CI_Controller {
 			"id_modificador" =>  $_SESSION['id_usuario'],
 			"nome" =>"sem nome1"
 		);
-		$id_rede = $this->model->insert_rede($data);		
+		$id_rede = $this->model->insert_rede($data);	
 		$jsonObj = json_decode($_POST['rede']);
 		$rede = $jsonObj->network;
 		print_r($rede);
 		foreach ( $rede as $no )
 	    {
+	    	if ($no->type == 'begin' || $no->type == 'end'){
+				$data0 = array(
+					"posicao_x" 	=> $no->x,
+					"posicao_y"		=> $no->y,
+					"id_rede"		=> $id_rede,
+				);
+				if($no->type == 'begin'){
+					echo "string";
+					$this->model->insert_begin($data0);
+				}
+				if($no->type == 'end')
+					$this->model->insert_end($data0);
+			}
 
 	    	if($no->type != 'arc'){
 				$data = array(
@@ -62,7 +75,8 @@ class Draw extends CI_Controller {
 					$this->model->insert_transicao($data);
 				if($no->type == 'activity')
 					$this->model->insert_atividade($data);
-			}else
+			}
+			else
 			{
 				if($no->origin->type == 'event'){
 					$origem = $this->model->get_id_evento($no->origin->id, $id_rede);

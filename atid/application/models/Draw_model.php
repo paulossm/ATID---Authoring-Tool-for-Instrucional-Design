@@ -43,6 +43,16 @@ class Draw_model extends CI_Model {
             //echo $this->db->last_query();
     }
 
+    function insert_begin($data) {
+        $this->db->insert('begin',$data);
+            //echo $this->db->last_query();
+    }
+
+    function insert_end($data) {
+        $this->db->insert('end',$data);
+            //echo $this->db->last_query();
+    }
+
     function get_id_evento($identificador, $id_rede) {
         $query = $this->db->query("select id_evento from evento where id_rede= ".$id_rede." and identificador = ".$identificador);
         return $query->row();
