@@ -152,9 +152,9 @@ class Principal extends CI_Controller {
 	function cadastrar_usuario() {
 		$senha = md5($this->input->post('senha'));
 		$confirmacao = md5($this->input->post('senha-confirma'));
-		if($confirmacao != $senha){
-            echo "As senhas não correspondem!";
-            redirect(base_url());
+		if($confirmacao != $senha){        				
+			redirect(base_url().'?invalidConfirmPassword=true'  , 'refresh');            
+
 		}else {
 			$loga = $this->usuario->verificar_email($this->input->post("email"));
 	        if (count($loga) > 0) {

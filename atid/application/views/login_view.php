@@ -23,15 +23,40 @@
                 <h1 class="text-primary">ATID</h1>
                 <small>Authoring Tool for Instructional Design</small>
             </div>
-            <ul class="nav nav-tabs formTabs">
-                <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-                <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
+            
+            <!--Continuar na aba de cadastro com mensagem de erro caso haja falha na validação-->
+            <ul class="nav nav-tabs formTabs">            
+                <?php                             
+                if(!isset($_GET['invalidConfirmPassword'])){ ?>
+                    <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+                    <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
+                <?php                                    
+                }
+                else{?>
+                    <li role="presentation"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+                    <li role="presentation" class="active"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
+                <?php
+                } 
+                ?>                                         
             </ul>
 
-            <div class="tab-content">
+            <div class="tab-content">                                                                                                                                                       
+                
+            <!--Continuar na aba de cadastro com mensagem de erro caso haja falha na validação-->
+            <?php                             
+            if(!isset($_GET['invalidConfirmPassword'])){ ?>
                 <div role="tabpanel" class="tab-pane active" id="login">
+                    <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                                        
+            <?php                                    
+            }
+            else{?>
+                <div role="tabpanel" class="tab-pane" id="login">
                     <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                
-                                            
+            <?php
+            } 
+            ?>                                                                                    
+                          
+                        <!--Mensagem de erro caso haja falha na autenticação-->
                         <?php 
                             if(isset($_GET['invalid']))
                             {
@@ -53,8 +78,23 @@
                         <button type="submit" class="btn btn-primary">Log me in</button>
                     </form>        
                 </div>
-                <div role="tabpanel" class="tab-pane" id="signup">
+                                
+            <!--Continuar na aba de cadastro com mensagem de erro caso haja falha na validação-->    
+            <?php                             
+            if(isset($_GET['invalidConfirmPassword'])){ ?>
+                <div role="tabpanel" class="tab-pane active" id="signup">                                
                     <form class="signupForm" action="<?=base_url()?>index.php/Principal/cadastrar_usuario" method="post">                
+                        
+            <?php                    
+                echo "The passwords are diferent";                
+            }
+            else{?>
+                <div role="tabpanel" class="tab-pane" id="signup">                                
+                    <form class="signupForm" action="<?=base_url()?>index.php/Principal/cadastrar_usuario" method="post">                
+            <?php
+            } 
+            ?>
+                            
                         <fieldset class="form-group" >
                             <label for="nome">Full name</label>
                             <input class="form-control" type="text" name="nome" id="nome" placeholder="type your name" required>
