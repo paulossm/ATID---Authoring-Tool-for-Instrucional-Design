@@ -31,6 +31,14 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="login">
                     <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                
+                                            
+                        <?php 
+                            if(isset($_GET['invalid']))
+                            {
+                                echo "Invalid Email and Password";
+                            }   
+                        ?>
+                                                                     
                         <fieldset class="form-group">
                             <label for="email">E-mail</label>
                             <input class="form-control" type="email" name="email" id="email" placeholder="email@domain.com" required>

@@ -59,8 +59,7 @@ class Principal extends CI_Controller {
         	unset ($_SESSION['id_usuario']);
         	unset ($_SESSION['email']);
         	unset ($_SESSION['nome']);
-			redirect(base_url(), 'refresh');
-            
+			redirect(base_url().'?invalid=true'  , 'refresh');            
         }
     }
 
