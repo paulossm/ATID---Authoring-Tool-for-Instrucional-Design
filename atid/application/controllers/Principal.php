@@ -157,9 +157,9 @@ class Principal extends CI_Controller {
 
 		}else {
 			$loga = $this->usuario->verificar_email($this->input->post("email"));
-	        if (count($loga) > 0) {
-	            echo "E-mail já cadastrado!";
-				redirect(base_url());
+	        if (count($loga) > 0) {				
+				redirect(base_url().'?invalidEmail=true'  , 'refresh');            
+												
 	        } else {
 				$data = array(
 					"nome" => $this->input->post("nome"),

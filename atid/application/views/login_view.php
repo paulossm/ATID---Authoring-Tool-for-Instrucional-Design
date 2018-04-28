@@ -27,7 +27,7 @@
             <!--Continuar na aba de cadastro com mensagem de erro caso haja falha na validação-->
             <ul class="nav nav-tabs formTabs">            
                 <?php                             
-                if(!isset($_GET['invalidConfirmPassword'])){ ?>
+                if( !isset($_GET['invalidConfirmPassword']) && !isset($_GET['invalidEmail'])  ){ ?>
                     <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
                     <li role="presentation"><a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">Signup</a></li>
                 <?php                                    
@@ -44,7 +44,7 @@
                 
             <!--Continuar na aba de cadastro com mensagem de erro caso haja falha na validação-->
             <?php                             
-            if(!isset($_GET['invalidConfirmPassword'])){ ?>
+            if( !isset($_GET['invalidConfirmPassword']) && !isset($_GET['invalidEmail'])  ){ ?>
                 <div role="tabpanel" class="tab-pane active" id="login">
                     <form class="loginForm" action="<?=base_url()?>index.php/Principal/autenticar" method="post">                                        
             <?php                                    
@@ -81,12 +81,18 @@
                                 
             <!--Continuar na aba de cadastro com mensagem de erro caso haja falha na validação-->    
             <?php                             
-            if(isset($_GET['invalidConfirmPassword'])){ ?>
+            if( isset($_GET['invalidConfirmPassword']) || isset($_GET['invalidEmail']) ){ ?>
                 <div role="tabpanel" class="tab-pane active" id="signup">                                
                     <form class="signupForm" action="<?=base_url()?>index.php/Principal/cadastrar_usuario" method="post">                
                         
             <?php                    
-                echo "The passwords are diferent";                
+                if(isset($_GET['invalidConfirmPassword'])){
+                    echo "The passwords are diferent";                
+                }
+                if(isset($_GET['invalidEmail'])){
+                    echo "Email already registered";                
+                }
+                
             }
             else{?>
                 <div role="tabpanel" class="tab-pane" id="signup">                                
