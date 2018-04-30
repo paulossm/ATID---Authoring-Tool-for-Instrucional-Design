@@ -22,8 +22,17 @@ class Dashboard extends CI_Controller {
 
 	public function editar($id_rede='')
 	{	
-		session_start();
-		$this->load->view('draw_view');
+		session_start();						
+		$data['atividades'] = $this->model->atividades_rede_selecionada($id_rede); 						
+		$data['transicoes'] =  $this->model->transicoes_rede_selecionada($id_rede);
+		//$data['arcos'] =  $this->model->arcos_rede_selecionada($id_rede);
+		$data['repositorios'] =  $this->model->repositorios_rede_selecionada($id_rede);
+		$data['eventos'] =  $this->model->eventos_rede_selecionada($id_rede);
+		$data['subredes'] =  $this->model->subredes_rede_selecionada($id_rede);		
+		
+		//echo json_encode($data);
+
+		$this->load->view('draw_view', $data);
 	}
 
 	public function autoCompleteEmails()

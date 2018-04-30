@@ -44,12 +44,12 @@ class Draw_model extends CI_Model {
     }
 
     function insert_begin($data) {
-        $this->db->insert('begin',$data);
+        $this->db->insert('inicio',$data);
             //echo $this->db->last_query();
     }
 
     function insert_end($data) {
-        $this->db->insert('end',$data);
+        $this->db->insert('fim',$data);
             //echo $this->db->last_query();
     }
 

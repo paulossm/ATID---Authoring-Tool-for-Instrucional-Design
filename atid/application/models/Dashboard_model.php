@@ -8,6 +8,42 @@ class Dashboard_model extends CI_Model {
                 $this->load->database();
         }
 
+    function atividades_rede_selecionada($id_rede){        
+        $query = $this->db->query(" select * from atividade
+                                    where atividade.id_rede = ".$id_rede);    	
+        return $query->result();
+    }
+
+    function transicoes_rede_selecionada($id_rede){        
+        $query = $this->db->query(" select * from transicao
+                                    where transicao.id_rede = ".$id_rede);
+        return $query->result();
+    }
+
+    /* function arcos_rede_selecionada($id_rede){        
+        $query = $this->db->query(" select * from arco
+                                    where arco.id_rede = ".$id_rede);    
+        return $query->result();
+    } */
+
+    function repositorios_rede_selecionada($id_rede){        
+        $query = $this->db->query(" select * from repositorio
+                                    where repositorio.id_rede = ".$id_rede);
+        return $query->result();
+    }
+
+    function eventos_rede_selecionada($id_rede){        
+        $query = $this->db->query(" select * from evento
+                                    where evento.id_rede = ".$id_rede);    
+        return $query->result();
+    }
+
+    function subredes_rede_selecionada($id_rede){        
+        $query = $this->db->query(" select * from subrede
+                                    where subrede.id_rede = ".$id_rede);
+        return $query->result();
+    }
+
     function redes($id_usuario) {
     	$query = $this->db->query("select r.*, u.nome as nome_usuario from rede r 
                                     inner join usuario u on u.id_usuario = r.id_criador

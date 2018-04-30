@@ -130,7 +130,94 @@
                 </defs>
                 
                 <g id="subnet-1" class="subnet subnet-active">
-                    <use id="board" fill="#fff" x="0" y="0" href="#drawBoard"></use>
+                    <use id="board" fill="#fff" x="0" y="0" href="#drawBoard"></use>   
+
+                    <?php
+                    //Carregamento para os nós do tipo ATIVIDADE                     
+                    foreach ($atividades as $item):                                                 
+                    ?>
+                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                               <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
+                                <use x="0" y="0" href="#activity" data-type="activity" ></use>
+                                <image id="activity" x="0" y="0" width="32.5" height="32.5" 
+                                    href="<?php echo base_url(); ?>images/tools/activity.svg"></image>
+                            </g>                                                    
+                    <?php
+                    endforeach;
+                    ?>
+
+                    <?php
+                    //Carregamento para os nós do tipo TRANSIÇÃO                     
+                    foreach ($transicoes as $item):                                                 
+                    ?>
+                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                               <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
+                                <use x="0" y="0" href="#transition" data-type="transition" ></use>
+                                <image id="transition" x="0" y="0" width="32.5" height="32.5" 
+                                    href="<?php echo base_url(); ?>images/tools/transition.svg"></image>
+                            </g>                                                    
+                    <?php
+                    endforeach;
+                    ?>                                                                                                  
+
+                    
+                    <?php
+                    //Carregamento para os nós do tipo ARCO                     
+                    //foreach ($arcos as $item):                                                 
+                    ?>
+                            <!-- 
+                            <g  class="draggable" transform="translate(<?php// echo $item->posicao_x .",". $item->posicao_y?>)">                                                              
+                                <use x="0" y="0" href="#arc" data-type="arc" ></use>
+                                <image id="arc" x="0" y="0" width="32.5" height="32.5" 
+                                    href="<?php// echo base_url(); ?>images/tools/arc.svg"></image>
+                            </g>  
+                            -->                                                  
+                    <?php
+                    //endforeach;
+                    ?>                                                                                                  
+
+                    <?php
+                    //Carregamento para os nós do tipo REPOSITÓRIO                     
+                    foreach ($repositorios as $item):                                                 
+                    ?>
+                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                               <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
+                                <use x="0" y="0" href="#repository" data-type="repository" ></use>
+                                <image id="repository" x="0" y="0" width="32.5" height="32.5" 
+                                    href="<?php echo base_url(); ?>images/tools/repository.svg"></image>
+                            </g>                                                    
+                    <?php
+                    endforeach;
+                    ?>                                                                                                  
+
+                    <?php
+                    //Carregamento para os nós do tipo EVENTO                    
+                    foreach ($eventos as $item):                                                 
+                    ?>
+                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                               <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
+                                <use x="0" y="0" href="#event" data-type="event" ></use>
+                                <image id="event" x="0" y="0" width="32.5" height="32.5" 
+                                    href="<?php echo base_url(); ?>images/tools/event.svg"></image>
+                            </g>                                                    
+                    <?php
+                    endforeach;
+                    ?>                                                                                                  
+
+                    <?php
+                    //Carregamento para os nós do tipo SUBREDE                    
+                    foreach ($subredes as $item):                                                 
+                    ?>
+                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                               <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
+                                <use x="0" y="0" href="#subnet" data-type="subnet" ></use>
+                                <image id="subnet" x="0" y="0" width="32.5" height="32.5" 
+                                    href="<?php echo base_url(); ?>images/tools/subnet.svg"></image>
+                            </g>                                                    
+                    <?php
+                    endforeach;
+                    ?>                                                                                                  
+
                 </g>
             </svg>
             

@@ -203,7 +203,7 @@
                                     <p><i class="fa fa-clock-o"></i> last modified: <?php echo $dia[0].'/'.$dia[2].'/'.$dia[1].' '.$hora[1]?></p>
                                 </div>
                                 <div class="panel-footer text-center">
-                                    <a class="btn btn-edit" <a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo md5($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a>
+                                    <a class="btn btn-edit" <a href="<?php echo base_url(); ?>index.php/Dashboard/editar/<?php echo ($id) ?>"/><i class="fa fa-pencil-square-o"></i> edit</a>
                                     <a class="btn btn-success" data-toggle="modal" onclick="compartilhar(<?php echo $id ?>)" data-target="#myModal"><i class="fa fa-share-square-o"></i> share</a>                        
                                 </div>
                             </div>
