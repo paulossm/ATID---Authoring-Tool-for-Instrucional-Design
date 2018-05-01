@@ -166,17 +166,13 @@
                     
                     <?php
                     //Carregamento para os nós do tipo ARCO                     
-                    //foreach ($arcos as $item):                                                 
-                    ?>
-                            <!-- 
-                            <g  class="draggable" transform="translate(<?php// echo $item->posicao_x .",". $item->posicao_y?>)">                                                              
-                                <use x="0" y="0" href="#arc" data-type="arc" ></use>
-                                <image id="arc" x="0" y="0" width="32.5" height="32.5" 
-                                    href="<?php// echo base_url(); ?>images/tools/arc.svg"></image>
-                            </g>  
-                            -->                                                  
+                    foreach ($arcos as $item):                                                 
+                    ?>                       
+                        <path d="M<?php echo $item->posicao_origem_x .",". $item->posicao_origem_y ." L". $item->posicao_destino_x .",". $item->posicao_destino_y?>" 
+                            marker-end="url(#arc_arrow)" stroke-width="2" stroke="#333">
+                        </path>                         
                     <?php
-                    //endforeach;
+                    endforeach;
                     ?>                                                                                                  
 
                     <?php

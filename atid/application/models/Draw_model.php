@@ -53,32 +53,42 @@ class Draw_model extends CI_Model {
             //echo $this->db->last_query();
     }
 
-    function get_id_evento($identificador, $id_rede) {
-        $query = $this->db->query("select id_evento from evento where id_rede= ".$id_rede." and identificador = ".$identificador);
+    function get_evento($id_rede) {
+        $query = $this->db->query("select * from evento where id_rede= ".$id_rede);
         return $query->row();
     }
 
-    function get_id_subrede($identificador, $id_rede) {
-        $query = $this->db->query("select id_subrede from subrede where id_rede= ".$id_rede." and identificador = ".$identificador);
+    function get_subrede($id_rede) {
+        $query = $this->db->query("select * from subrede where id_rede= ".$id_rede);
         return $query->row();
     }
 
-    function get_id_repositorio($identificador, $id_rede) {
-        $query = $this->db->query("select id_repositorio from repositorio where id_rede= ".$id_rede." and identificador = ".$identificador);
+    function get_repositorio($id_rede) {
+        $query = $this->db->query("select * from repositorio where id_rede= ".$id_rede);
         return $query->row();
     }
 
-    function get_id_transicao($identificador, $id_rede) {
-        $query = $this->db->query("select id_transicao from transicao where id_rede= ".$id_rede." and identificador = ".$identificador);
+    function get_transicao($id_rede) {
+        $query = $this->db->query("select * from transicao where id_rede= ".$id_rede);
         return $query->row();
     }
 
-    function get_id_atividade($identificador, $id_rede) {
-        $query = $this->db->query("select id_atividade from atividade where id_rede= ".$id_rede." and identificador = ".$identificador);
+    function get_atividade($id_rede) {
+        $query = $this->db->query("select * from atividade where id_rede= ".$id_rede);
         echo $this->db->last_query();
         return $query->row();
     }
 
-    
+    function get_begin($id_rede) {
+        $query = $this->db->query("select * from inicio where id_rede= ".$id_rede);
+        echo $this->db->last_query();
+        return $query->row();
+    }
 
+    function get_end($id_rede) {
+        $query = $this->db->query("select * from fim where id_rede= ".$id_rede);
+        echo $this->db->last_query();
+        return $query->row();
+    }
+    
 }?>

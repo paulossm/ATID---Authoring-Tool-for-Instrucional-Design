@@ -20,11 +20,11 @@ class Dashboard_model extends CI_Model {
         return $query->result();
     }
 
-    /* function arcos_rede_selecionada($id_rede){        
+    function arcos_rede_selecionada($id_rede){        
         $query = $this->db->query(" select * from arco
                                     where arco.id_rede = ".$id_rede);    
         return $query->result();
-    } */
+    }
 
     function repositorios_rede_selecionada($id_rede){        
         $query = $this->db->query(" select * from repositorio

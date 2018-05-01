@@ -25,7 +25,7 @@ class Dashboard extends CI_Controller {
 		session_start();						
 		$data['atividades'] = $this->model->atividades_rede_selecionada($id_rede); 						
 		$data['transicoes'] =  $this->model->transicoes_rede_selecionada($id_rede);
-		//$data['arcos'] =  $this->model->arcos_rede_selecionada($id_rede);
+		$data['arcos'] =  $this->model->arcos_rede_selecionada($id_rede);
 		$data['repositorios'] =  $this->model->repositorios_rede_selecionada($id_rede);
 		$data['eventos'] =  $this->model->eventos_rede_selecionada($id_rede);
 		$data['subredes'] =  $this->model->subredes_rede_selecionada($id_rede);		
@@ -46,7 +46,6 @@ class Dashboard extends CI_Controller {
 	public function cadastrarRedeCompartilhada()
 	{	
 		//session_start();
-
 		
 		$usuario = $this->model->get_usuario($this->input->get("email"));
 	        if (count($usuario) > 0) {
