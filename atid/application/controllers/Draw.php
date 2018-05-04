@@ -174,7 +174,8 @@ class Draw extends CI_Controller {
 					"posicao_origem_x"	=> $pos_origem_x,
 					"posicao_origem_y"	=> $pos_origem_y,
 					"posicao_destino_x"	=> $pos_destino_x,
-					"posicao_destino_y"	=> $pos_destino_y 
+					"posicao_destino_y"	=> $pos_destino_y,
+					"identificador"	=> $no->id
 				);
 
 				$this->model->insert_arco($data);

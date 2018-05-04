@@ -131,17 +131,19 @@
                 
                 <g id="subnet-1" class="subnet subnet-active">
                     <use id="board" fill="#fff" x="0" y="0" href="#drawBoard"></use>   
-
-                    <?php                        
+                    
+                    <?php
                         if( !empty($atividades)   || !empty($transicoes)   || !empty($repositorios) || 
                             !empty($eventos)      || !empty($subredes) ){
 
                     //Carregamento para os nós do tipo ATIVIDADE                     
                     foreach ($atividades as $item):                                                 
                     ?>
-                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                            <g id="node<?php echo $item->identificador ?>" data-referenceId="<?php echo $item->identificador ?>"
+                               class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
                                <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
-                                <use x="0" y="0" href="#activity" data-type="activity" ></use>
+                                <use x="0" y="0" href="#activity" 
+                                     data-type="activity" data-reference="<?php echo $item->identificador ?>"></use>
                                 <image id="activity" x="0" y="0" width="32.5" height="32.5" 
                                     href="<?php echo base_url(); ?>images/tools/activity.svg"></image>
                             </g>                                                    
@@ -153,9 +155,11 @@
                     //Carregamento para os nós do tipo TRANSIÇÃO                     
                     foreach ($transicoes as $item):                                                 
                     ?>
-                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                            <g id="node<?php echo $item->identificador ?>" data-referenceId="<?php echo $item->identificador ?>"  
+                               class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
                                <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
-                                <use x="0" y="0" href="#transition" data-type="transition" ></use>
+                                <use x="0" y="0" href="#transition" 
+                                data-type="transition" data-reference="<?php echo $item->identificador ?>"></use>
                                 <image id="transition" x="0" y="0" width="32.5" height="32.5" 
                                     href="<?php echo base_url(); ?>images/tools/transition.svg"></image>
                             </g>                                                    
@@ -169,7 +173,7 @@
                     foreach ($arcos as $item):                                                 
                     ?>                       
                         <path d="M<?php echo $item->posicao_origem_x .",". $item->posicao_origem_y ." L". $item->posicao_destino_x .",". $item->posicao_destino_y?>" 
-                            marker-end="url(#arc_arrow)" stroke-width="2" stroke="#333">
+                            id="arc<?php echo $item->identificador?>" marker-end="url(#arc_arrow)" stroke-width="2" stroke="#333">
                         </path>                         
                     <?php
                     endforeach;
@@ -179,9 +183,11 @@
                     //Carregamento para os nós do tipo REPOSITÓRIO                     
                     foreach ($repositorios as $item):                                                 
                     ?>
-                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                            <g id="node<?php echo $item->identificador ?>" data-referenceId="<?php echo $item->identificador ?>"  
+                               class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
                                <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
-                                <use x="0" y="0" href="#repository" data-type="repository" ></use>
+                                <use x="0" y="0" href="#repository" 
+                                data-type="repository" data-reference="<?php echo $item->identificador ?>"></use>
                                 <image id="repository" x="0" y="0" width="32.5" height="32.5" 
                                     href="<?php echo base_url(); ?>images/tools/repository.svg"></image>
                             </g>                                                    
@@ -193,9 +199,11 @@
                     //Carregamento para os nós do tipo EVENTO                    
                     foreach ($eventos as $item):                                                 
                     ?>
-                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                            <g id="node<?php echo $item->identificador ?>" data-referenceId="<?php echo $item->identificador ?>"  
+                               class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
                                <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
-                                <use x="0" y="0" href="#event" data-type="event" ></use>
+                                <use x="0" y="0" href="#event" 
+                                data-type="event" data-reference="<?php echo $item->identificador ?>"></use>
                                 <image id="event" x="0" y="0" width="32.5" height="32.5" 
                                     href="<?php echo base_url(); ?>images/tools/event.svg"></image>
                             </g>                                                    
@@ -207,9 +215,11 @@
                     //Carregamento para os nós do tipo SUBREDE                    
                     foreach ($subredes as $item):                                                 
                     ?>
-                            <g  class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
+                            <g id="node<?php echo $item->identificador ?>" data-referenceId="<?php echo $item->identificador ?>"  
+                               class="draggable" transform="translate(<?php echo $item->posicao_x .",". $item->posicao_y?>)">                               
                                <text x="16.25" y="50" text-anchor="middle" fill="#d8335b"> <?php echo $item->nome ?> </text>
-                                <use x="0" y="0" href="#composite_activity" data-type="composite_activity" ></use>
+                                <use x="0" y="0" href="#composite_activity" 
+                                data-type="composite_activity" data-reference="<?php echo $item->identificador ?>"></use>
                                 <image id="composite_activity" x="0" y="0" width="32.5" height="32.5" 
                                     href="<?php echo base_url(); ?>images/tools/composite_activity.svg"></image>
                             </g>                                                    
@@ -310,13 +320,13 @@
                     console.log(e);
                 });
 
-                prepareEnvironment(board);
-                document.getElementById("submitDescription").addEventListener("click", submitDescription, false);
-
+                prepareEnvironment(board)                
+                document.getElementById("submitDescription").addEventListener("click", submitDescription, false);                
                 //drawBeginEndNodes();
                 //drawNode("begin", {x: 30, y: ($(svg).height() / 2)}, subnet);
                 //drawNode("end", {x: $(svg).width() - 30, y: ($(svg).height() / 2)}, subnet);
             });
+            
         </script>
 
         <!-- DATE AND TIME PICKERS -->
